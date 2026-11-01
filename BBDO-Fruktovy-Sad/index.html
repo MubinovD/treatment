@@ -74,7 +74,7 @@ b{font-weight:800}
 #top.show{opacity:.9}
 #top.on-dark{color:rgba(243,239,230,.55)}
 #top .chap{font-weight:800;text-transform:uppercase;letter-spacing:.16em}
-#prog{position:fixed;left:0;top:0;height:3px;width:0;background:linear-gradient(90deg,var(--lime),var(--yellow));z-index:41}
+#prog{position:fixed;left:0;bottom:0;height:6px;width:0;background:linear-gradient(90deg,var(--lime),var(--yellow));z-index:41}
 #nav{position:fixed;right:clamp(14px,1.52vw,24px);bottom:clamp(14px,1.52vw,24px);z-index:45;display:flex;flex-direction:column;gap:10px;opacity:0;transition:opacity .5s}
 #nav.show{opacity:1}
 #nav button{width:52px;height:52px;border-radius:50%;border:0;background:rgba(20,63,32,.82);color:var(--cream);cursor:pointer;display:grid;place-items:center;backdrop-filter:blur(6px);box-shadow:0 8px 24px rgba(0,0,0,.18);transition:transform .2s,background .2s}
@@ -103,7 +103,7 @@ b{font-weight:800}
 #toc .lb{white-space:nowrap;font-size:14px;font-weight:700;letter-spacing:.01em;max-width:0;opacity:0;overflow:hidden;transition:max-width .4s var(--ease),opacity .3s;display:flex;gap:10px}
 #toc .lb i{font-style:normal;font-weight:800;opacity:.45;font-size:12px;letter-spacing:.06em;align-self:center}
 /* collapsed: only current (+faded neighbours) labels, on a soft pill */
-#toc li.cur .lb{max-width:240px;opacity:1}
+#toc.near li.cur .lb{max-width:240px;opacity:1}
 #toc li.nb .tk{width:20px;background:rgba(80,100,82,.6)}
 #toc:not(.open) li.cur .lb{background:rgba(15,40,22,.55);padding:3px 11px;border-radius:20px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 /* open: everything */
@@ -114,11 +114,14 @@ b{font-weight:800}
 #toc .count{margin:10px 0 0 26px;font-size:12px;font-weight:800;letter-spacing:.14em;color:rgba(243,239,230,.55);max-height:0;opacity:0;overflow:hidden;transition:all .35s}
 #toc.open .count{max-height:30px;opacity:1}
 #tocEdge{position:fixed;left:0;top:0;bottom:0;width:28px;z-index:45}
+#tocDim{position:fixed;inset:0;z-index:45;background:rgba(8,20,11,.6);opacity:0;pointer-events:none;transition:opacity .6s var(--ease)}
+#tocDim.on{opacity:1;pointer-events:auto;cursor:pointer}
 #tocTip{position:fixed;z-index:47;left:clamp(56px,5vw,80px);top:50%;transform:translate(-8px,-50%);background:var(--cream);color:var(--g7);font-weight:800;font-size:15px;padding:12px 16px;border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.22);opacity:0;pointer-events:none;transition:opacity .5s var(--ease),transform .5s var(--ease);max-width:260px;line-height:1.35}
 #tocTip::before{content:"";position:absolute;left:-7px;top:50%;width:14px;height:14px;background:inherit;transform:translateY(-50%) rotate(45deg);border-radius:2px}
-#tocTip.on{opacity:1;transform:translate(0,-50%)}
+#tocTip.on{opacity:1;transform:translate(0,-50%);pointer-events:auto}
+#tocTip button{display:block;margin-top:12px;border:0;border-radius:20px;background:var(--g7);color:var(--cream);font:800 13px/1 'Nunito',sans-serif;padding:9px 16px;cursor:pointer}
 #tocTip small{display:block;font-weight:600;font-size:13px;color:#5E6B5F;margin-top:3px}
-@media (max-width:900px){#toc,#tocEdge,#tocTip{display:none}}
+@media (max-width:900px){#toc,#tocEdge,#tocTip,#tocDim{display:none}}
 
 
 /* ---------- mobile contents: cube + bottom sheet ---------- */
@@ -155,7 +158,7 @@ b{font-weight:800}
   #howto .cubeslot{width:112px;height:112px;border-radius:28px;align-self:flex-start}
 }
 /* ---------- desktop nav variants (?nav=rail|cube|dock|top) ---------- */
-body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTip{display:none!important}
+body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTip,body:not(.nav-rail) #tocDim{display:none!important}
 #dock,#segbar,#seglbl{display:none}
 @media (min-width:901px){
   /* B — cube, like on the phone, list opens as a popover */
@@ -207,6 +210,13 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
   #segbar a:hover span{opacity:1;transform:translate(-50%,0)}
   #segbar a:first-child span{left:0;transform:none}
   #segbar a:last-child span{left:auto;right:0;transform:none}
+  #segPop{display:none}
+  body.nav-top #segPop{display:block;position:fixed;z-index:49;left:10px;top:26px;width:300px;max-height:75vh;overflow:auto;border-radius:16px;background:rgba(15,40,22,.86);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:10px 8px;opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity .25s,transform .3s var(--ease);box-shadow:0 18px 50px rgba(0,0,0,.25)}
+  body.nav-top #segPop.on{opacity:1;transform:none;pointer-events:auto}
+  #segPop a{display:flex;gap:12px;padding:8px 12px;border-radius:10px;font:700 15px/1.2 'Nunito',sans-serif;color:var(--cream);cursor:pointer}
+  #segPop a:hover{background:rgba(243,239,230,.08)}
+  #segPop a i{font-style:normal;font-size:11px;font-weight:800;opacity:.45;width:18px;align-self:center}
+  #segPop a.cur{background:rgba(169,207,70,.16);color:var(--lime)}
   body.nav-top #seglbl{display:block;position:fixed;z-index:47;left:12px;top:22px;font:800 12px/1 'Nunito',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);opacity:0;transition:opacity .4s}
   body.nav-top #seglbl.on{opacity:.9}
 }
@@ -623,7 +633,8 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 <header id="top"><span class="chap" id="chap"></span></header>
 <nav id="toc" aria-label="Содержание"><div class="panel"><ol id="tocList"></ol><p class="count" id="tocCount"></p></div></nav>
 <div id="tocEdge" aria-hidden="true"></div>
-<div id="tocTip">Содержание<small>Можно перейти к любой теме</small></div>
+<div id="tocDim"></div>
+<div id="tocTip">Здесь содержание<small>Тритмент недлинный, но к любой теме можно перейти сразу — просто подведите мышь к левому краю.</small><button id="tocTipOk">Понятно</button></div>
 <button id="mcube" aria-label="Содержание"><span class="bars"><i></i><i></i><i></i></span><span class="n" id="mcubeN">01<small>/15</small></span></button>
 <div id="mshade"></div>
 <div id="msheet" role="dialog" aria-label="Содержание"><div class="grab"></div><h4>Содержание</h4><ol id="mlist"></ol></div>
@@ -1310,20 +1321,32 @@ $$('main section').forEach(function(sec){ var c=sec.dataset.chap; if(!c||c==='О
 chapters.forEach(function(ch,i){ var li=document.createElement('li'); li.innerHTML='<a><span class="tkw"><span class="tk"></span></span><span class="lb"><i>'+String(i+1).padStart(2,'0')+'</i>'+(LABEL[ch.name]||ch.name)+'</span></a>';
   li.firstChild.addEventListener('click',function(){ scrollTo({top:ch.el.getBoundingClientRect().top+scrollY,behavior:'smooth'}); });
   tocList.appendChild(li); ch.li=li; });
-function tocShow(ms){ if(scrollY<cov.offsetHeight-vh*.5||ov.classList.contains('open'))return; toc.classList.add('on'); clearTimeout(tocHideT); if(ms) tocHideT=setTimeout(function(){ if(!tocHover) toc.classList.remove('on','open'); },ms); }
-toc.addEventListener('mouseenter',function(){tocHover=true;clearTimeout(tocHideT);toc.classList.add('open');tocTip.classList.remove('on')});
-toc.addEventListener('mouseleave',function(){tocHover=false;toc.classList.remove('open');tocShow(1400)});
+function tocShowX(){}
+function tocShow(ms){ if(tocIntro||scrollY<cov.offsetHeight-vh*.5||ov.classList.contains('open'))return; toc.classList.add('on'); clearTimeout(tocHideT); if(ms) tocHideT=setTimeout(function(){ if(!tocHover) toc.classList.remove('on','open','near'); },ms); }
+toc.addEventListener('mouseenter',function(){ tocHover=true;clearTimeout(tocHideT);toc.classList.add('open'); if(tocIntro) endTocIntro(); });
+toc.addEventListener('mouseleave',function(){ if(tocIntro)return; tocHover=false;toc.classList.remove('open');tocShow(1400)});
 $('#tocEdge').addEventListener('mouseenter',function(){tocShow(2200)});
-addEventListener('mousemove',function(e){ if(e.clientX<70) tocShow(2200); },{passive:true});
+var nearT=null;
+addEventListener('mousemove',function(e){ if(tocIntro)return;
+  if(e.clientX<200){ tocShow(2200); toc.classList.add('near'); clearTimeout(nearT); }
+  else if(toc.classList.contains('near')&&!tocHover){ clearTimeout(nearT); nearT=setTimeout(function(){toc.classList.remove('near')},400); }
+},{passive:true});
 function tocUpdate(){
   var mid=vh*.4, idx=-1;
   chapters.forEach(function(ch,i){ var r=ch.secs[0].getBoundingClientRect(); if(r.top<=mid) idx=i; });
-  if(scrollY<cov.offsetHeight-vh*.5){ toc.classList.remove('on','open'); return; }
+  if(scrollY<cov.offsetHeight-vh*.5&&!tocIntro){ toc.classList.remove('on','open','near'); return; }
   if(idx!==curIdx){ curIdx=idx; chapters.forEach(function(ch,i){ ch.li.classList.toggle('cur',i===idx); ch.li.classList.toggle('nb',Math.abs(i-idx)===1); }); tocCount.textContent=(idx+1)+' из '+chapters.length; }
 }
-var tocTipDone=false; try{tocTipDone=sessionStorage.getItem('fsTocTip')==='1'}catch(_){}
-function tocTipCheck(){ if(tocTipDone||MQ())return; if(scrollY>cov.offsetHeight-vh*.3){ tocTipDone=true; try{sessionStorage.setItem('fsTocTip','1')}catch(_){}
-  setTimeout(function(){ tocShow(4200); tocTip.classList.add('on'); setTimeout(function(){tocTip.classList.remove('on')},3800); },500); } }
+// first time past the cover: dim the page, open the contents, explain once
+var tocTipDone=false, tocIntro=false, tocIntroT=null, tocDim=$('#tocDim'); try{tocTipDone=sessionStorage.getItem('fsTocTip')==='1'}catch(_){}
+function tocTipCheck(){ if(tocTipDone||MQ()||NAV!=='rail'||!played)return;
+  if(cov.getBoundingClientRect().bottom<vh*.92){ tocTipDone=true; try{sessionStorage.setItem('fsTocTip','1')}catch(_){}
+    tocIntro=true; toc.classList.add('on','open','near'); clearTimeout(tocHideT); tocDim.classList.add('on');
+    setTimeout(function(){ if(!tocIntro)return; var pr=$('#toc .panel').getBoundingClientRect(); tocTip.style.left=(pr.right+18)+'px'; tocTip.classList.add('on'); },550);
+    tocIntroT=setTimeout(endTocIntro,6500); } }
+function endTocIntro(){ if(!tocIntro)return; tocIntro=false; clearTimeout(tocIntroT); tocDim.classList.remove('on'); tocTip.classList.remove('on');
+  if(!tocHover){ toc.classList.remove('open'); toc.classList.add('near'); setTimeout(function(){ if(!tocHover) toc.classList.remove('near'); tocShow(1); },2200); } }
+tocDim.addEventListener('click',endTocIntro); $('#tocTipOk').addEventListener('click',endTocIntro);
 
 
 /* ---------- mobile contents ---------- */
@@ -1366,6 +1389,14 @@ chapters.forEach(function(ch,i){
 });
 $('#dPrev').onclick=function(){goCh(curIdx-1)}; $('#dNext').onclick=function(){goCh(curIdx+1)};
 $('#dMid').onclick=function(e){e.stopPropagation();dock.classList.toggle('open')};
+var dockT=null; dock.addEventListener('mouseenter',function(){clearTimeout(dockT);dock.classList.add('open')}); dock.addEventListener('mouseleave',function(){dockT=setTimeout(function(){dock.classList.remove('open')},350)});
+// cube on desktop: hover opens the list
+var cubeT=null; function cubeIn(){ if(MQ()||NAV!=='cube')return; clearTimeout(cubeT); msheet.classList.add('on'); var c=mlist.querySelector('li.cur'); if(c) msheet.scrollTop=c.offsetTop-msheet.clientHeight/2; } function cubeOut(){ if(MQ()||NAV!=='cube')return; cubeT=setTimeout(function(){msheet.classList.remove('on')},400); }
+mcube.addEventListener('mouseenter',cubeIn); mcube.addEventListener('mouseleave',cubeOut); msheet.addEventListener('mouseenter',cubeIn); msheet.addEventListener('mouseleave',cubeOut);
+// segments: hovering the bar shows the full list
+var segPop=document.createElement('div'); segPop.id='segPop'; chapters.forEach(function(ch,i){ var a=document.createElement('a'); a.innerHTML='<i>'+String(i+1).padStart(2,'0')+'</i>'+(LABEL[ch.name]||ch.name); a.onclick=function(){goCh(i)}; segPop.appendChild(a); ch.sp=a; }); document.body.appendChild(segPop);
+var segT2=null; function segIn(){clearTimeout(segT2);segPop.classList.add('on')} function segOut(){segT2=setTimeout(function(){segPop.classList.remove('on')},350)}
+segbar.addEventListener('mouseenter',segIn); segbar.addEventListener('mouseleave',segOut); segPop.addEventListener('mouseenter',segIn); segPop.addEventListener('mouseleave',segOut);
 document.addEventListener('click',function(e){ if(!dock.contains(e.target)) dock.classList.remove('open'); });
 var lastNavIdx=-2;
 function navUpdate(){
@@ -1375,7 +1406,8 @@ function navUpdate(){
   if(NAV==='top'){ segbar.classList.toggle('on',past);
     chapters.forEach(function(ch,i){ var a=ch.secs[0].getBoundingClientRect().top+scrollY, nx=chapters[i+1]?chapters[i+1].secs[0].getBoundingClientRect().top+scrollY:document.documentElement.scrollHeight-vh; var f=clamp((scrollY+vh*.4-a)/(nx-a),0,1); ch.sg.firstChild.style.width=(f*100)+'%'; });
     if(curIdx!==lastNavIdx&&curIdx>=0&&past){ seglbl.textContent=String(curIdx+1).padStart(2,'0')+' · '+(LABEL[chapters[curIdx].name]||chapters[curIdx].name); seglbl.classList.add('on'); clearTimeout(segT); segT=setTimeout(function(){seglbl.classList.remove('on')},2200); }
-    if(!past) seglbl.classList.remove('on'); }
+    if(!past){ seglbl.classList.remove('on'); segPop.classList.remove('on'); }
+    if(curIdx>=0) chapters.forEach(function(ch,i){ch.sp.classList.toggle('cur',i===curIdx)}); }
   lastNavIdx=curIdx;
 }
 
