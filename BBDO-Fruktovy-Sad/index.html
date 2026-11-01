@@ -172,10 +172,10 @@ b{font-weight:800}
 
 /* expand player (attention tests) */
 .xp{position:relative;background:var(--paper)}
-.xp .stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;align-items:center;padding:clamp(70px,8vw,120px) var(--pad)}
+.xp .stick{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:clamp(80px,9vw,140px) var(--pad)}
 .xp .fade{transition:none}
-.xp-slot{aspect-ratio:16/9;width:100%}
-.xp-player{position:absolute;z-index:6;overflow:hidden;border-radius:var(--r);box-shadow:0 24px 50px rgba(20,40,20,.28);background:#111;cursor:zoom-in}
+.xp-slot{aspect-ratio:16/9;width:100%;position:relative}
+.xp-player{position:absolute;inset:0;z-index:6;overflow:hidden;border-radius:var(--r);box-shadow:0 24px 50px rgba(20,40,20,.28);background:#111;cursor:zoom-in}
 .xp-player video,.xp-player img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .xp-player img{transition:opacity .5s}
 .xp-player.live img{opacity:0}
@@ -184,7 +184,10 @@ b{font-weight:800}
 .xp-player.live .xp-btn{opacity:0;pointer-events:none}
 .xp-hint{position:absolute;z-index:3;right:14px;bottom:12px;background:rgba(15,48,24,.75);color:var(--cream);font-size:var(--small);font-weight:700;padding:6px 12px;border-radius:30px;opacity:0;transition:opacity .4s}
 .xp-player.live .xp-hint{opacity:1}
-.xp .stk{position:absolute;z-index:5;font-size:clamp(20px,2.1vw,40px);transform:rotate(-4deg)}
+.xp .stk{position:absolute;z-index:7;pointer-events:none;opacity:0;transition:opacity .6s ease 1.9s;font-size:clamp(20px,2.1vw,40px);transform:rotate(-4deg)}
+.xp-slot.in .stk{opacity:1}
+.xp .stk[data-anchor=tl]{left:-22px;top:-30px}
+.xp .stk[data-anchor=br]{right:-26px;bottom:-30px}
 .xp .stk.big{font-size:clamp(26px,2.9vw,56px);transform:rotate(-3deg)}
 
 /* overlay player */
@@ -196,6 +199,11 @@ b{font-weight:800}
 #ov .lr{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:56px;height:56px;border-radius:50%;border:0;background:rgba(243,239,230,.14);color:var(--cream);font-size:28px;cursor:pointer;display:none}
 #ov.gal .lr{display:block}
 #ov .lr.l{left:14px}#ov .lr.r{right:14px}
+#ov .ovdisc{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:8%;background:rgba(10,24,13,.86);cursor:pointer;transition:opacity .6s var(--ease)}
+#ov .ovdisc p{color:var(--cream);font-weight:800;text-align:center;font-size:clamp(18px,2.2vw,40px);line-height:1.35;max-width:22em;animation:discIn .7s var(--ease) both}
+#ov .ovdisc span{color:var(--lime);font-size:var(--small);letter-spacing:.12em;font-weight:700;opacity:.8}
+#ov .ovdisc.off{opacity:0;pointer-events:none}
+@keyframes discIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 #ov .cap{position:absolute;left:0;right:0;bottom:12px;text-align:center;color:var(--mint);font-size:var(--small)}
 
 /* challenge */
@@ -414,7 +422,6 @@ b{font-weight:800}
   .trio .pair{display:grid;grid-template-columns:auto 1fr auto 1fr;align-items:center}
   .trio .pair p{grid-column:1/-1;order:9}
   .xp .stk{display:none}
-  .xp .stick{align-items:flex-start;padding-top:80px}
   .cuts .txt .p{font-size:18px}
   #challenge .lead{font-size:26px}
   .torn-title h2{white-space:normal}
@@ -522,25 +529,25 @@ b{font-weight:800}
   </div>
 </section>
 
-<section class="xp" id="sm-nuance" data-chap="Вызов" style="height:280vh" data-stops="0,.55,1">
+<section class="xp" id="sm-nuance" data-chap="Вызов">
   <div class="stick">
-    <div class="wrap grid2" style="--cols:.9fr 1fr">
-      <div class="stack xp-text fade">
+    <div class="wrap grid2" style="--cols:.8fr 1.2fr">
+      <div class="stack xp-text" data-r>
         <h2 class="h2">Но есть нюанс…</h2>
         <p class="lead">Бо́льшую часть текста зритель может не успеть прочитать.</p>
         <p class="p">Он не может смотреть на две части кадра одновременно, а игровая часть забирает всё внимание, потому что она активнее текста. <b>При этом текст очень важен:</b> в нём инсайт про подготовку к празднику. Если зритель его пропустит, ролик не донесёт главного.</p>
         <p class="p accent">Хорошая новость: решения есть, о них я расскажу дальше.</p>
       </div>
-      <div class="xp-slot"></div>
+      <div class="xp-slot" data-r="r" style="--d:1.1s"></div>
     </div>
-    <div class="xp-player" data-video="a/att-farm.mp4" data-poster="a/att-farm.jpg" data-title="Тест внимания «Ферма»">
+    <div class="xp-player" data-video="a/att-farm.mp4" data-poster="a/att-farm.jpg" data-title="Тест внимания «Ферма»" data-disc="Это тест на внимание. Я показываю, куда смотрит зритель и сколько текста он успевает прочитать.">
       <img src="a/att-farm.jpg" alt="Тест внимания «Ферма»: трактор в стоп-моушене забирает взгляд, текст слева прочитан наполовину" loading="lazy">
       <video muted loop playsinline preload="none"></video>
-      <button class="xp-btn" aria-label="Смотреть тест внимания"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></button>
-      <span class="xp-hint">Нажмите, чтобы открыть крупно</span>
+      <button class="xp-btn" aria-label="Смотреть тест внимания" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></button>
+      
     </div>
-    <span class="stk sticker fade" data-anchor="tl">Как переключается внимание</span>
-    <span class="stk big sticker fade" data-anchor="br">Главный вызов ↓</span>
+    <span class="stk sticker" data-anchor="tl">Как переключается внимание</span>
+    <span class="stk big sticker" data-anchor="br">Главный вызов ↓</span>
   </div>
 </section>
 
@@ -572,29 +579,29 @@ b{font-weight:800}
   </div>
 </section>
 
-<section class="xp" id="att-ok" data-chap="Решение" style="height:280vh" data-stops="0,.55,1">
+<section class="xp" id="att-ok" data-chap="Решение">
   <div class="stick">
     <div style="width:100%;max-width:1680px;margin:0 auto">
-      <div class="fade" style="margin-bottom:clamp(20px,3vw,48px)">
+      <div style="margin-bottom:clamp(20px,3vw,48px)">
         <h2 class="h2">Как это работает</h2>
         <p class="p" style="margin-top:12px">Героиня сама смотрит на текст, и строка появляется в тот момент, когда туда переходит взгляд зрителя.</p>
       </div>
       <div class="grid2" style="--cols:1.25fr 1fr">
-        <div class="xp-slot"></div>
-        <div class="steps fade">
+        <div class="xp-slot" data-r="r" style="--d:1.1s"></div>
+        <div class="steps">
           <p><i>1</i>смотрим на героя и узнаём ситуацию</p>
           <p><i>2</i>вслед за его взглядом читаем текст</p>
           <p><i>3</i>видим реакцию героя</p>
         </div>
       </div>
     </div>
-    <div class="xp-player" data-video="a/att-sister.mp4" data-poster="a/att-sister.jpg" data-title="Тест внимания: правильный тайминг">
+    <div class="xp-player" data-video="a/att-sister.mp4" data-poster="a/att-sister.jpg" data-title="Тест внимания: правильный тайминг" data-disc="Тот же тест на внимание, только текст появляется вслед за взглядом героини.">
       <img src="a/att-sister.jpg" alt="Тест внимания: правильный тайминг, весь текст прочитан" loading="lazy">
       <video muted loop playsinline preload="none"></video>
-      <button class="xp-btn" aria-label="Смотреть тест внимания"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></button>
-      <span class="xp-hint">Нажмите, чтобы открыть крупно</span>
+      <button class="xp-btn" aria-label="Смотреть тест внимания" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></button>
+      
     </div>
-    <span class="stk sticker fade" data-anchor="tl">Тест внимания</span>
+    <span class="stk sticker" data-anchor="tl">Тест внимания</span>
   </div>
 </section>
 
@@ -973,7 +980,7 @@ $('#play').addEventListener('click',function(){
   played=true; html.classList.remove('locked');
   var p=cvv.play(); if(p&&p.catch)p.catch(function(){});
   cv.classList.add('playing'); this.classList.add('gone');
-  setTimeout(function(){ $('#hint').classList.add('show'); $('#nav').classList.add('show'); },600);
+  setTimeout(function(){ if(scrollY<vh*.15)$('#hint').classList.add('show'); $('#nav').classList.add('show'); },600);
   measure();
 });
 
@@ -1005,8 +1012,14 @@ function closeOv(){ov.classList.remove('open','gal');setTimeout(function(){if(!o
 function showGal(){var it=galleries[gal][gi];ovbox.innerHTML='<img src="'+it[0]+'" alt="'+it[1]+'">';ovcap.textContent=it[1]+'  ·  '+(gi+1)+' / '+galleries[gal].length}
 function openGal(g,i){gal=g;gi=i;ov.classList.add('gal');showGal();openOv()}
 function stepGal(d){if(!gal)return;gi=(gi+d+galleries[gal].length)%galleries[gal].length;showGal()}
-function openVideo(src,poster,title){gal=null;ovbox.innerHTML='<video src="'+src+'" poster="'+poster+'" autoplay loop muted playsinline controls></video>';ovcap.textContent=title||'';openOv()}
-$('#ovx').onclick=closeOv; $('#ovl').onclick=function(){stepGal(-1)}; $('#ovr').onclick=function(){stepGal(1)};
+var discT=null;
+function openVideo(src,poster,title,disc){gal=null;clearTimeout(discT);
+  ovbox.innerHTML='<video src="'+src+'" poster="'+poster+'" loop muted playsinline controls preload="auto"></video>'+(disc?'<div class="ovdisc"><p></p><span>Нажмите, чтобы начать сразу</span></div>':'');
+  var v=$('video',ovbox), d=$('.ovdisc',ovbox); ovcap.textContent=title||''; openOv();
+  function go(){clearTimeout(discT); if(d)d.classList.add('off'); var pr=v.play(); if(pr&&pr.catch)pr.catch(function(){});}
+  if(d){ $('p',d).textContent=disc; d.addEventListener('click',go); discT=setTimeout(go,3400);} else go();
+}
+$('#ovx').onclick=function(){clearTimeout(discT);closeOv()}; $('#ovl').onclick=function(){stepGal(-1)}; $('#ovr').onclick=function(){stepGal(1)};
 ov.addEventListener('click',function(e){if(e.target===ov)closeOv()});
 var tx=null; ov.addEventListener('touchstart',function(e){tx=e.touches[0].clientX},{passive:true});
 ov.addEventListener('touchend',function(e){if(tx===null||!gal)return;var dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)stepGal(dx<0?1:-1);tx=null});
@@ -1016,29 +1029,13 @@ $('#stz').addEventListener('click',function(){openGal('style',styleIdx)});
 /* ---------- YouTube ---------- */
 $$('.yt').forEach(function(y){y.addEventListener('click',function(){ if(y.querySelector('iframe'))return; var f=document.createElement('iframe'); f.src='https://www.youtube-nocookie.com/embed/'+y.dataset.id+'?autoplay=1&rel=0&modestbranding=1&playsinline=1'; f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen=true; y.appendChild(f); });});
 
-/* ---------- expand players (attention tests) ---------- */
-var xps=$$('.xp').map(function(sec){
-  var o={sec:sec,stick:$('.stick',sec),slot:$('.xp-slot',sec),pl:$('.xp-player',sec),fades:$$('.fade',sec),stk:$$('.stk',sec),live:false,base:null};
-  o.v=$('video',o.pl);
-  o.pl.addEventListener('click',function(){ o.v.pause(); openVideo(o.pl.dataset.video,o.pl.dataset.poster,o.pl.dataset.title); });
-  return o;
+/* ---------- attention tests: click -> page-wide player with disclaimer ---------- */
+$$('.xp').forEach(function(sec){
+  var slot=$('.xp-slot',sec), pl=$('.xp-player',sec);
+  slot.appendChild(pl); $$('.stk',sec).forEach(function(k){slot.appendChild(k)});
+  $('video',pl).remove();
+  pl.addEventListener('click',function(){ openVideo(pl.dataset.video,pl.dataset.poster,pl.dataset.title,pl.dataset.disc); });
 });
-function xpBase(o){ var s=o.stick.getBoundingClientRect(), r=o.slot.getBoundingClientRect(); o.base={x:r.left-s.left,y:r.top-s.top,w:r.width,h:r.height,sw:s.width,sh:s.height}; }
-function xpUpdate(o){
-  var r=o.sec.getBoundingClientRect(), range=o.sec.offsetHeight-vh, p=clamp(-r.top/range,0,1);
-  if(!o.base)xpBase(o);
-  var b=o.base, e=ease(clamp((p-.08)/.4,0,1));
-  var mob=innerWidth<=900, tw=Math.min(b.sw*(mob?.96:.94),(b.sh*(mob?.8:.86))*16/9), th=tw*9/16, tx=(b.sw-tw)/2, ty=(b.sh-th)/2+(mob?10:14);
-  var x=b.x+(tx-b.x)*e, y=b.y+(ty-b.y)*e, w=b.w+(tw-b.w)*e, h=b.h+(th-b.h)*e;
-  o.pl.style.cssText='left:'+x+'px;top:'+y+'px;width:'+w+'px;height:'+h+'px';
-  var f=1-clamp(e*1.6,0,1);
-  o.fades.forEach(function(el){el.style.opacity=f; el.style.transform='translateY('+(-30*e)+'px)'});
-  var fs=1-clamp(e*4,0,1); o.stk.forEach(function(el){ el.style.opacity=fs; el.style.visibility=fs<.02?'hidden':'visible'; if(el.dataset.anchor==='tl'){el.style.left=(b.x-24)+'px';el.style.top=(b.y-34)+'px'} else {el.style.left=(b.x+b.w-260)+'px';el.style.top=(b.y+b.h-20)+'px'} });
-  var inView=r.top<vh&&r.bottom>0;
-  if(e>.92&&inView){ if(!o.live){ o.live=true; o.pl.classList.add('live'); if(!o.v.src)o.v.src=o.pl.dataset.video; try{o.v.currentTime=0}catch(_){} var pr=o.v.play(); if(pr&&pr.catch)pr.catch(function(){}); } }
-  else if(o.live&&(e<.75||!inView)){ o.live=false; o.pl.classList.remove('live'); o.v.pause(); }
-}
-
 /* ---------- approach swap ---------- */
 var ap=$('#approach'), swap=$('#swap'), swapcap=$('#swapcap');
 function apUpdate(){ var r=ap.getBoundingClientRect(), p=clamp(-r.top/(ap.offsetHeight-vh),0,1); var on=p>.42; swap.classList.toggle('on',on); swapcap.classList.toggle('on',on); }
@@ -1082,7 +1079,7 @@ function covUpdate(){
 /* ---------- header, progress, chapters ---------- */
 var lastChap=null, chapT=null, top=$('#top'), chap=$('#chap'), prog=$('#prog'), secs=$$('main>section');
 function hdUpdate(){
-  var y=scrollY, H=document.documentElement.scrollHeight-vh;
+  var y=scrollY, H=document.documentElement.scrollHeight-vh; if(y>vh*.3)$('#hint').classList.remove('show');
   prog.style.width=(clamp(y/H,0,1)*100)+'%';
   var cur=null; for(var i=0;i<secs.length;i++){var r=secs[i].getBoundingClientRect(); if(r.top<=60&&r.bottom>60){cur=secs[i];break}}
   if(cur){ var c=cur.dataset.chap||''; top.classList.toggle('on-dark',cur.hasAttribute('data-dark'));
@@ -1095,7 +1092,6 @@ function measure(){
   vh=innerHeight; stops=[];
   secs.forEach(function(s){ var top=s.getBoundingClientRect().top+scrollY; if(s.dataset.stops){ var range=s.offsetHeight-vh; s.dataset.stops.split(',').forEach(function(f){stops.push(Math.round(top+range*parseFloat(f)))}) } else stops.push(Math.round(top)); });
   stops.sort(function(a,b){return a-b});
-  xps.forEach(function(o){o.base=null});
 }
 function go(d){
   if(!played)return;
@@ -1114,7 +1110,7 @@ $('#down').onclick=function(){go(1)}; $('#up').onclick=function(){go(-1)};
 
 /* ---------- main loop ---------- */
 var ticking=false;
-function frame(){ticking=false; covUpdate(); xps.forEach(xpUpdate); apUpdate(); stUpdate(); hdUpdate();}
+function frame(){ticking=false; covUpdate(); apUpdate(); stUpdate(); hdUpdate();}
 addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(frame)}},{passive:true});
 var rt; addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){measure();frame()},120)});
 addEventListener('load',function(){measure();frame()});
