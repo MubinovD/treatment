@@ -84,7 +84,7 @@ b{font-weight:800}
 @keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
 /* ---------- sections ---------- */
-.sec{position:relative;min-height:100vh;min-height:100svh;padding:clamp(72px,6.84vw,106px) var(--pad);display:flex;align-items:center;overflow:hidden}
+.sec{position:relative;min-height:86vh;min-height:86svh;padding:clamp(72px,6.84vw,106px) var(--pad);display:flex;align-items:center;overflow:hidden}
 .light{background:var(--paper)}
 .dark{background:radial-gradient(ellipse 90% 80% at 25% 20%,var(--g6) 0%,var(--g7) 55%,var(--g8) 100%) fixed;color:var(--cream)}
 .dark::before{content:"";position:absolute;inset:0;background:url(a/grain.webp) center/100vw 100vh fixed;opacity:.6;pointer-events:none}
@@ -159,7 +159,8 @@ b{font-weight:800}
 .tilt-r{transform:rotate(2deg)}
 
 /* chapter title */
-.chap-title{justify-content:center;text-align:center}
+.chap-title{justify-content:center;text-align:center;min-height:72vh!important;min-height:72svh!important}
+.sec.tight{min-height:0;padding-top:clamp(56px,6vw,96px);padding-bottom:clamp(56px,6vw,96px)}
 .chap-title h2{font-family:'Lobster',cursive;font-weight:400;font-size:var(--h1);line-height:1.02;color:var(--cream)}
 .chap-title .bar-lime{margin:clamp(18px,1.9vw,30px) auto 0;transform:scaleX(0);transition:transform 1s var(--ease) .5s}
 .chap-title.in .bar-lime{transform:scaleX(1)}
@@ -265,7 +266,8 @@ b{font-weight:800}
 .sb .txt>*:not(.num){position:relative}
 .sb .h2{font-size:clamp(40px,3.5vw,64px)}
 .sb .p{color:#3A463C;font-size:clamp(15px,1.14vw,22px);line-height:1.45}
-.sb .pic{position:relative;display:flex;align-items:center;justify-content:center;padding:clamp(36px,3.8vw,68px) clamp(18px,3.8vw,76px)}
+.sb .pic{position:relative;display:flex;align-items:center;justify-content:center;padding:clamp(36px,3.8vw,68px) clamp(24px,3.8vw,76px) clamp(36px,3.8vw,68px) calc(max(9%,10.2vh) + clamp(28px,3vw,56px))}
+.sb.flip .pic{padding:clamp(36px,3.8vw,68px) calc(max(9%,10.2vh) + clamp(28px,3vw,56px)) clamp(36px,3.8vw,68px) clamp(24px,3.8vw,76px)}
 .sb .pic::before{content:"";position:absolute;inset:0;background:url(a/panel-right.webp) left center/cover no-repeat}
 .sb.flip{grid-template-columns:minmax(0,.58fr) minmax(0,.42fr)}
 .sb.flip .pic{order:-1}
@@ -307,9 +309,9 @@ b{font-weight:800}
 .tests p b{color:var(--g7)}
 
 /* cuts */
-.cuts{padding:0;display:grid;grid-template-columns:minmax(0,.4fr) minmax(0,.6fr);min-height:100vh;min-height:100svh}
+.cuts{padding:0;align-items:stretch;display:grid;grid-template-columns:minmax(0,.4fr) minmax(0,.6fr);min-height:100vh;min-height:100svh}
 .cuts .txt{padding:clamp(72px,6.08vw,99px) clamp(18px,2.28vw,46px) clamp(72px,6.08vw,99px) var(--pad);display:flex;flex-direction:column;justify-content:center;gap:clamp(12px,1.4vw,22px)}
-.cuts .pic{position:relative;display:flex;align-items:center;justify-content:center;padding:clamp(36px,3.8vw,68px) clamp(18px,3.04vw,61px);gap:20px}
+.cuts .pic{position:relative;display:flex;align-items:center;justify-content:center;padding:clamp(36px,3.8vw,68px) clamp(24px,3.04vw,61px) clamp(36px,3.8vw,68px) calc(max(9%,10.2vh) + clamp(28px,3vw,56px));gap:20px}
 .cuts .pic::before{content:"";position:absolute;inset:0;background:url(a/panel-right.webp) left center/cover no-repeat}
 .cuts .pic>*{position:relative}
 .cuts .m{border-radius:14px;aspect-ratio:16/9;box-shadow:0 20px 50px rgba(0,0,0,.35)}
@@ -406,7 +408,7 @@ b{font-weight:800}
 @media (max-width:900px){
   .grid2,.tl-row,.types,.pp,.cmp,.sb,.sb.flip,.cuts{grid-template-columns:1fr!important}
   .sec{padding:84px 20px 90px}
-  .sb .pic,.cuts .pic{min-height:0;padding:34px 18px 40px}
+  .sb .pic,.cuts .pic,.sb.flip .pic{min-height:0;padding:34px 18px 40px calc(9% + 22px)}
   .sb{min-height:0}
   .cuts{min-height:0}
   #thanks>img.bg{object-position:78% center}
@@ -845,19 +847,13 @@ b{font-weight:800}
   </div>
 </section>
 
-<section class="sec light" id="seasons-hair" data-chap="Новый год VS Наурыз">
-  <div class="wrap stack">
-    <p class="kicker" data-r>Новый год VS Наурыз</p>
-    <h2 class="h2" data-r style="--d:.05s">Костюмы и причёски</h2>
-    <p class="p" data-r style="font-size:var(--lead);line-height:1.45;max-width:40ch;--d:.15s">Первично нужно менять внешний вид героев — они всегда на переднем плане, в фокусе и двигаются. Зритель уделяет им <b style="color:var(--g7)">80% внимания</b> и только 20% фону.</p>
-  </div>
-</section>
-
 <section class="sec light" id="seasons-costume" data-chap="Новый год VS Наурыз">
-  <div class="wrap grid2" style="--cols:.9fr 1fr">
-    <div class="stack">
-      <p class="kicker" data-r>Новый год и Наурыз</p>
-      <p class="p" data-r style="--d:.1s">Поэтому в новогодней версии они должны быть уютно одеты — в тёплые вещи: свитеры, свитшоты, двухслойно. А ещё у них должен быть нарядный хейрстайл — уложенные волосы, у дочки могут быть блёстки на волосах или украшение на голове. Отец в магазине должен быть в куртке.</p>
+  <div class="wrap grid2" style="--cols:minmax(0,46ch) 1fr">
+    <div class="stack" style="gap:clamp(12px,1.3vw,22px)">
+      <p class="kicker" data-r>Новый год VS Наурыз</p>
+      <h2 class="h2" data-r style="--d:.05s">Костюмы и причёски</h2>
+      <p class="p" data-r style="--d:.1s">Первично нужно менять внешний вид героев — они всегда на переднем плане, в фокусе и двигаются. Зритель уделяет им <b style="color:var(--g7)">80% внимания</b> и только 20% фону.</p>
+      <p class="p" data-r style="--d:.15s">Поэтому в новогодней версии они должны быть уютно одеты — в тёплые вещи: свитеры, свитшоты, двухслойно. А ещё у них должен быть нарядный хейрстайл — уложенные волосы, у дочки могут быть блёстки на волосах или украшение на голове. Отец в магазине должен быть в куртке.</p>
       <p class="p" data-r style="--d:.2s">В версии Наурыза же мы скидываем весь груз в виде одежды и переходим на более весенне-летнюю одежду, а на маме — платок.</p>
     </div>
     <div class="costumes" data-r="r">
@@ -869,7 +865,7 @@ b{font-weight:800}
   </div>
 </section>
 
-<section class="sec light" id="seasons-art" data-chap="Новый год VS Наурыз">
+<section class="sec light tight" id="seasons-art" data-chap="Новый год VS Наурыз">
   <div class="wrap">
     <p class="kicker" data-r>Новый год и Наурыз</p>
     <h2 class="h2" data-r style="--d:.05s;margin-top:8px">Художка и свет</h2>
@@ -881,7 +877,7 @@ b{font-weight:800}
   </div>
 </section>
 
-<section class="sec light" id="casting" data-chap="Кастинг">
+<section class="sec light tight" id="casting" data-chap="Кастинг">
   <div class="wrap">
     <h2 class="h2" data-r>Кастинг</h2>
     <p class="p" data-r style="--d:.1s;margin-top:16px">Задание по кастингу, указанное в брифе, — идеальное, и мне здесь ничего не хочется менять. Для этого проекта актёрские скиллы мне важны так же, как и типаж: например, ту же хитрость подростка мы сможем отыграть хитрым прищуром.</p>
@@ -923,7 +919,7 @@ b{font-weight:800}
   </div>
 </section>
 
-<section class="sec light" id="music" data-chap="Аудиоряд">
+<section class="sec light tight" id="music" data-chap="Аудиоряд">
   <div class="wrap">
     <h2 class="h2" data-r>Музыка</h2>
     <p class="p" data-r style="--d:.1s;margin-top:18px">Музыку вы уже слышали в аниматике: она нейтральная и с паузами. Я хочу праздничную, немного quirky, заигрывающую музыку с паузами в нужных местах, чтобы мы слышали саунд-дизайн. Музыка не должна заполнять весь эфир — она просто подыгрывает.</p>
@@ -1010,7 +1006,8 @@ $('#play').addEventListener('click',function(){
 });
 
 /* ---------- reveal ---------- */
-var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.18,rootMargin:'0px 0px -6% 0px'});
+// reveal on the way down; reset when the element drops below the screen again (scrolling back up), so it replays
+var io=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting&&e.intersectionRatio>=.18){e.target.classList.add('in')} else if(e.boundingClientRect.top>innerHeight){e.target.classList.remove('in')} })},{threshold:[0,.18],rootMargin:'0px 0px -6% 0px'});
 $$('[data-r],.chap-title,[data-fly]').forEach(function(el){io.observe(el)});
 
 /* ---------- lazy looping videos ---------- */
