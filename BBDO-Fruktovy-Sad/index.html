@@ -277,6 +277,14 @@ b{font-weight:800}
 .sb .note{position:absolute;left:0;right:0;bottom:clamp(22px,5vh,70px);text-align:center;color:#fff;font-weight:700;font-size:clamp(14px,1.03vw,20px);padding:0 10%;z-index:2}
 .sb .foot{z-index:3}
 
+/* one continuous torn-paper strip through storyboard / cuts (desktop) */
+.paperwrap{position:relative;background:var(--paper)}
+@media (min-width:901px){
+  .paperwrap::before{content:"";position:absolute;top:0;bottom:0;right:0;width:58%;background:url(a/panel-tile.webp) left top/100% auto repeat-y;pointer-events:none}
+  .paperwrap .sec{background:transparent}
+  .paperwrap .pic::before{display:none}
+  .paperwrap .pic{padding-left:calc(9% + clamp(28px,3vw,56px))!important;padding-right:clamp(24px,3.8vw,76px)!important}
+}
 /* stop-motion types */
 .types{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(22px,3.04vw,53px);align-items:end;margin-top:clamp(22px,2.28vw,38px)}
 .types .m{border-radius:var(--r)}
@@ -309,7 +317,7 @@ b{font-weight:800}
 .tests p b{color:var(--g7)}
 
 /* cuts */
-.cuts{padding:0;align-items:stretch;display:grid;grid-template-columns:minmax(0,.4fr) minmax(0,.6fr);min-height:100vh;min-height:100svh}
+.cuts{padding:0;align-items:stretch;display:grid;grid-template-columns:minmax(0,.42fr) minmax(0,.58fr);min-height:100vh;min-height:100svh}
 .cuts .txt{padding:clamp(72px,6.08vw,99px) clamp(18px,2.28vw,46px) clamp(72px,6.08vw,99px) var(--pad);display:flex;flex-direction:column;justify-content:center;gap:clamp(12px,1.4vw,22px)}
 .cuts .pic{position:relative;display:flex;align-items:center;justify-content:center;padding:clamp(36px,3.8vw,68px) clamp(24px,3.04vw,61px) clamp(36px,3.8vw,68px) calc(max(9%,10.2vh) + clamp(28px,3vw,56px));gap:20px}
 .cuts .pic::before{content:"";position:absolute;inset:0;background:url(a/panel-right.webp) left center/cover no-repeat}
@@ -367,7 +375,9 @@ b{font-weight:800}
 .pills span:last-child{background:var(--cream);color:var(--g7)}
 
 /* sound */
-.ding{position:relative;width:min(420px,70%);aspect-ratio:1;margin:0 auto;display:grid;place-items:center}
+.audio-row{display:grid;grid-template-columns:minmax(160px,300px) minmax(0,60ch);gap:clamp(24px,4vw,72px);align-items:center}
+.music-part{display:grid;grid-template-columns:minmax(0,60ch) minmax(0,1fr);gap:clamp(24px,4vw,72px);align-items:center;margin-top:clamp(56px,6vw,100px);padding-top:clamp(40px,4vw,64px);border-top:1px solid #E6EAE2}
+.ding{position:relative;width:100%;aspect-ratio:1;margin:0;display:grid;place-items:center}
 .ding .box{width:42%;aspect-ratio:1;border:7px solid var(--g7);border-radius:18%;display:grid;place-items:center;background:#fff;position:relative;z-index:2}
 .ding .box svg{width:78%;stroke:var(--lime);stroke-width:14;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:120;stroke-dashoffset:120;animation:tick 2.6s var(--ease) infinite}
 .ding .ring{position:absolute;inset:29%;border-radius:50%;border:4px solid var(--lime);opacity:0;animation:ring 2.6s ease-out infinite}
@@ -395,13 +405,13 @@ b{font-weight:800}
 #thanks .logos{position:absolute;left:var(--pad);top:clamp(16px,2.28vw,43px);display:flex;gap:18px;align-items:center;z-index:2}
 #thanks .logos img{height:clamp(27px,2.58vw,49px);width:auto}
 
-#thanks .end{position:absolute;left:var(--pad);bottom:clamp(40px,8vh,110px);z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:clamp(6px,1vw,16px)}
+#thanks .end{position:absolute;left:var(--pad);bottom:clamp(40px,8vh,110px);z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:0}
 #thanks .torn-title h2{font-size:clamp(63px,6.84vw,129px)}
-#thanks .torn-title{transform:rotate(-4deg)}
-.torn-note{position:relative;padding:clamp(16px,1.52vw,26px) clamp(27px,2.28vw,43px);transform:rotate(2deg)}
+#thanks .torn-title{transform:rotate(-4deg);z-index:2}
+.torn-note{position:relative;margin-top:calc(-1 * clamp(14px,1.6vw,30px));margin-left:clamp(10px,1.2vw,24px);z-index:1;padding:clamp(16px,1.52vw,26px) clamp(27px,2.28vw,43px);transform:rotate(2deg)}
 .torn-note img{position:absolute;inset:0;width:100%;height:100%;max-width:none}
 .torn-note p{position:relative;font-weight:800;color:var(--g7);font-size:clamp(15px,1.1vw,21px)}
-#thanks .sign{position:absolute;right:var(--pad);bottom:clamp(18px,3vh,40px);z-index:2;color:rgba(243,239,230,.7);font-size:var(--small);text-align:right}
+#thanks .sign{position:relative;margin-top:clamp(18px,2.4vw,40px);margin-left:clamp(10px,1.2vw,24px);color:rgba(243,239,230,.75);font-size:var(--small);text-align:left;line-height:1.6}
 #thanks .sign a{color:var(--lime);text-decoration:none;font-weight:800}
 
 /* ---------- responsive ---------- */
@@ -419,6 +429,8 @@ b{font-weight:800}
   .sb .pic::before,.sb.flip .pic::before,.cuts .pic::before{background-image:url(a/panel-right.webp);background-position:left top;background-size:cover}
   .portrait{margin:10px auto 0;width:78%}
   .cast{grid-template-columns:repeat(3,1fr)}
+  .audio-row,.music-part{grid-template-columns:1fr}
+  .audio-row .ding{width:min(220px,60%);margin:0 auto}
   #nav{display:none}
   .xp{height:auto}
   #approach{height:auto}
@@ -647,6 +659,7 @@ b{font-weight:800}
 <!-- CH: СТОРИБОРД -->
 <section class="sec dark chap-title" data-chap="Сториборд" data-dark><div class="wrap"><h2 data-split>Сториборд</h2><div class="bar-lime"></div></div></section>
 
+<div class="paperwrap">
 <section class="sec light sb" id="sb1" data-chap="Сториборд">
   <div class="txt"><span class="num">1</span>
     <h2 class="h2" data-r>1. Полка</h2>
@@ -655,7 +668,7 @@ b{font-weight:800}
   <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb1.mp4" poster="a/sb1.jpg" muted loop playsinline></video></div></div>
 </section>
 
-<section class="sec light sb flip" id="sb2" data-chap="Сториборд">
+<section class="sec light sb" id="sb2" data-chap="Сториборд">
   <div class="txt"><span class="num">2</span>
     <h2 class="h2" data-r>2. Папа</h2>
     <p class="p" data-r style="--d:.12s"><b>POV полки.</b> Отца пока не видно — только руку, которая потянулась к соку в предыдущем кадре. Рука раздвигает соки, и сквозь щель мы видим отца. Наши живые соки расступаются в стороны и окончательно открывают кадр. Параллельно появляется текст, и на моменте с «Ой, забыл» отец смотрит на него и пожимает плечами.</p>
@@ -672,7 +685,7 @@ b{font-weight:800}
     <p class="note" data-r style="--d:1.6s">Я объединил кадры 3 и 4, потому что они умещаются в один ракурс.</p></div>
 </section>
 
-<section class="sec light sb flip" id="sb4" data-chap="Сториборд">
+<section class="sec light sb" id="sb4" data-chap="Сториборд">
   <div class="txt"><span class="num">4</span>
     <h2 class="h2" data-r>4. Сын</h2>
     <p class="p" data-r style="--d:.12s">А это рука её братишки, который опередил её, налил себе стакан сока и с хитрым прищуром выпивает его.</p>
@@ -687,6 +700,7 @@ b{font-weight:800}
   </div>
   <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb5.mp4" poster="a/sb5.jpg" muted loop playsinline></video></div></div>
 </section>
+</div>
 
 <!-- CH: РЕАЛИЗАЦИЯ -->
 <section class="sec dark chap-title" data-chap="Реализация" data-dark><div class="wrap"><h2 data-split>Реализация</h2><div class="bar-lime"></div></div></section>
@@ -777,6 +791,7 @@ b{font-weight:800}
 <!-- CH: АДАПТАЦИИ -->
 <section class="sec dark chap-title" data-chap="Адаптации" data-dark><div class="wrap"><h2 data-split>Адаптации</h2><div class="bar-lime"></div></div></section>
 
+<div class="paperwrap">
 <section class="sec light cuts" id="cuts3" data-chap="Адаптации">
   <div class="txt">
     <p class="kicker" data-r>Каты</p>
@@ -814,6 +829,7 @@ b{font-weight:800}
     <div class="pair" data-r="r" style="--d:.3s"><div class="m"><img src="a/cut-son.jpg" alt="Сын" loading="lazy"></div><span class="plus">+</span><div class="m"><img src="a/packshot.jpg" alt="Пэкшот" loading="lazy"></div><p><b>Сын</b> — налил себе сок, улыбнулся, и вся семья празднует.</p></div>
   </div></div>
 </section>
+</div>
 
 <!-- CH: СТИЛЬ -->
 <section class="sec dark chap-title" data-chap="Визуальный стиль" data-dark><div class="wrap"><h2 data-split>Визуальный стиль</h2><div class="bar-lime"></div></div></section>
@@ -910,23 +926,24 @@ b{font-weight:800}
 <section class="sec dark chap-title" data-chap="Аудиоряд" data-dark><div class="wrap"><h2 data-split>Аудиоряд</h2><div class="bar-lime"></div></div></section>
 
 <section class="sec light" id="sound" data-chap="Аудиоряд">
-  <div class="wrap grid2">
-    <div class="stack">
-      <h2 class="h2" data-r>Звук</h2>
-      <p class="p" data-r style="--d:.1s">Каждая отметка должна сопровождаться звуком успеха, на который, кстати, и может реагировать наш герой. <span class="accent">Я бы даже сказал, что саунд-дизайн тут сильно важнее музыки.</span></p>
+  <div class="wrap">
+    <div class="audio-row">
+      <div class="ding" data-r="s" aria-hidden="true"><span class="ring"></span><span class="ring"></span><span class="ring"></span><div class="box"><svg viewBox="0 0 100 100"><path d="M22 54 L42 72 L80 30"/></svg></div></div>
+      <div class="stack">
+        <h2 class="h2" data-r>Звук</h2>
+        <p class="p" data-r style="--d:.1s">Каждая отметка должна сопровождаться звуком успеха, на который, кстати, и может реагировать наш герой. <span class="accent">Я бы даже сказал, что саунд-дизайн тут сильно важнее музыки.</span></p>
+      </div>
     </div>
-    <div class="ding" data-r="s" aria-hidden="true"><span class="ring"></span><span class="ring"></span><span class="ring"></span><div class="box"><svg viewBox="0 0 100 100"><path d="M22 54 L42 72 L80 30"/></svg></div></div>
+    <div class="music-part" id="music">
+      <div class="stack"><h2 class="h2" data-r>Музыка</h2>
+        <p class="p" data-r style="--d:.1s;margin-top:14px">Музыку вы уже слышали в аниматике: она нейтральная и с паузами. Я хочу праздничную, немного quirky, заигрывающую музыку с паузами в нужных местах, чтобы мы слышали саунд-дизайн. Музыка не должна заполнять весь эфир — она просто подыгрывает.</p></div>
+      <div class="wave"><div class="track" id="track" data-r style="--d:.25s;margin-top:0"><span class="head" id="head"></span></div>
+        <div class="legend" data-r style="--d:.3s"><span><em></em>музыка-подложка</span><span><em class="d"></em>паузы под звуки отметок</span></div></div>
+    </div>
   </div>
 </section>
 
-<section class="sec light tight" id="music" data-chap="Аудиоряд">
-  <div class="wrap">
-    <h2 class="h2" data-r>Музыка</h2>
-    <p class="p" data-r style="--d:.1s;margin-top:18px">Музыку вы уже слышали в аниматике: она нейтральная и с паузами. Я хочу праздничную, немного quirky, заигрывающую музыку с паузами в нужных местах, чтобы мы слышали саунд-дизайн. Музыка не должна заполнять весь эфир — она просто подыгрывает.</p>
-    <div class="track" id="track" data-r style="--d:.25s"><span class="head" id="head"></span></div>
-    <div class="legend" data-r style="--d:.3s"><span><em></em>музыка-подложка</span><span><em class="d"></em>паузы под звуки отметок</span></div>
-  </div>
-</section>
+
 
 <!-- THANKS -->
 <section class="sec" id="thanks" data-chap="Рахмат!" data-dark>
@@ -936,8 +953,8 @@ b{font-weight:800}
   <div class="end">
     <div class="torn-title" data-r="s"><img src="a/torn-green.webp" alt=""><h2>Рахмат!</h2></div>
     <div class="torn-note" data-r style="--d:.3s"><img src="a/torn-cream.webp" alt=""><p>Буду рад вопросам и любой обратной связи.</p></div>
+    <p class="sign">Режиссёрский тритмент Дамира Мубинова<br><a href="https://mubinov.uz">mubinov.uz</a></p>
   </div>
-  <p class="sign">Режиссёрский тритмент Дамира Мубинова<br><a href="https://mubinov.uz">mubinov.uz</a></p>
 </section>
 
 </main>
@@ -1104,13 +1121,13 @@ function covUpdate(){
 })();
 
 /* ---------- header, progress, chapters ---------- */
-var lastChap=null, chapT=null, top=$('#top'), chap=$('#chap'), prog=$('#prog'), secs=$$('main>section');
+var lastChap=null, chapT=null, top=$('#top'), chap=$('#chap'), prog=$('#prog'), secs=$$('main section');
 function hdUpdate(){
   var y=scrollY, H=document.documentElement.scrollHeight-vh; if(y>vh*.3)$('#hint').classList.remove('show');
   prog.style.width=(clamp(y/H,0,1)*100)+'%';
   var cur=null; for(var i=0;i<secs.length;i++){var r=secs[i].getBoundingClientRect(); if(r.top<=60&&r.bottom>60){cur=secs[i];break}}
   if(cur){ var c=cur.dataset.chap||''; top.classList.toggle('on-dark',cur.hasAttribute('data-dark'));
-    if(c!==lastChap){ lastChap=c; chap.textContent=c; clearTimeout(chapT); if(cur!==cov&&!cur.classList.contains('chap-title')){ top.classList.add('show'); chapT=setTimeout(function(){top.classList.remove('show')},2200);} else top.classList.remove('show'); } }
+    if(c!==lastChap){ lastChap=c; chap.textContent=c; clearTimeout(chapT); if(cur!==cov&&cur.id!=='thanks'&&!cur.classList.contains('chap-title')){ top.classList.add('show'); chapT=setTimeout(function(){top.classList.remove('show')},2200);} else top.classList.remove('show'); } }
 }
 
 /* ---------- keyboard / arrows: jump between fragments ---------- */
