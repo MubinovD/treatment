@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Nunito:wght@400;600;700;800;900&display=swap&subset=cyrillic" rel="stylesheet">
-<link rel="preload" as="image" href="a/cover2-first.jpg">
+<link rel="preload" as="image" href="a/cover3-first.jpg">
 <style>
 :root{
   --g9:#0F3018;--g8:#143F20;--g7:#1D5A2E;--g6:#2C7542;--lime:#A9CF46;--yellow:#F2C14E;
@@ -643,7 +643,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <div class="cvdim"></div>
     <div id="cv">
       <video id="cvv" muted loop playsinline preload="auto"></video>
-      <img src="a/cover2-first.jpg" alt="Стоп-моушен обложка: покадрово собираются логотип «Фруктовый сад» и пачки сока">
+      <img src="a/cover3-first.jpg" alt="Стоп-моушен обложка: покадрово собираются логотип «Фруктовый сад» и пачки сока">
     </div>
     <div class="logos"><img src="a/logo-chilly.webp" alt="Chilly Production"></div><img class="bbdo" src="a/bbdo-light.webp" alt="BBDO">
     <button id="play" aria-label="Начать"><span class="disc"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></span>Начать</button>
@@ -922,7 +922,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       <p class="p" data-r style="--d:.12s">Для покадровой съёмки нам понадобится фотоаппарат вместо кинокамеры, но с возможностью поставить на него кинооптику. Фотоаппарат подключаем к компьютеру со специальным софтом — Dragonframe.</p>
       <p class="p" data-r style="--d:.2s">Программа сразу показывает получившуюся анимацию, и лишние кадры можно убрать <span class="accent">прямо на съёмочной площадке</span>.</p>
       <div class="tests" data-r style="--d:.9s">
-        <div class="m loading"><video class="lv" data-src="a/cover2.mp4" poster="a/cover2-first.jpg" muted loop playsinline></video></div>
+        <div class="m loading"><video class="lv" data-src="a/cover3.mp4" poster="a/cover3-first.jpg" muted loop playsinline></video></div>
         <p><b>Тесты проведены.</b> Dragonframe я знаю по другим проектам, а под этот ролик заново всё проверил на последней версии. Всё оки.</p>
       </div>
     </div>
@@ -1137,20 +1137,20 @@ function setP(p){target=Math.max(target,p)}
 (function tick(){shown+=(target-shown)*0.12; if(target-shown<0.002)shown=target; bar.style.width=(shown*100)+'%'; pct.textContent=Math.round(shown*100)+'%'; if(shown<1)requestAnimationFrame(tick); else finish();})();
 var t0=Date.now(), finished=false;
 function finish(){ if(finished)return; finished=true; setTimeout(function(){ $('#loader').classList.add('done'); },Math.max(0,1400-(Date.now()-t0))); }
-var MOB=matchMedia('(max-width:900px)').matches; if(MOB)$('#cv img').src='a/cover2-43-first.jpg';
-var imgs=[MOB?'a/cover2-43-first.jpg':'a/cover2-first.jpg','a/grain.webp','a/logo-chilly.webp','a/bbdo-light.webp','a/damir.jpg'];
+var MOB=matchMedia('(max-width:900px)').matches; if(MOB)$('#cv img').src='a/cover3-43-first.jpg';
+var imgs=[MOB?'a/cover3-43-first.jpg':'a/cover3-first.jpg','a/grain.webp','a/logo-chilly.webp','a/bbdo-light.webp','a/damir.jpg'];
 var parts={img:0,font:0,vid:0};
 function upd(){setP(parts.img*0.15+parts.font*0.05+parts.vid*0.8)}
 var loaded=0; imgs.forEach(function(s){var i=new Image();i.onload=i.onerror=function(){loaded++;parts.img=loaded/imgs.length;upd()};i.src=s});
 (document.fonts&&document.fonts.ready||Promise.resolve()).then(function(){parts.font=1;upd()});
 // fetch cover video with progress so first play is instant
 (function(){
-  var url=MOB?'a/cover2-43.mp4':'a/cover2.mp4';
+  var url=MOB?'a/cover3-43.mp4':'a/cover3.mp4';
   function fallback(){cvv.src=url;cvv.addEventListener('canplaythrough',function(){parts.vid=1;upd()},{once:true});cvv.load();setTimeout(function(){parts.vid=1;upd()},9000)}
   if(!window.fetch||!window.ReadableStream){fallback();return}
   fetch(url).then(function(r){
     if(!r.ok||!r.body)throw 0;
-    var total=+r.headers.get('content-length')||(MOB?3002397:4811945), got=0, chunks=[], rd=r.body.getReader();
+    var total=+r.headers.get('content-length')||(MOB?3254658:4801022), got=0, chunks=[], rd=r.body.getReader();
     return (function pump(){return rd.read().then(function(x){ if(x.done){ var b=new Blob(chunks,{type:'video/mp4'}); cvv.src=URL.createObjectURL(b); parts.vid=1; upd(); return;} chunks.push(x.value); got+=x.value.length; parts.vid=clamp(got/total,0,.99); upd(); return pump(); })})();
   }).catch(fallback);
 })();
