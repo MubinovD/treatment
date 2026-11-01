@@ -407,7 +407,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 .note-stk{align-self:center;max-width:42ch;text-align:left;background:var(--lime);color:var(--g8);font-weight:700;font-size:clamp(16px,1.25vw,22px);line-height:1.45;padding:16px 22px 18px;border-radius:8px;box-shadow:0 14px 30px rgba(0,0,0,.25);transform:rotate(-1.5deg);margin-top:clamp(28px,3vw,56px);margin-bottom:0}
 #animatic{padding-bottom:clamp(20px,2vw,36px);min-height:0}
 #animatic-color{padding-top:0}
-.flow-arrow{width:clamp(40px,3.4vw,60px);height:clamp(170px,18vw,320px);align-self:center;margin-bottom:clamp(10px,1.4vw,26px);clip-path:inset(0 0 calc(100% - var(--fp,0)*100%) 0)}
+.flow-arrow{width:clamp(40px,3.4vw,60px);height:clamp(170px,18vw,320px);align-self:center;margin-bottom:clamp(10px,1.4vw,26px);clip-path:inset(0 0 100% 0)}
 .flow-arrow svg{width:100%;height:100%;overflow:visible}
 .flow-arrow .ln{fill:none;stroke:var(--lime);stroke-width:5;stroke-linecap:round;stroke-dasharray:10 12;animation:flowdash .8s linear infinite}
 .flow-arrow .hd{fill:none;stroke:var(--lime);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;animation:flowpulse 1.8s ease-in-out infinite}
@@ -1476,7 +1476,7 @@ measure(); frame();
 </script>
 <script>
 (function(){var f=document.getElementById('flowArrow');if(!f)return;var tk=false;
-function u(){tk=false;var r=f.getBoundingClientRect(),vh=innerHeight;var p=(vh*0.9-r.top)/(r.height+vh*0.25);p=Math.max(0,Math.min(1,p));f.style.setProperty('--fp',p.toFixed(3));}
+function u(){tk=false;var r=f.getBoundingClientRect(),vh=innerHeight;var p=(vh*0.9-r.top)/(r.height+vh*0.25);p=Math.max(0,Math.min(1,p));var c='inset(0 0 '+((1-p)*100).toFixed(1)+'% 0)';f.style.clipPath=c;f.style.webkitClipPath=c;}
 addEventListener('scroll',function(){if(!tk){tk=true;requestAnimationFrame(u)}},{passive:true});addEventListener('resize',u);u();})();
 </script>
 <script>
