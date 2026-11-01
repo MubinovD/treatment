@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Nunito:wght@400;600;700;800;900&display=swap&subset=cyrillic" rel="stylesheet">
-<link rel="preload" as="image" href="a/cover-first.jpg">
+<link rel="preload" as="image" href="a/cover2-first.jpg">
 <style>
 :root{
   --g9:#0F3018;--g8:#143F20;--g7:#1D5A2E;--g6:#2C7542;--lime:#A9CF46;--yellow:#F2C14E;
@@ -163,6 +163,64 @@ b{font-weight:800}
 @keyframes dtap{0%{opacity:0;transform:scale(1.6)}10%{opacity:1;transform:scale(1)}18%{opacity:0;transform:scale(.8)}100%{opacity:0}}
 @keyframes dcube{0%,9%{transform:none}13%{transform:scale(.88)}18%,100%{transform:none}}
 @keyframes dsheet{0%,14%{transform:scale(.12);opacity:0}26%,66%{transform:none;opacity:1}78%,100%{transform:scale(.12);opacity:0}}
+
+/* ---------- desktop nav variants (?nav=rail|cube|dock|top) ---------- */
+body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTip{display:none!important}
+#dock,#segbar,#seglbl{display:none}
+@media (min-width:901px){
+  /* B — cube, like on the phone, list opens as a popover */
+  body.nav-cube #mcube{display:grid;place-items:center;position:fixed;z-index:48;left:24px;bottom:24px;width:58px;height:58px;border-radius:16px;border:0;cursor:pointer;background:rgba(15,40,22,.5);backdrop-filter:blur(10px) saturate(1.2);-webkit-backdrop-filter:blur(10px) saturate(1.2);color:var(--cream);font:800 13px/1 'Nunito',sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.16);opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:opacity .4s var(--ease),transform .4s var(--ease),background .3s}
+  body.nav-cube #mcube.on{opacity:1;transform:none;pointer-events:auto}
+  body.nav-cube #mcube:hover{background:rgba(15,40,22,.78)}
+  body.nav-cube #mcube .n{display:flex;flex-direction:column;align-items:center;gap:2px}
+  body.nav-cube #mcube .n small{font-size:10px;opacity:.55;font-weight:700}
+  body.nav-cube #mcube .bars{display:flex;flex-direction:column;gap:3px;margin-bottom:4px}
+  body.nav-cube #mcube .bars i{display:block;width:16px;height:2px;border-radius:2px;background:currentColor;opacity:.7}
+  body.nav-cube #mcube .bars i:nth-child(2){width:11px;background:var(--lime);opacity:1}
+  body.nav-cube #mshade{display:block;position:fixed;inset:0;z-index:49;background:rgba(8,20,11,.25);opacity:0;pointer-events:none;transition:opacity .3s}
+  body.nav-cube #mshade.on{opacity:1;pointer-events:auto}
+  body.nav-cube #msheet{display:block;position:fixed;z-index:50;left:24px;bottom:94px;width:300px;max-height:70vh;overflow:auto;border-radius:18px;background:rgba(15,40,22,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);color:var(--cream);padding:12px 8px;transform-origin:0 100%;transform:scale(.6) translateY(20px);opacity:0;pointer-events:none;transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .25s;box-shadow:0 18px 50px rgba(0,0,0,.25)}
+  body.nav-cube #msheet.on{transform:none;opacity:1;pointer-events:auto}
+  body.nav-cube #msheet .grab{display:none}
+  body.nav-cube #msheet h4{font:800 11px/1 'Nunito',sans-serif;letter-spacing:.18em;text-transform:uppercase;opacity:.5;margin:4px 12px 8px}
+  body.nav-cube #msheet ol{list-style:none}
+  body.nav-cube #msheet li a{display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:10px;text-decoration:none;color:inherit;font-weight:700;font-size:15px;cursor:pointer}
+  body.nav-cube #msheet li a:hover{background:rgba(243,239,230,.08)}
+  body.nav-cube #msheet li a i{font-style:normal;font-size:11px;font-weight:800;opacity:.45;width:18px}
+  body.nav-cube #msheet li.cur a{background:rgba(169,207,70,.16);color:var(--lime)}
+  /* C — dock: one pill at the bottom centre */
+  body.nav-dock #dock{display:flex;position:fixed;z-index:48;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;align-items:center;gap:2px;padding:5px;border-radius:40px;background:rgba(15,40,22,.5);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2);color:var(--cream);box-shadow:0 8px 28px rgba(0,0,0,.16);transition:opacity .4s var(--ease),transform .4s var(--ease),background .3s;font-family:'Nunito',sans-serif}
+  body.nav-dock #dock.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+  body.nav-dock #dock:hover{background:rgba(15,40,22,.8)}
+  #dock button{border:0;background:none;color:inherit;cursor:pointer;font:inherit}
+  #dock .ar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:18px;opacity:.75}
+  #dock .ar:hover{background:rgba(243,239,230,.1);opacity:1}
+  #dock .ar:disabled{opacity:.2;cursor:default;background:none}
+  #dock .mid{display:flex;align-items:center;gap:10px;padding:0 14px;height:38px;border-radius:30px;font-weight:800;font-size:15px;white-space:nowrap}
+  #dock .mid:hover{background:rgba(243,239,230,.1)}
+  #dock .mid i{font-style:normal;font-size:12px;opacity:.5;letter-spacing:.06em}
+  #dock .mid em{font-style:normal;color:var(--lime)}
+  #dock .pop{position:absolute;left:50%;bottom:calc(100% + 10px);transform:translate(-50%,10px);width:300px;max-height:66vh;overflow:auto;border-radius:18px;background:rgba(15,40,22,.86);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:10px 8px;opacity:0;pointer-events:none;transition:opacity .25s,transform .3s var(--ease);box-shadow:0 18px 50px rgba(0,0,0,.25)}
+  #dock.open .pop{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+  #dock .pop a{display:flex;gap:12px;padding:8px 12px;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;color:var(--cream);text-decoration:none}
+  #dock .pop a:hover{background:rgba(243,239,230,.08)}
+  #dock .pop a i{font-style:normal;font-size:11px;font-weight:800;opacity:.45;width:18px;align-self:center}
+  #dock .pop a.cur{background:rgba(169,207,70,.16);color:var(--lime)}
+  /* D — segmented top bar */
+  body.nav-top #prog{display:none}
+  body.nav-top #segbar{display:flex;position:fixed;z-index:48;left:0;right:0;top:0;height:16px;padding:6px 10px 0;gap:4px;opacity:0;transition:opacity .4s;pointer-events:none}
+  body.nav-top #segbar.on{opacity:1;pointer-events:auto}
+  #segbar a{position:relative;flex:1;height:4px;border-radius:3px;background:rgba(140,150,140,.28);cursor:pointer;transition:height .2s,background .2s}
+  #segbar a:hover{height:7px}
+  #segbar a b{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:3px;background:var(--lime)}
+  #segbar a span{position:absolute;top:14px;left:50%;transform:translate(-50%,-4px);white-space:nowrap;background:rgba(15,40,22,.88);color:var(--cream);font:700 13px/1 'Nunito',sans-serif;padding:7px 10px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+  #segbar a:hover span{opacity:1;transform:translate(-50%,0)}
+  #segbar a:first-child span{left:0;transform:none}
+  #segbar a:last-child span{left:auto;right:0;transform:none}
+  body.nav-top #seglbl{display:block;position:fixed;z-index:47;left:12px;top:22px;font:800 12px/1 'Nunito',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);opacity:0;transition:opacity .4s}
+  body.nav-top #seglbl.on{opacity:.9}
+}
+
 /* ---------- sections ---------- */
 .sec{position:relative;min-height:86vh;min-height:86svh;padding:clamp(72px,6.84vw,106px) var(--pad);display:flex;align-items:center;overflow:hidden}
 .light{background:var(--paper)}
@@ -579,6 +637,8 @@ b{font-weight:800}
 <button id="mcube" aria-label="Содержание"><span class="bars"><i></i><i></i><i></i></span><span class="n" id="mcubeN">01<small>/15</small></span></button>
 <div id="mshade"></div>
 <div id="msheet" role="dialog" aria-label="Содержание"><div class="grab"></div><h4>Содержание</h4><ol id="mlist"></ol></div>
+<div id="dock" aria-label="Навигация"><button class="ar" id="dPrev" aria-label="Предыдущая тема">‹</button><button class="mid" id="dMid"><i id="dNum">01</i><span id="dName">Знакомство</span><em id="dCnt">1/15</em></button><button class="ar" id="dNext" aria-label="Следующая тема">›</button><div class="pop" id="dPop"></div></div>
+<nav id="segbar" aria-label="Темы"></nav><div id="seglbl"></div>
 <div id="hint"><span></span>Листайте<small>или стрелки ↓ на клавиатуре</small></div>
 <nav id="nav" aria-label="Навигация по тритменту">
   <button id="up" aria-label="Предыдущий фрагмент"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button>
@@ -593,7 +653,7 @@ b{font-weight:800}
     <div class="cvdim"></div>
     <div id="cv">
       <video id="cvv" muted loop playsinline preload="auto"></video>
-      <img src="a/cover-first.jpg" alt="Стоп-моушен обложка: покадрово собираются логотип «Фруктовый сад» и пачки сока">
+      <img src="a/cover2-first.jpg" alt="Стоп-моушен обложка: покадрово собираются логотип «Фруктовый сад» и пачки сока">
     </div>
     <div class="logos"><img src="a/logo-chilly.webp" alt="Chilly Production"></div><img class="bbdo" src="a/bbdo-light.webp" alt="BBDO">
     <button id="play" aria-label="Начать"><span class="disc"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></span>Начать</button>
@@ -872,7 +932,7 @@ b{font-weight:800}
       <p class="p" data-r style="--d:.12s">Для покадровой съёмки нам понадобится фотоаппарат вместо кинокамеры, но с возможностью поставить на него кинооптику. Фотоаппарат подключаем к компьютеру со специальным софтом — Dragonframe.</p>
       <p class="p" data-r style="--d:.2s">Программа сразу показывает получившуюся анимацию, и лишние кадры можно убрать <span class="accent">прямо на съёмочной площадке</span>.</p>
       <div class="tests" data-r style="--d:.9s">
-        <div class="m loading"><video class="lv" data-src="a/cover.mp4" poster="a/cover-first.jpg" muted loop playsinline></video></div>
+        <div class="m loading"><video class="lv" data-src="a/cover2.mp4" poster="a/cover2-first.jpg" muted loop playsinline></video></div>
         <p><b>Тесты проведены.</b> Dragonframe я знаю по другим проектам, а под этот ролик заново всё проверил на последней версии. Всё оки.</p>
       </div>
     </div>
@@ -1088,19 +1148,19 @@ function setP(p){target=Math.max(target,p)}
 var t0=Date.now(), finished=false;
 function finish(){ if(finished)return; finished=true; setTimeout(function(){ $('#loader').classList.add('done'); },Math.max(0,1400-(Date.now()-t0))); }
 var MOB=matchMedia('(max-width:900px)').matches; if(MOB)$('#cv img').src='a/cover-43-first.jpg';
-var imgs=[MOB?'a/cover-43-first.jpg':'a/cover-first.jpg','a/grain.webp','a/logo-chilly.webp','a/bbdo-light.webp','a/damir.jpg'];
+var imgs=[MOB?'a/cover-43-first.jpg':'a/cover2-first.jpg','a/grain.webp','a/logo-chilly.webp','a/bbdo-light.webp','a/damir.jpg'];
 var parts={img:0,font:0,vid:0};
 function upd(){setP(parts.img*0.15+parts.font*0.05+parts.vid*0.8)}
 var loaded=0; imgs.forEach(function(s){var i=new Image();i.onload=i.onerror=function(){loaded++;parts.img=loaded/imgs.length;upd()};i.src=s});
 (document.fonts&&document.fonts.ready||Promise.resolve()).then(function(){parts.font=1;upd()});
 // fetch cover video with progress so first play is instant
 (function(){
-  var url=MOB?'a/cover-43.mp4':'a/cover.mp4';
+  var url=MOB?'a/cover-43.mp4':'a/cover2.mp4';
   function fallback(){cvv.src=url;cvv.addEventListener('canplaythrough',function(){parts.vid=1;upd()},{once:true});cvv.load();setTimeout(function(){parts.vid=1;upd()},9000)}
   if(!window.fetch||!window.ReadableStream){fallback();return}
   fetch(url).then(function(r){
     if(!r.ok||!r.body)throw 0;
-    var total=+r.headers.get('content-length')||(MOB?4885245:4811086), got=0, chunks=[], rd=r.body.getReader();
+    var total=+r.headers.get('content-length')||(MOB?4885245:4811945), got=0, chunks=[], rd=r.body.getReader();
     return (function pump(){return rd.read().then(function(x){ if(x.done){ var b=new Blob(chunks,{type:'video/mp4'}); cvv.src=URL.createObjectURL(b); parts.vid=1; upd(); return;} chunks.push(x.value); got+=x.value.length; parts.vid=clamp(got/total,0,.99); upd(); return pump(); })})();
   }).catch(fallback);
 })();
@@ -1279,22 +1339,47 @@ function tocTipCheck(){ if(tocTipDone||innerWidth<=900)return; if(scrollY>cov.of
 /* ---------- mobile contents ---------- */
 var isM=function(){return innerWidth<=900}, mcube=$('#mcube'), msheet=$('#msheet'), mshade=$('#mshade'), mlist=$('#mlist'), mcubeN=$('#mcubeN'), howto=$('#howto');
 chapters.forEach(function(ch,i){ var li=document.createElement('li'); li.innerHTML='<a><i>'+String(i+1).padStart(2,'0')+'</i>'+(LABEL[ch.name]||ch.name)+'</a>'; li.firstChild.addEventListener('click',function(){ msClose(); setTimeout(function(){ scrollTo({top:ch.el.getBoundingClientRect().top+scrollY,behavior:'smooth'}); },120); }); mlist.appendChild(li); ch.mli=li; });
-function msOpen(){ msheet.classList.add('on'); mshade.classList.add('on'); var c=mlist.querySelector('li.cur'); if(c) c.scrollIntoView({block:'center'}); }
+function msOpen(){ msheet.classList.add('on'); mshade.classList.add('on'); var c=mlist.querySelector('li.cur'); if(c) msheet.scrollTop=c.offsetTop-msheet.clientHeight/2; }
 function msClose(){ msheet.classList.remove('on'); mshade.classList.remove('on'); }
 mcube.addEventListener('click',function(){ msheet.classList.contains('on')?msClose():msOpen(); });
 mshade.addEventListener('click',msClose);
 var msy=null; msheet.addEventListener('touchstart',function(e){msy=e.touches[0].clientY},{passive:true});
 msheet.addEventListener('touchend',function(e){ if(msy!==null&&e.changedTouches[0].clientY-msy>70&&msheet.scrollTop<=0) msClose(); msy=null; });
 function mUpdate(){
-  if(!isM())return;
-  var past=howto.getBoundingClientRect().bottom<vh*.55;
+  if(!isM()&&NAV!=='cube')return;
+  var past=isM()?howto.getBoundingClientRect().bottom<vh*.55:scrollY>cov.offsetHeight-vh*.5;
   mcube.classList.toggle('on',past&&played);
   if(curIdx>=0){ mcubeN.innerHTML=String(curIdx+1).padStart(2,'0')+'<small>/'+chapters.length+'</small>'; chapters.forEach(function(ch,i){ ch.mli.classList.toggle('cur',i===curIdx); }); }
 }
 
+
+/* ---------- nav variant switch ---------- */
+var NAV=(location.search.match(/[?&]nav=(rail|cube|dock|top)/)||[])[1]||'rail';
+document.body.classList.add('nav-'+NAV);
+var dock=$('#dock'), dPop=$('#dPop'), segbar=$('#segbar'), seglbl=$('#seglbl'), segT=null;
+function goCh(i){ var ch=chapters[i]; if(ch) scrollTo({top:ch.el.getBoundingClientRect().top+scrollY,behavior:'smooth'}); }
+chapters.forEach(function(ch,i){
+  var a=document.createElement('a'); a.innerHTML='<i>'+String(i+1).padStart(2,'0')+'</i>'+(LABEL[ch.name]||ch.name); a.onclick=function(){dock.classList.remove('open');goCh(i)}; dPop.appendChild(a); ch.da=a;
+  var sg=document.createElement('a'); sg.innerHTML='<b></b><span>'+String(i+1).padStart(2,'0')+' · '+(LABEL[ch.name]||ch.name)+'</span>'; sg.onclick=function(){goCh(i)}; segbar.appendChild(sg); ch.sg=sg;
+});
+$('#dPrev').onclick=function(){goCh(curIdx-1)}; $('#dNext').onclick=function(){goCh(curIdx+1)};
+$('#dMid').onclick=function(e){e.stopPropagation();dock.classList.toggle('open')};
+document.addEventListener('click',function(e){ if(!dock.contains(e.target)) dock.classList.remove('open'); });
+var lastNavIdx=-2;
+function navUpdate(){
+  var past=scrollY>cov.offsetHeight-vh*.5&&played;
+  if(NAV==='dock'){ dock.classList.toggle('on',past); if(!past) dock.classList.remove('open');
+    if(curIdx!==lastNavIdx&&curIdx>=0){ $('#dNum').textContent=String(curIdx+1).padStart(2,'0'); $('#dName').textContent=LABEL[chapters[curIdx].name]||chapters[curIdx].name; $('#dCnt').textContent=(curIdx+1)+'/'+chapters.length; $('#dPrev').disabled=curIdx<=0; $('#dNext').disabled=curIdx>=chapters.length-1; chapters.forEach(function(ch,i){ch.da.classList.toggle('cur',i===curIdx)}); } }
+  if(NAV==='top'){ segbar.classList.toggle('on',past);
+    chapters.forEach(function(ch,i){ var a=ch.secs[0].getBoundingClientRect().top+scrollY, nx=chapters[i+1]?chapters[i+1].secs[0].getBoundingClientRect().top+scrollY:document.documentElement.scrollHeight-vh; var f=clamp((scrollY+vh*.4-a)/(nx-a),0,1); ch.sg.firstChild.style.width=(f*100)+'%'; });
+    if(curIdx!==lastNavIdx&&curIdx>=0&&past){ seglbl.textContent=String(curIdx+1).padStart(2,'0')+' · '+(LABEL[chapters[curIdx].name]||chapters[curIdx].name); seglbl.classList.add('on'); clearTimeout(segT); segT=setTimeout(function(){seglbl.classList.remove('on')},2200); }
+    if(!past) seglbl.classList.remove('on'); }
+  lastNavIdx=curIdx;
+}
+
 /* ---------- main loop ---------- */
 var ticking=false;
-function frame(){ticking=false; covUpdate(); xpUpdate(); apUpdate(); tocUpdate(); tocTipCheck(); mUpdate(); stUpdate(); hdUpdate();}
+function frame(){ticking=false; covUpdate(); xpUpdate(); apUpdate(); tocUpdate(); tocTipCheck(); mUpdate(); navUpdate(); stUpdate(); hdUpdate();}
 addEventListener('scroll',function(){ if(played)tocShow(1600); if(!ticking){ticking=true;requestAnimationFrame(frame)}},{passive:true});
 var rt; addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){measure();frame()},120)});
 addEventListener('load',function(){measure();frame()});
