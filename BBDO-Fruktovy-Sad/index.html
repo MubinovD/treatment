@@ -83,6 +83,37 @@ b{font-weight:800}
 #hint small{font-size:inherit;letter-spacing:.12em;text-transform:none;font-weight:600;opacity:.7}
 @keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
+
+/* ---------- table of contents (left rail) ---------- */
+#toc{position:fixed;left:0;top:50%;transform:translate(-14px,-50%);z-index:46;opacity:0;pointer-events:none;transition:opacity .45s var(--ease),transform .45s var(--ease);font-family:'Nunito',sans-serif}
+#toc.on{opacity:1;transform:translate(0,-50%);pointer-events:auto}
+#toc .panel{margin-left:clamp(10px,1.2vw,22px);padding:14px 16px 14px 14px;border-radius:16px;background:rgba(15,40,22,.0);transition:background .35s,box-shadow .35s,backdrop-filter .35s}
+#toc.open .panel{background:rgba(15,40,22,.86);box-shadow:0 18px 50px rgba(0,0,0,.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+#toc ol{list-style:none;display:flex;flex-direction:column;gap:2px}
+#toc li a{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--cream);padding:3px 0;cursor:pointer}
+#toc .tk{flex:none;width:14px;height:3px;border-radius:2px;background:rgba(120,140,120,.55);box-shadow:0 0 0 1px rgba(255,255,255,.35);transition:width .3s var(--ease),background .3s}
+#toc li.cur .tk{width:26px;background:var(--lime);box-shadow:none}
+#toc .lb{white-space:nowrap;font-size:14px;font-weight:700;letter-spacing:.01em;max-width:0;opacity:0;overflow:hidden;transition:max-width .4s var(--ease),opacity .3s;display:flex;gap:10px}
+#toc .lb i{font-style:normal;font-weight:800;opacity:.45;font-size:12px;letter-spacing:.06em;align-self:center}
+/* collapsed: only current (+faded neighbours) labels, on a soft pill */
+#toc li.cur .lb,#toc li.nb .lb{max-width:240px;opacity:1}
+#toc li.nb .lb{opacity:.42}
+#toc:not(.open) li.cur .lb,#toc:not(.open) li.nb .lb{background:rgba(15,40,22,.78);padding:3px 10px;border-radius:20px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#toc:not(.open) li.nb .lb{opacity:.55}
+/* open: everything */
+#toc.open .lb{max-width:260px;opacity:.6}
+#toc.open li.cur .lb{opacity:1;color:var(--lime)}
+#toc.open li a:hover .lb{opacity:1}
+#toc.open li a:hover .tk{width:22px;background:var(--cream)}
+#toc .count{margin:10px 0 0 26px;font-size:12px;font-weight:800;letter-spacing:.14em;color:rgba(243,239,230,.55);max-height:0;opacity:0;overflow:hidden;transition:all .35s}
+#toc.open .count{max-height:30px;opacity:1}
+#tocEdge{position:fixed;left:0;top:0;bottom:0;width:28px;z-index:45}
+#tocTip{position:fixed;z-index:47;left:clamp(56px,5vw,80px);top:50%;transform:translate(-8px,-50%);background:var(--cream);color:var(--g7);font-weight:800;font-size:15px;padding:12px 16px;border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.22);opacity:0;pointer-events:none;transition:opacity .5s var(--ease),transform .5s var(--ease);max-width:260px;line-height:1.35}
+#tocTip::before{content:"";position:absolute;left:-7px;top:50%;width:14px;height:14px;background:inherit;transform:translateY(-50%) rotate(45deg);border-radius:2px}
+#tocTip.on{opacity:1;transform:translate(0,-50%)}
+#tocTip small{display:block;font-weight:600;font-size:13px;color:#5E6B5F;margin-top:3px}
+@media (max-width:900px){#toc,#tocEdge,#tocTip{display:none}}
+
 /* ---------- sections ---------- */
 .sec{position:relative;min-height:86vh;min-height:86svh;padding:clamp(72px,6.84vw,106px) var(--pad);display:flex;align-items:center;overflow:hidden}
 .light{background:var(--paper)}
@@ -488,6 +519,9 @@ b{font-weight:800}
 
 <div id="prog"></div>
 <header id="top"><span class="chap" id="chap"></span></header>
+<nav id="toc" aria-label="Содержание"><div class="panel"><ol id="tocList"></ol><p class="count" id="tocCount"></p></div></nav>
+<div id="tocEdge" aria-hidden="true"></div>
+<div id="tocTip">Содержание<small>Можно перейти к любой теме</small></div>
 <div id="hint"><span></span>Листайте<small>или стрелки ↓ на клавиатуре</small></div>
 <nav id="nav" aria-label="Навигация по тритменту">
   <button id="up" aria-label="Предыдущий фрагмент"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button>
@@ -1130,7 +1164,7 @@ function hdUpdate(){
   prog.style.width=(clamp(y/H,0,1)*100)+'%';
   var cur=null; for(var i=0;i<secs.length;i++){var r=secs[i].getBoundingClientRect(); if(r.top<=60&&r.bottom>60){cur=secs[i];break}}
   if(cur){ var c=cur.dataset.chap||''; top.classList.toggle('on-dark',cur.hasAttribute('data-dark'));
-    if(c!==lastChap){ lastChap=c; chap.textContent=c; clearTimeout(chapT); if(cur!==cov&&cur.id!=='thanks'&&!cur.classList.contains('chap-title')){ top.classList.add('show'); chapT=setTimeout(function(){top.classList.remove('show')},2200);} else top.classList.remove('show'); } }
+    if(c!==lastChap){ lastChap=c; chap.textContent=c; clearTimeout(chapT); if(innerWidth<=900&&cur!==cov&&cur.id!=='thanks'&&!cur.classList.contains('chap-title')){ top.classList.add('show'); chapT=setTimeout(function(){top.classList.remove('show')},2200);} else top.classList.remove('show'); } }
 }
 
 /* ---------- keyboard / arrows: jump between fragments ---------- */
@@ -1155,10 +1189,33 @@ addEventListener('keydown',function(e){
 });
 $('#down').onclick=function(){go(1)}; $('#up').onclick=function(){go(-1)};
 
+
+/* ---------- table of contents ---------- */
+var toc=$('#toc'), tocList=$('#tocList'), tocCount=$('#tocCount'), tocTip=$('#tocTip'), chapters=[], tocHideT=null, tocHover=false, curIdx=-1;
+var LABEL={'Рахмат!':'Финал','Новый год VS Наурыз':'Новый год и Наурыз'};
+$$('main section').forEach(function(sec){ var c=sec.dataset.chap; if(!c||c==='Обложка')return; if(!chapters.length||chapters[chapters.length-1].name!==c) chapters.push({name:c,el:sec,secs:[sec]}); else chapters[chapters.length-1].secs.push(sec); });
+chapters.forEach(function(ch,i){ var li=document.createElement('li'); li.innerHTML='<a><span class="tk"></span><span class="lb"><i>'+String(i+1).padStart(2,'0')+'</i>'+(LABEL[ch.name]||ch.name)+'</span></a>';
+  li.firstChild.addEventListener('click',function(){ scrollTo({top:ch.el.getBoundingClientRect().top+scrollY,behavior:'smooth'}); });
+  tocList.appendChild(li); ch.li=li; });
+function tocShow(ms){ if(scrollY<cov.offsetHeight-vh*.5||ov.classList.contains('open'))return; toc.classList.add('on'); clearTimeout(tocHideT); if(ms) tocHideT=setTimeout(function(){ if(!tocHover) toc.classList.remove('on','open'); },ms); }
+toc.addEventListener('mouseenter',function(){tocHover=true;clearTimeout(tocHideT);toc.classList.add('open');tocTip.classList.remove('on')});
+toc.addEventListener('mouseleave',function(){tocHover=false;toc.classList.remove('open');tocShow(1400)});
+$('#tocEdge').addEventListener('mouseenter',function(){tocShow(2200)});
+addEventListener('mousemove',function(e){ if(e.clientX<70) tocShow(2200); },{passive:true});
+function tocUpdate(){
+  var mid=vh*.4, idx=-1;
+  chapters.forEach(function(ch,i){ var r=ch.secs[0].getBoundingClientRect(); if(r.top<=mid) idx=i; });
+  if(scrollY<cov.offsetHeight-vh*.5){ toc.classList.remove('on','open'); return; }
+  if(idx!==curIdx){ curIdx=idx; chapters.forEach(function(ch,i){ ch.li.classList.toggle('cur',i===idx); ch.li.classList.toggle('nb',Math.abs(i-idx)===1); }); tocCount.textContent=(idx+1)+' из '+chapters.length; }
+}
+var tocTipDone=false; try{tocTipDone=sessionStorage.getItem('fsTocTip')==='1'}catch(_){}
+function tocTipCheck(){ if(tocTipDone||innerWidth<=900)return; if(scrollY>cov.offsetHeight-vh*.3){ tocTipDone=true; try{sessionStorage.setItem('fsTocTip','1')}catch(_){}
+  setTimeout(function(){ tocShow(4200); tocTip.classList.add('on'); setTimeout(function(){tocTip.classList.remove('on')},3800); },500); } }
+
 /* ---------- main loop ---------- */
 var ticking=false;
-function frame(){ticking=false; covUpdate(); xpUpdate(); apUpdate(); stUpdate(); hdUpdate();}
-addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(frame)}},{passive:true});
+function frame(){ticking=false; covUpdate(); xpUpdate(); apUpdate(); tocUpdate(); tocTipCheck(); stUpdate(); hdUpdate();}
+addEventListener('scroll',function(){ if(played)tocShow(1600); if(!ticking){ticking=true;requestAnimationFrame(frame)}},{passive:true});
 var rt; addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){measure();frame()},120)});
 addEventListener('load',function(){measure();frame()});
 measure(); frame();
