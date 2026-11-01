@@ -201,6 +201,8 @@ b{font-weight:800}
 #cv img{transition:opacity .6s}
 #cv.playing img{opacity:0}
 #cv::after{content:"";position:absolute;inset:0;z-index:1;background:rgba(8,20,11,.68);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);transition:opacity .8s var(--ease),backdrop-filter .8s;pointer-events:none}
+.cvdim{position:absolute;inset:0;z-index:1;background:rgba(8,20,11,.68);transition:opacity .8s var(--ease);pointer-events:none}
+#cover.playing .cvdim{opacity:0}
 #cv.playing::after{opacity:0;backdrop-filter:none;-webkit-backdrop-filter:none}
 #play{position:absolute;z-index:5;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:18px;border:0;background:none;cursor:pointer;color:var(--cream);font:800 clamp(15px,1.2vw,22px)/1 'Nunito',sans-serif;letter-spacing:.24em;text-transform:uppercase;text-shadow:0 2px 12px rgba(0,0,0,.6);transition:opacity .5s,transform .5s}
 #play .disc{width:clamp(86px,6.84vw,114px);height:clamp(86px,6.84vw,114px);border-radius:50%;background:var(--lime);display:grid;place-items:center;box-shadow:0 0 0 0 rgba(169,207,70,.55);animation:pulse 2s infinite}
@@ -522,8 +524,11 @@ b{font-weight:800}
   .xp .stk{opacity:1}
   .dark{background:var(--g7)}
   .dark::before{background-attachment:scroll;background-size:cover}
-  #cv{transform-origin:50% 50%;inset:auto;left:0;right:0;top:calc(50% - 37.5vw);height:75vw}
+  #cv{transform-origin:50% 50%;inset:auto;left:0;right:0;top:calc(50% - 37.5vw);height:75vw;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 12%,#000 88%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 12%,#000 88%,transparent 100%)}
   #cv video,#cv img{object-fit:cover}
+  #cv::after{backdrop-filter:none;-webkit-backdrop-filter:none}
+  #cover .stick::before{background:radial-gradient(ellipse 120% 60% at 50% 50%,#2a3424 0%,#1d2518 45%,#0f140c 100%)}
+  #cover .stick::after{opacity:.35}
   #top{padding:12px 16px}
   #top .who{display:none}
   .foot{display:none}
@@ -585,6 +590,7 @@ b{font-weight:800}
 <!-- 1. COVER -->
 <section id="cover" data-chap="Обложка" data-dark data-stops="0,1">
   <div class="stick">
+    <div class="cvdim"></div>
     <div id="cv">
       <video id="cvv" muted loop playsinline preload="auto"></video>
       <img src="a/cover-first.jpg" alt="Стоп-моушен обложка: покадрово собираются логотип «Фруктовый сад» и пачки сока">
@@ -1108,7 +1114,7 @@ addEventListener('touchmove',blockEv,{passive:false});
 $('#play').addEventListener('click',function(){
   played=true; html.classList.remove('locked');
   var p=cvv.play(); if(p&&p.catch)p.catch(function(){});
-  cv.classList.add('playing'); this.classList.add('gone');
+  cv.classList.add('playing'); cov.classList.add('playing'); this.classList.add('gone');
   $('#nav').classList.add('show');
   // «Листайте» — only once the cover is actually playing, plus 2 s
   var showHint=function(){ setTimeout(function(){ if(scrollY<vh*.15)$('#hint').classList.add('show'); },2000); };
