@@ -28,6 +28,8 @@ header p{font-size:clamp(17px,1.4vw,20px);text-wrap:pretty}
 .v{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#EEF1EA}
 .v iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .v.empty{display:grid;place-items:center;color:var(--muted);font-size:14px;font-weight:700}
+.big{grid-column:1/-1;margin-bottom:clamp(14px,2vw,28px)}
+.big h2{font-weight:800;font-size:clamp(18px,1.6vw,22px);color:var(--g7);margin-bottom:12px;letter-spacing:.01em}
 .cap{margin-top:10px;font-size:14px;color:var(--muted);font-weight:600}
 footer{margin-top:clamp(40px,6vw,72px);padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px 28px;font-size:15px;font-weight:700}
 footer a{color:var(--g7);text-decoration:none;border-bottom:2px solid var(--lime);padding-bottom:2px}
@@ -54,22 +56,22 @@ footer a:hover{border-color:var(--g7)}
 <script>
 // Заполнить: id ролика Vimeo (число из ссылки vimeo.com/123456789) и подпись. Для приватных ссылок вида vimeo.com/123/abcd — h: 'abcd'.
 var WORKS=[
-  {id:'1242066009',h:'',title:'TIM Sherin — стоп-моушен'},
-  {id:'1239310885',h:'',title:'7UP — Heat'},
-  {id:'1048144229',h:'',title:'Humans — Bemalool, рок-версия'},
-  {id:'1129838763',h:'',title:'MASELKO — Just Like Childhood'}
+  {id:'1242066009',h:'',title:'TIM Sherin — Stop Motion',big:true},
+  {id:'1239310885',h:'',title:'7UP — Heat',big:true},
+  {id:'1129838763',h:'',title:'MASELKO — Just Like Childhood'},
+  {id:'1048144229',h:'',title:'Humans — Bemalool, рок-версия'}
 ];
 var VIMEO_PROFILE='https://vimeo.com/mubinov';
 (function(){
   var g=document.getElementById('grid');
   WORKS.forEach(function(w,i){
-    var c=document.createElement('div'); c.setAttribute('data-r',''); c.style.setProperty('--d',(0.08*i+0.1)+'s');
+    var c=document.createElement('div'); c.setAttribute('data-r',''); c.style.setProperty('--d',(0.08*i+0.1)+'s'); if(w.big){c.className='big'; var h=document.createElement('h2'); h.textContent=w.title; c.appendChild(h);}
     var box=document.createElement('div'); box.className='v'+(w.id?'':' empty');
     if(w.id){ var f=document.createElement('iframe'); f.loading='lazy'; f.allow='autoplay; fullscreen; picture-in-picture'; f.allowFullscreen=true; f.title=w.title||'Работа '+(i+1);
       f.src='https://player.vimeo.com/video/'+w.id+'?'+(w.h?'h='+w.h+'&':'')+'dnt=1&title=0&byline=0&portrait=0&color=A9CF46'; box.appendChild(f); }
     else box.textContent='Скоро';
     c.appendChild(box);
-    if(w.title){ var p=document.createElement('p'); p.className='cap'; p.textContent=w.title; c.appendChild(p); }
+    if(w.title&&!w.big){ var p=document.createElement('p'); p.className='cap'; p.textContent=w.title; c.appendChild(p); }
     g.appendChild(c);
   });
   if(VIMEO_PROFILE) document.getElementById('vimeoLink').href=VIMEO_PROFILE;
