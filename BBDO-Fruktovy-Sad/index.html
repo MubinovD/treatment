@@ -117,6 +117,41 @@ b{font-weight:800}
 #tocTip small{display:block;font-weight:600;font-size:13px;color:#5E6B5F;margin-top:3px}
 @media (max-width:900px){#toc,#tocEdge,#tocTip{display:none}}
 
+
+/* ---------- mobile contents: cube + bottom sheet ---------- */
+#mcube,#msheet,#mshade,#mintro{display:none}
+@media (max-width:900px){
+  #mcube{display:grid;place-items:center;position:fixed;z-index:48;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:15px;border:0;background:rgba(15,40,22,.58);backdrop-filter:blur(10px) saturate(1.2);-webkit-backdrop-filter:blur(10px) saturate(1.2);color:var(--cream);font:800 13px/1 'Nunito',sans-serif;letter-spacing:.02em;box-shadow:0 8px 24px rgba(0,0,0,.18);opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:opacity .4s var(--ease),transform .4s var(--ease),background .3s}
+  #mcube.on{opacity:1;transform:none;pointer-events:auto}
+  #mcube .n{display:flex;flex-direction:column;align-items:center;gap:2px}
+  #mcube .n small{font-size:10px;opacity:.55;font-weight:700}
+  #mcube .bars{display:flex;flex-direction:column;gap:3px;margin-bottom:4px}
+  #mcube .bars i{display:block;width:16px;height:2px;border-radius:2px;background:currentColor;opacity:.7}
+  #mcube .bars i:nth-child(2){width:11px;background:var(--lime);opacity:1}
+  #mshade{display:block;position:fixed;inset:0;z-index:49;background:rgba(8,20,11,.55);opacity:0;pointer-events:none;transition:opacity .35s}
+  #mshade.on{opacity:1;pointer-events:auto}
+  #msheet{display:block;position:fixed;z-index:50;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));max-height:72vh;overflow:auto;border-radius:22px;background:rgba(15,40,22,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);color:var(--cream);padding:10px 8px 14px;transform:translateY(calc(100% + 30px));transition:transform .45s cubic-bezier(.2,.8,.2,1);box-shadow:0 -10px 40px rgba(0,0,0,.25);overscroll-behavior:contain}
+  #msheet.on{transform:none}
+  #msheet .grab{width:40px;height:4px;border-radius:4px;background:rgba(243,239,230,.3);margin:4px auto 10px}
+  #msheet h4{font:800 12px/1 'Nunito',sans-serif;letter-spacing:.18em;text-transform:uppercase;opacity:.55;margin:0 14px 8px}
+  #msheet ol{list-style:none}
+  #msheet li a{display:flex;align-items:center;gap:14px;padding:11px 14px;border-radius:12px;text-decoration:none;color:inherit;font-weight:700;font-size:16px}
+  #msheet li a i{font-style:normal;font-size:12px;font-weight:800;opacity:.45;width:20px}
+  #msheet li.cur a{background:rgba(169,207,70,.16);color:var(--lime)}
+  #msheet li.cur a i{opacity:.9}
+  #mintro{display:flex;position:fixed;inset:0;z-index:51;flex-direction:column;justify-content:flex-end;padding:0 24px calc(96px + env(safe-area-inset-bottom));background:rgba(8,20,11,.0);opacity:0;pointer-events:none;transition:opacity .5s}
+  #mintro.on{opacity:1;pointer-events:auto}
+  #mintro .t{color:var(--cream);max-width:20em}
+  #mintro .t b{display:block;font-family:'Lobster',cursive;font-weight:400;font-size:34px;line-height:1.1;margin-bottom:10px}
+  #mintro .t p{font-size:17px;line-height:1.45;color:var(--mint)}
+  #mintro .t p em{font-style:normal;color:var(--lime);font-weight:800}
+  #mintro button{margin-top:22px;align-self:flex-start;border:0;border-radius:30px;background:var(--lime);color:var(--g8);font:800 16px/1 'Nunito',sans-serif;padding:14px 26px}
+  #mintro .arrow{position:absolute;left:30px;bottom:calc(76px + env(safe-area-inset-bottom));width:2px;height:22px;background:var(--lime);border-radius:2px;animation:drip 1.4s ease-in-out infinite}
+  body.mintro #mcube{z-index:52}
+  body.mintro #msheet{z-index:52}
+  body.mintro #mshade{background:rgba(8,20,11,.86)}
+}
+
 /* ---------- sections ---------- */
 .sec{position:relative;min-height:86vh;min-height:86svh;padding:clamp(72px,6.84vw,106px) var(--pad);display:flex;align-items:center;overflow:hidden}
 .light{background:var(--paper)}
@@ -525,6 +560,10 @@ b{font-weight:800}
 <nav id="toc" aria-label="Содержание"><div class="panel"><ol id="tocList"></ol><p class="count" id="tocCount"></p></div></nav>
 <div id="tocEdge" aria-hidden="true"></div>
 <div id="tocTip">Содержание<small>Можно перейти к любой теме</small></div>
+<button id="mcube" aria-label="Содержание"><span class="bars"><i></i><i></i><i></i></span><span class="n" id="mcubeN">01<small>/15</small></span></button>
+<div id="mshade"></div>
+<div id="msheet" role="dialog" aria-label="Содержание"><div class="grab"></div><h4>Содержание</h4><ol id="mlist"></ol></div>
+<div id="mintro"><span class="arrow"></span><div class="t"><b>Содержание</b><p>В левом нижнем углу — <em>содержание тритмента</em>. Нажмите на него, чтобы перейти к любой теме.</p></div><button id="mintroOk">Понятно</button></div>
 <div id="hint"><span></span>Листайте<small>или стрелки ↓ на клавиатуре</small></div>
 <nav id="nav" aria-label="Навигация по тритменту">
   <button id="up" aria-label="Предыдущий фрагмент"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button>
@@ -1048,7 +1087,7 @@ setTimeout(function(){setP(1)},20000); // never block forever
 
 /* ---------- cover: play gate ---------- */
 var played=false, cv=$('#cv');
-function blockEv(e){ if(!played){ e.preventDefault(); } }
+function blockEv(e){ if(!played||document.body.classList.contains('mintro')){ if(e.target.closest&&e.target.closest('#msheet'))return; e.preventDefault(); } }
 addEventListener('wheel',blockEv,{passive:false});
 addEventListener('touchmove',blockEv,{passive:false});
 $('#play').addEventListener('click',function(){
@@ -1167,7 +1206,7 @@ function hdUpdate(){
   prog.style.width=(clamp(y/H,0,1)*100)+'%';
   var cur=null; for(var i=0;i<secs.length;i++){var r=secs[i].getBoundingClientRect(); if(r.top<=60&&r.bottom>60){cur=secs[i];break}}
   if(cur){ var c=cur.dataset.chap||''; top.classList.toggle('on-dark',cur.hasAttribute('data-dark'));
-    if(c!==lastChap){ lastChap=c; chap.textContent=c; clearTimeout(chapT); if(innerWidth<=900&&cur!==cov&&cur.id!=='thanks'&&!cur.classList.contains('chap-title')){ top.classList.add('show'); chapT=setTimeout(function(){top.classList.remove('show')},2200);} else top.classList.remove('show'); } }
+    if(c!==lastChap){ lastChap=c; chap.textContent=c; clearTimeout(chapT); if(false&&cur!==cov&&cur.id!=='thanks'&&!cur.classList.contains('chap-title')){ top.classList.add('show'); chapT=setTimeout(function(){top.classList.remove('show')},2200);} else top.classList.remove('show'); } }
 }
 
 /* ---------- keyboard / arrows: jump between fragments ---------- */
@@ -1215,9 +1254,40 @@ var tocTipDone=false; try{tocTipDone=sessionStorage.getItem('fsTocTip')==='1'}ca
 function tocTipCheck(){ if(tocTipDone||innerWidth<=900)return; if(scrollY>cov.offsetHeight-vh*.3){ tocTipDone=true; try{sessionStorage.setItem('fsTocTip','1')}catch(_){}
   setTimeout(function(){ tocShow(4200); tocTip.classList.add('on'); setTimeout(function(){tocTip.classList.remove('on')},3800); },500); } }
 
+
+/* ---------- mobile contents ---------- */
+var isM=function(){return innerWidth<=900}, mcube=$('#mcube'), msheet=$('#msheet'), mshade=$('#mshade'), mlist=$('#mlist'), mintro=$('#mintro'), mcubeN=$('#mcubeN');
+chapters.forEach(function(ch,i){ var li=document.createElement('li'); li.innerHTML='<a><i>'+String(i+1).padStart(2,'0')+'</i>'+(LABEL[ch.name]||ch.name)+'</a>'; li.firstChild.addEventListener('click',function(){ msClose(); setTimeout(function(){ scrollTo({top:ch.el.getBoundingClientRect().top+scrollY,behavior:'smooth'}); },120); }); mlist.appendChild(li); ch.mli=li; });
+function msOpen(){ msheet.classList.add('on'); mshade.classList.add('on'); var c=mlist.querySelector('li.cur'); if(c) c.scrollIntoView({block:'center'}); }
+function msClose(){ msheet.classList.remove('on'); if(!document.body.classList.contains('mintro')) mshade.classList.remove('on'); }
+mcube.addEventListener('click',function(){ if(document.body.classList.contains('mintro')){ mEndIntro(); return; } msheet.classList.contains('on')?msClose():msOpen(); });
+mshade.addEventListener('click',function(){ if(document.body.classList.contains('mintro')) mEndIntro(); else msClose(); });
+var msy=null; msheet.addEventListener('touchstart',function(e){msy=e.touches[0].clientY},{passive:true});
+msheet.addEventListener('touchend',function(e){ if(msy!==null&&e.changedTouches[0].clientY-msy>70&&msheet.scrollTop<=0) msClose(); msy=null; });
+function mUpdate(){
+  if(!isM())return;
+  var past=scrollY>cov.offsetHeight-vh*.5;
+  mcube.classList.toggle('on',past&&played);
+  if(curIdx>=0){ mcubeN.innerHTML=String(curIdx+1).padStart(2,'0')+'<small>/'+chapters.length+'</small>'; chapters.forEach(function(ch,i){ ch.mli.classList.toggle('cur',i===curIdx); }); }
+  if(past&&played&&!mIntroDone) mStartIntro();
+}
+var mIntroDone=false; try{mIntroDone=localStorage.getItem('fsMIntro')==='1'}catch(_){}
+var mIntroT=[];
+function mStartIntro(){ mIntroDone=true; try{localStorage.setItem('fsMIntro','1')}catch(_){}
+  mIntroT.push(setTimeout(function(){
+    document.body.classList.add('mintro'); mshade.classList.add('on'); mcube.classList.add('on');
+    mIntroT.push(setTimeout(function(){ msOpen(); },500));
+    mIntroT.push(setTimeout(function(){ msheet.classList.remove('on'); mintro.classList.add('on'); },2300));
+    mIntroT.push(setTimeout(mEndIntro,9000));
+  },700));
+}
+function mEndIntro(){ mIntroT.forEach(clearTimeout); mIntroT=[]; mintro.classList.remove('on'); msheet.classList.remove('on'); mshade.classList.remove('on'); document.body.classList.remove('mintro'); }
+$('#mintroOk').addEventListener('click',mEndIntro);
+mintro.addEventListener('click',function(e){ if(e.target===mintro) mEndIntro(); });
+
 /* ---------- main loop ---------- */
 var ticking=false;
-function frame(){ticking=false; covUpdate(); xpUpdate(); apUpdate(); tocUpdate(); tocTipCheck(); stUpdate(); hdUpdate();}
+function frame(){ticking=false; covUpdate(); xpUpdate(); apUpdate(); tocUpdate(); tocTipCheck(); mUpdate(); stUpdate(); hdUpdate();}
 addEventListener('scroll',function(){ if(played)tocShow(1600); if(!ticking){ticking=true;requestAnimationFrame(frame)}},{passive:true});
 var rt; addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){measure();frame()},120)});
 addEventListener('load',function(){measure();frame()});
