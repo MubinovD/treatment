@@ -91,15 +91,18 @@ b{font-weight:800}
 #toc.open .panel{background:rgba(15,40,22,.86);box-shadow:0 18px 50px rgba(0,0,0,.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 #toc ol{list-style:none;display:flex;flex-direction:column;gap:2px}
 #toc li a{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--cream);padding:3px 0;cursor:pointer}
-#toc .tk{flex:none;width:14px;height:3px;border-radius:2px;background:rgba(120,140,120,.55);box-shadow:0 0 0 1px rgba(255,255,255,.35);transition:width .3s var(--ease),background .3s}
+#toc li a::before{content:"";flex:none;width:26px;height:3px;display:none}
+#toc .tk{display:block;width:14px;height:3px;border-radius:2px;background:rgba(120,140,120,.55);box-shadow:0 0 0 1px rgba(255,255,255,.35);transition:width .3s var(--ease),background .3s}
+#toc .lb{margin-left:10px}
+#toc li a{gap:0!important}
+#toc .tkw{flex:none;width:26px}
 #toc li.cur .tk{width:26px;background:var(--lime);box-shadow:none}
 #toc .lb{white-space:nowrap;font-size:14px;font-weight:700;letter-spacing:.01em;max-width:0;opacity:0;overflow:hidden;transition:max-width .4s var(--ease),opacity .3s;display:flex;gap:10px}
 #toc .lb i{font-style:normal;font-weight:800;opacity:.45;font-size:12px;letter-spacing:.06em;align-self:center}
 /* collapsed: only current (+faded neighbours) labels, on a soft pill */
-#toc li.cur .lb,#toc li.nb .lb{max-width:240px;opacity:1}
-#toc li.nb .lb{opacity:.42}
-#toc:not(.open) li.cur .lb,#toc:not(.open) li.nb .lb{background:rgba(15,40,22,.78);padding:3px 10px;border-radius:20px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-#toc:not(.open) li.nb .lb{opacity:.55}
+#toc li.cur .lb{max-width:240px;opacity:1}
+#toc li.nb .tk{width:20px;background:rgba(80,100,82,.85)}
+#toc:not(.open) li.cur .lb{background:rgba(15,40,22,.82);padding:3px 11px;border-radius:20px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 /* open: everything */
 #toc.open .lb{max-width:260px;opacity:.6}
 #toc.open li.cur .lb{opacity:1;color:var(--lime)}
@@ -1194,7 +1197,7 @@ $('#down').onclick=function(){go(1)}; $('#up').onclick=function(){go(-1)};
 var toc=$('#toc'), tocList=$('#tocList'), tocCount=$('#tocCount'), tocTip=$('#tocTip'), chapters=[], tocHideT=null, tocHover=false, curIdx=-1;
 var LABEL={'Рахмат!':'Финал','Новый год VS Наурыз':'Новый год и Наурыз'};
 $$('main section').forEach(function(sec){ var c=sec.dataset.chap; if(!c||c==='Обложка')return; if(!chapters.length||chapters[chapters.length-1].name!==c) chapters.push({name:c,el:sec,secs:[sec]}); else chapters[chapters.length-1].secs.push(sec); });
-chapters.forEach(function(ch,i){ var li=document.createElement('li'); li.innerHTML='<a><span class="tk"></span><span class="lb"><i>'+String(i+1).padStart(2,'0')+'</i>'+(LABEL[ch.name]||ch.name)+'</span></a>';
+chapters.forEach(function(ch,i){ var li=document.createElement('li'); li.innerHTML='<a><span class="tkw"><span class="tk"></span></span><span class="lb"><i>'+String(i+1).padStart(2,'0')+'</i>'+(LABEL[ch.name]||ch.name)+'</span></a>';
   li.firstChild.addEventListener('click',function(){ scrollTo({top:ch.el.getBoundingClientRect().top+scrollY,behavior:'smooth'}); });
   tocList.appendChild(li); ch.li=li; });
 function tocShow(ms){ if(scrollY<cov.offsetHeight-vh*.5||ov.classList.contains('open'))return; toc.classList.add('on'); clearTimeout(tocHideT); if(ms) tocHideT=setTimeout(function(){ if(!tocHover) toc.classList.remove('on','open'); },ms); }
