@@ -301,7 +301,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 .tilt-r{transform:rotate(2deg)}
 
 /* chapter title */
-.chap-title{justify-content:center;text-align:center;min-height:72vh!important;min-height:72svh!important}
+.chap-title{justify-content:center;text-align:center;min-height:100vh!important;min-height:100svh!important}
 .sec.tight{min-height:0;padding-top:clamp(56px,6vw,96px);padding-bottom:clamp(56px,6vw,96px)}
 .chap-title h2{font-family:'Lobster',cursive;font-weight:400;font-size:var(--h1);line-height:1.02;color:var(--cream)}
 .chap-title .bar-lime{margin:clamp(18px,1.9vw,30px) auto 0;transform:scaleX(0);transition:transform 1s var(--ease) .5s}
@@ -380,12 +380,17 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 .swap.on .b{opacity:1}
 .swap-cap{margin-top:18px;font-weight:800;letter-spacing:.06em;color:var(--g7);font-size:clamp(16px,1.06vw,20px);opacity:0;transform:translateY(10px);transition:all .8s var(--ease) .2s}
 .swap-cap.on{opacity:1;transform:none}
-.swap-txt{opacity:0;transform:translateY(14px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.swap-txt{margin-top:clamp(16px,1.6vw,26px);max-width:52ch;opacity:0;transform:translateY(14px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
 .swap-txt.on{opacity:1;transform:none}
 
 /* steps */
-.steps{border-left:5px solid var(--lime);padding-left:clamp(16px,1.52vw,27px);display:flex;flex-direction:column;gap:clamp(14px,1.22vw,20px)}
-.steps p{font-weight:800;color:var(--g7);font-size:clamp(18px,1.37vw,26px);line-height:1.3;display:flex;gap:.6em}
+.steps{display:flex;flex-direction:column;gap:clamp(14px,1.22vw,20px)}
+.xp .steps p{opacity:0;transform:translateY(12px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.xp .steps p.on{opacity:1;transform:none}
+#att-ok{height:230vh}
+#att-ok .grid2{gap:clamp(40px,5vw,110px);align-items:center}
+#att-ok .steps{gap:clamp(22px,2.2vw,40px)}
+.steps p{font-weight:700;color:var(--g7);font-size:clamp(18px,1.37vw,26px);line-height:1.3;display:flex;gap:.6em}
 .steps p i{font-style:normal;color:var(--lime);font-family:'Lobster',cursive;font-size:1.3em;line-height:1}
 
 /* youtube */
@@ -436,6 +441,12 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 #stopmo{padding-bottom:clamp(30px,4vw,60px);min-height:0}
 .paperwrap.cutswrap + .chap-title::after{content:"";position:absolute;left:0;right:0;top:0;height:min(32vh,260px);background:linear-gradient(rgb(4,65,34),rgba(4,65,34,0));pointer-events:none;z-index:0}
 .paperwrap.cutswrap + .chap-title .wrap{z-index:1}
+.tear-b::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:clamp(70px,9vw,150px);background:url(a/torn-bottom.webp) left bottom/100% 100% no-repeat;pointer-events:none;z-index:8}
+.tear-b + .chap-title::after{content:"";position:absolute;left:0;right:0;top:0;height:min(32vh,260px);background:linear-gradient(rgb(4,65,34),rgba(4,65,34,0));pointer-events:none;z-index:0}
+.tear-b + .chap-title .wrap,.tear-t .wrap{z-index:1}
+.chap-title.tear-t::after{content:"";position:absolute;left:0;right:0;bottom:0;height:min(32vh,260px);background:linear-gradient(rgba(4,65,34,0),rgb(4,65,34));pointer-events:none;z-index:0}
+.tear-top{position:absolute;left:0;right:0;top:-1px;height:clamp(70px,9vw,150px);background:url(a/torn-bottom.webp) left bottom/100% 100% no-repeat;transform:scaleY(-1);pointer-events:none;z-index:3}
+.paperwrap.cutswrap:has(.tear-top){padding-top:clamp(40px,5vw,90px)}
 .nuance .say{margin-top:clamp(16px,1.6vw,26px)}
 .nuance .p{margin-top:clamp(28px,3vw,52px);color:#55605A}
 .nuance .good{margin-top:clamp(40px,5vw,90px);font-size:var(--body);color:var(--g7)}
@@ -473,7 +484,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 .rig svg{left:0;top:28%;width:60.8%;height:auto;z-index:1;pointer-events:none}
 .rig .cam{z-index:2}
 .rig .lap{z-index:3}
-.tests{margin-top:clamp(25px,3.04vw,46px);display:flex;align-items:center;gap:clamp(14px,1.52vw,23px);padding:clamp(14px,1.4vw,22px);border-radius:18px;background:#F2F5EC;max-width:820px}
+.tests{margin-top:clamp(56px,7vw,130px);display:flex;align-items:center;gap:clamp(14px,1.52vw,23px);padding:clamp(14px,1.4vw,22px);border-radius:18px;background:#F2F5EC;max-width:820px}
 .tests .m{width:clamp(117px,10.64vw,182px);flex:none;aspect-ratio:16/9;border-radius:10px}
 .tests p{font-size:clamp(14px,1.15vw,20px);line-height:1.45;color:var(--ink)}
 .tests p b{color:var(--g7)}
@@ -537,8 +548,10 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 .pills span:last-child{background:var(--cream);color:var(--g7)}
 
 /* sound */
-.audio-row{display:grid;grid-template-columns:minmax(160px,300px) minmax(0,60ch);gap:clamp(24px,4vw,72px);align-items:center}
-.music-part{display:grid;grid-template-columns:minmax(0,60ch) minmax(0,1fr);gap:clamp(24px,4vw,72px);align-items:center;margin-top:clamp(56px,6vw,100px);padding-top:clamp(40px,4vw,64px);border-top:1px solid #E6EAE2}
+.audio-row{display:grid;grid-template-columns:minmax(0,60ch) minmax(160px,300px);justify-content:space-between;gap:clamp(24px,4vw,72px);align-items:center}
+.music-part{display:grid;grid-template-columns:minmax(0,60ch) minmax(0,1fr);gap:clamp(24px,4vw,72px);align-items:center;margin-top:clamp(90px,10vw,190px)}
+#sound{padding-top:clamp(130px,13vw,240px);padding-bottom:clamp(130px,13vw,240px)}
+@media (min-width:901px){.audio-row .ding{order:2}.music-part{grid-template-columns:minmax(0,1fr) minmax(0,56ch)}.music-part .wave{order:-1}}
 .ding{position:relative;width:100%;aspect-ratio:1;margin:0;padding:0;border:0;background:none;font:inherit;color:inherit;display:grid;place-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}.ding:focus{outline:none}.ding:focus-visible .box{outline:3px solid var(--yellow);outline-offset:6px}.ding .box{transition:transform .25s var(--ease),border-color .25s,box-shadow .25s}.ding:hover .box{transform:scale(1.07) rotate(-2deg);border-color:var(--g6);box-shadow:0 14px 34px rgba(29,90,46,.2)}.ding:active .box{transform:scale(.94);transition-duration:.08s}.ding .ding-cap{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-size:14px;font-weight:700;color:var(--g7);padding:7px 14px;border-radius:999px;background:#F3EFE6;transition:background .25s,transform .25s var(--ease)}.ding .ding-cap svg{width:18px;height:18px;fill:var(--g7)}.ding .ding-cap svg .w{fill:none;stroke:var(--g7);stroke-width:2;stroke-linecap:round}.ding:hover .ding-cap{background:var(--yellow);transform:translateX(-50%) translateY(-2px)}.ding.hit .box svg{animation:tickhit .4s var(--ease) forwards}.ding.hit .ring{animation:ringhit .9s ease-out forwards}.ding.hit .ring:nth-child(2){animation-delay:.08s}.ding.hit .ring:nth-child(3){animation-delay:.16s}.ding.hit .box{animation:boxhit .45s var(--ease)}.ding.hit .ding-cap .w{animation:wv .5s ease-in-out 2}@keyframes tickhit{0%{stroke-dashoffset:120}100%{stroke-dashoffset:0}}@keyframes ringhit{0%,25%{transform:scale(.7);opacity:0}32%{opacity:1}100%{transform:scale(1.9);opacity:0}}@keyframes boxhit{0%{transform:scale(.92)}55%{transform:scale(1.1)}100%{transform:scale(1.07) rotate(-2deg)}}@keyframes wv{50%{opacity:.2}}
 .ding .box{width:42%;aspect-ratio:1;border:7px solid var(--g7);border-radius:18%;display:grid;place-items:center;background:#fff;position:relative;z-index:2}
 .ding .box svg{width:78%;stroke:var(--lime);stroke-width:14;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:120;stroke-dashoffset:120;animation:tick 2.6s var(--ease) infinite}
@@ -568,6 +581,8 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 #thanks .logos img{height:clamp(27px,2.58vw,49px);width:auto}
 
 #thanks .end{position:absolute;left:var(--pad);bottom:clamp(40px,8vh,110px);z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:0}
+.torn-title.cream{align-self:center;margin-bottom:clamp(6px,1vw,18px)}
+.torn-title.cream h2{color:var(--g7);font-size:clamp(34px,3.6vw,68px)}
 #thanks .torn-title h2{font-size:clamp(63px,6.84vw,129px)}
 #thanks .torn-title{transform:rotate(-4deg);z-index:2}
 .torn-note{position:relative;margin-top:calc(-1 * clamp(14px,1.6vw,30px));margin-left:clamp(10px,1.2vw,24px);z-index:1;padding:clamp(16px,1.52vw,26px) clamp(27px,2.28vw,43px);transform:rotate(2deg)}
@@ -595,12 +610,13 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
   .audio-row .ding{width:min(220px,60%);margin:0 auto}
   #nav{display:none}
   #hint small{display:none}
-  .xp{height:auto}
+  .xp,#att-ok{height:auto}
   #approach{height:auto}
   #approach .stick{position:relative;height:auto}
   .swap-txt,.swap-cap{opacity:1;transform:none}
   .xp .stick{position:relative;height:auto;overflow:visible;padding:80px 20px}
   .xp-slot{opacity:1;transform:none;margin-top:10px}
+  .xp .steps p{opacity:1;transform:none}
   .xp .stk{opacity:1}
   .dark{background:var(--g7)}
   .dark::before{background-attachment:scroll;background-size:cover}
@@ -781,20 +797,19 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       <div class="stack">
         <h2 class="h2" data-r>Решение</h2>
         <p class="lead" data-r style="color:var(--g6);--d:.1s">Мы добьёмся прочтения текста через взгляды и акценты.</p>
-        <p class="p swap-txt" id="swaptxt"><span class="accent">Герои тоже видят нашу графику и реагируют на неё!</span> Восприятие устроено так, что если актёр смотрит на надпись, мы тоже начинаем её читать.</p>
       </div>
       <div data-r="r">
         <div class="swap" id="swap">
           <div class="m loading" style="border-radius:0"><video class="lv" data-src="a/side-eye.mp4" poster="a/side-eye.jpg" muted loop playsinline></video></div>
           <img class="b" src="a/papa-looks.jpg" alt="Кадр из ролика: папа в магазине с пачкой сока косится на надпись «Папа: 1 большой закуп, 2 «ой, забыл…»»" loading="lazy" style="width:100%;height:100%;object-fit:cover">
         </div>
-        <p class="swap-cap" id="swapcap">Герои видят надписи</p>
+        <p class="p swap-txt" id="swaptxt"><span class="accent">Герои тоже видят нашу графику и реагируют на неё!</span> Восприятие устроено так, что если актёр смотрит на надпись, мы тоже начинаем её читать.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="xp" id="att-ok" data-chap="Решение" data-stops="0,.6">
+<section class="xp tear-b" id="att-ok" data-chap="Решение" data-stops="0,.6">
   <div class="stick">
     <div style="width:100%;max-width:1680px;margin:0 auto">
       <div style="margin-bottom:clamp(18px,2.28vw,36px)">
@@ -824,7 +839,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 <section class="sec dark chap-title" data-chap="Аниматик" data-dark><div class="wrap"><h2 data-split>Аниматик</h2><div class="bar-lime"></div></div></section>
 
 <section class="sec dark media-sec" id="animatic" data-chap="Аниматик" data-dark>
-  <h2 class="h2" data-r>Аниматик</h2>
+  <div class="torn-title cream" data-r="s"><img src="a/torn-cream.webp" alt=""><h2>Чёрно-белая версия</h2></div>
   <div class="yt" data-id="PBTlkvO4V1o" data-r="s"><img src="a/animatic.jpg" alt="Аниматик: кадр с сыном и титром «Сын: 0,5 комнат украшено, 1 стакан сока выпит»" loading="lazy"><span class="pb"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></span><span class="lbl">▶ Аниматик · YouTube</span></div>
 </section>
 
@@ -835,9 +850,9 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 </section>
 
 <!-- CH: СТОРИБОРД -->
-<section class="sec dark chap-title" data-chap="Сториборд" data-dark><div class="wrap"><h2 data-split>Сториборд</h2><div class="bar-lime"></div></div></section>
+<section class="sec dark chap-title tear-t" data-chap="Сториборд" data-dark><div class="wrap"><h2 data-split>Сториборд</h2><div class="bar-lime"></div></div></section>
 
-<div class="paperwrap">
+<div class="paperwrap cutswrap"><div class="tear-top"></div>
 <section class="sec light sb" id="sb1" data-chap="Сториборд">
   <div class="txt"><span class="num">1</span>
     <h2 class="h2" data-r>1. Полка</h2>
@@ -946,16 +961,13 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 <section class="sec dark chap-title" data-chap="Техника" data-dark><div class="wrap"><h2 data-split>Техника</h2><div class="bar-lime"></div></div></section>
 
 <section class="sec light" id="tech" data-chap="Техника">
-  <div class="wrap grid2" style="--cols:.8fr 1fr">
+ <div class="wrap">
+  <div class="grid2" style="--cols:.8fr 1fr">
     <div class="stack">
       <h2 class="h2" data-r>Фотоаппарат и Dragonframe</h2>
       <p class="p" data-r style="--d:.12s">Для покадровой съёмки нам понадобится фотоаппарат вместо кинокамеры, но с возможностью поставить на него кинооптику. Фотоаппарат подключаем к компьютеру со специальным софтом — Dragonframe.</p>
       <p class="p" data-r style="--d:.2s">Программа сразу показывает получившуюся анимацию, и лишние кадры можно убрать <span class="accent">прямо на съёмочной площадке</span>.</p>
       <p class="p kv" data-r style="--d:.3s">Бонус такого способа: каждый кадр — это фото в высоком разрешении. В некоторых сценах они могут заменить отдельный фотосет для <b>KV</b>.</p>
-      <div class="tests" data-r style="--d:.9s">
-        <div class="m loading"><video class="lv" data-src="a/cover3.mp4" poster="a/cover3-first.jpg" muted loop playsinline></video></div>
-        <p><b>Тесты проведены.</b> Dragonframe я знаю по другим проектам, а под этот ролик заново всё проверил на последней версии. Всё оки.</p>
-      </div>
     </div>
     <div class="rig" data-r="r">
       <img class="cam" src="a/camera.webp" alt="Фотоаппарат Sony с кинообъективом на переходнике" loading="lazy">
@@ -963,6 +975,11 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       <svg viewBox="0 0 620 460" aria-hidden="true"><path id="cable" d="M96 22 C 96 230, 170 330, 300 345 S 520 330, 600 300" fill="none" stroke="#E8711E" stroke-width="12" stroke-linecap="round"/><path d="M96 22 C 96 230, 170 330, 300 345 S 520 330, 600 300" fill="none" stroke="#FFE2B8" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 16"><animate attributeName="stroke-dashoffset" from="0" to="-52" dur="0.6s" repeatCount="indefinite"/></path><circle r="24" fill="#F2C14E" opacity="0.35"><animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#cable"/></animateMotion><animate attributeName="r" values="14;28;14" dur="0.9s" repeatCount="indefinite"/></circle><circle r="9" fill="#FFF6E0"><animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#cable"/></animateMotion></circle><circle r="9" fill="#FFF6E0"><animateMotion dur="1.8s" begin="0.9s" repeatCount="indefinite"><mpath href="#cable"/></animateMotion></circle></svg>
     </div>
   </div>
+  <div class="tests" data-r>
+        <div class="m loading"><video class="lv" data-src="a/cover3.mp4" poster="a/cover3-first.jpg" muted loop playsinline></video></div>
+        <p><b>Тесты проведены.</b> Dragonframe я знаю по другим проектам, а под этот ролик заново всё проверил на последней версии. Всё оки.</p>
+  </div>
+ </div>
 </section>
 
 <!-- CH: АДАПТАЦИИ -->
@@ -1263,10 +1280,10 @@ $$('.xp').forEach(function(sec){
   pl.addEventListener('click',function(){ openVideo(pl.dataset.video,pl.dataset.poster,pl.dataset.title,pl.dataset.disc); });
 });
 var xpSecs=$$('.xp');
-function xpUpdate(){ xpSecs.forEach(function(sec){ var r=sec.getBoundingClientRect(); var p=-r.top/(sec.offsetHeight-vh); var sl=$('.xp-slot',sec); if(p>.3)sl.classList.add('in'); else if(r.top>vh*.6) sl.classList.remove('in'); }); }
+function xpUpdate(){ xpSecs.forEach(function(sec){ var r=sec.getBoundingClientRect(); var p=-r.top/(sec.offsetHeight-vh); var sl=$('.xp-slot',sec); if(p>.3)sl.classList.add('in'); else if(r.top>vh*.6) sl.classList.remove('in'); $$('.steps p',sec).forEach(function(el,i){ el.classList.toggle('on', p>.42+i*.14); }); }); }
 /* ---------- approach swap ---------- */
-var ap=$('#approach'), swap=$('#swap'), swapcap=$('#swapcap'), swaptxt=$('#swaptxt');
-function apUpdate(){ var r=ap.getBoundingClientRect(), p=clamp(-r.top/(ap.offsetHeight-vh),0,1); var on=p>.3; swap.classList.toggle('on',on); swapcap.classList.toggle('on',on); swaptxt.classList.toggle('on',on); }
+var ap=$('#approach'), swap=$('#swap'), swaptxt=$('#swaptxt');
+function apUpdate(){ var r=ap.getBoundingClientRect(), p=clamp(-r.top/(ap.offsetHeight-vh),0,1); var on=p>.3; swap.classList.toggle('on',on); swaptxt.classList.toggle('on',on); }
 
 /* ---------- style sequence ---------- */
 var st=$('#style'), refs=$$('#style .ref'), stTxt=$('#style .txt'), stShade=$('#style .shade'), thumbs=$('#style .thumbs'), stc=$('#stc'), stz=$('#stz'), styleIdx=0;
