@@ -58,7 +58,7 @@ b{font-weight:800}
 
 /* ---------- header / nav ---------- */
 #top{position:fixed;left:0;right:0;top:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:14px var(--pad);font-size:var(--small);letter-spacing:.06em;color:var(--muted);pointer-events:none;transition:opacity .5s,color .4s;opacity:0}
-#top.show{opacity:1}
+#top.show{opacity:.9}
 #top.on-dark{color:rgba(243,239,230,.55)}
 #top .chap{font-weight:800;text-transform:uppercase;letter-spacing:.16em}
 #prog{position:fixed;left:0;top:0;height:3px;width:0;background:linear-gradient(90deg,var(--lime),var(--yellow));z-index:41}
@@ -76,8 +76,8 @@ b{font-weight:800}
 /* ---------- sections ---------- */
 .sec{position:relative;min-height:100vh;min-height:100svh;padding:clamp(80px,9vw,140px) var(--pad);display:flex;align-items:center;overflow:hidden}
 .light{background:var(--paper)}
-.dark{background:radial-gradient(ellipse at 20% 15%,var(--g6) 0%,var(--g7) 50%,var(--g8) 100%);color:var(--cream)}
-.dark::before{content:"";position:absolute;inset:0;background:url(a/grain.webp) center/cover;opacity:.6;pointer-events:none}
+.dark{background:radial-gradient(ellipse 90% 80% at 25% 20%,var(--g6) 0%,var(--g7) 55%,var(--g8) 100%) fixed;color:var(--cream)}
+.dark::before{content:"";position:absolute;inset:0;background:url(a/grain.webp) center/100vw 100vh fixed;opacity:.6;pointer-events:none}
 .dark>*{position:relative}
 .wrap{width:100%;max-width:1680px;margin:0 auto}
 .grid2{display:grid;grid-template-columns:var(--cols,1fr 1fr);gap:clamp(28px,4vw,80px);align-items:center}
@@ -139,10 +139,11 @@ b{font-weight:800}
 .portrait img{position:relative;width:100%;aspect-ratio:2/3;object-fit:cover;transform:rotate(-1.5deg);box-shadow:0 30px 70px rgba(20,40,20,.22)}
 #intro-me .h2{font-size:clamp(56px,7vw,130px)}
 .tl-row{display:grid;grid-template-columns:.62fr 1fr;gap:clamp(24px,4vw,70px);align-items:center;margin-top:clamp(30px,5vw,80px)}
-.torn{position:relative}
-.torn .m{border-radius:0}
-.torn .fr{position:absolute;inset:-8.5% -8.5% -13.5% -8.5%;width:117%;height:122%;max-width:none;pointer-events:none;z-index:2}
-.torn.big .fr{inset:-9.6% -5.8% -11.5% -5.8%;width:111.6%;height:121%}
+.torn{position:relative;aspect-ratio:1176/738}
+.torn.big{aspect-ratio:1744/1062}
+.torn .m{position:absolute;border-radius:0;left:6.4%;top:10.9%;right:6.3%;bottom:10.2%}
+.torn.big .m{left:4.6%;top:7.5%;right:4.3%;bottom:7.5%}
+.torn .fr{position:absolute;inset:0;width:100%;height:100%;max-width:none;pointer-events:none;z-index:2}
 .torn .tape{position:absolute;z-index:3;width:30%;pointer-events:none}
 .tilt-l{transform:rotate(-4deg)}
 .tilt-r{transform:rotate(2deg)}
@@ -159,6 +160,9 @@ b{font-weight:800}
 
 /* story */
 #story .sheet{width:min(560px,100%);transform:rotate(-2deg);filter:drop-shadow(0 30px 50px rgba(0,0,0,.4));margin:0 auto}
+#story .fly{opacity:0}
+#story .fly.in{animation:fly 1.5s cubic-bezier(.45,.05,.4,1) both}
+@keyframes fly{0%{opacity:1;transform:translate(4vw,-115vh) rotate(-14deg)}30%{transform:translate(-3vw,-62vh) rotate(9deg)}55%{transform:translate(2vw,-22vh) rotate(-6deg)}78%{transform:translate(0,0) rotate(2.5deg)}88%{transform:translate(0,-1.2vh) rotate(-.8deg)}100%{opacity:1;transform:none}}
 #story .p{color:var(--mint);font-size:var(--lead);line-height:1.4;font-weight:400}
 #story .y{color:var(--yellow);font-weight:800;font-size:clamp(20px,1.9vw,32px)}
 
@@ -180,7 +184,7 @@ b{font-weight:800}
 .xp-player.live .xp-btn{opacity:0;pointer-events:none}
 .xp-hint{position:absolute;z-index:3;right:14px;bottom:12px;background:rgba(15,48,24,.75);color:var(--cream);font-size:var(--small);font-weight:700;padding:6px 12px;border-radius:30px;opacity:0;transition:opacity .4s}
 .xp-player.live .xp-hint{opacity:1}
-.xp .stk{position:absolute;z-index:7;font-size:clamp(20px,2.1vw,40px);transform:rotate(-4deg)}
+.xp .stk{position:absolute;z-index:5;font-size:clamp(20px,2.1vw,40px);transform:rotate(-4deg)}
 .xp .stk.big{font-size:clamp(26px,2.9vw,56px);transform:rotate(-3deg)}
 
 /* overlay player */
@@ -390,6 +394,8 @@ b{font-weight:800}
   .portrait{margin:10px auto 0;width:78%}
   .cast{grid-template-columns:repeat(3,1fr)}
   #nav{display:none}
+  .dark{background:var(--g7)}
+  .dark::before{background-attachment:scroll;background-size:cover}
   #cv{transform-origin:50% 50%}
   #cv video,#cv img{object-fit:contain}
   #play{top:auto;bottom:16%;transform:translateX(-50%)}
@@ -438,7 +444,7 @@ b{font-weight:800}
 </div>
 
 <div id="prog"></div>
-<header id="top"><span class="chap" id="chap">Фруктовый сад × BBDO</span><span class="who">Режиссёрский тритмент Дамира Мубинова</span></header>
+<header id="top"><span class="chap" id="chap"></span></header>
 <div id="hint"><span></span>Листайте<small>или стрелки ↓ на клавиатуре</small></div>
 <nav id="nav" aria-label="Навигация по тритменту">
   <button id="up" aria-label="Предыдущий фрагмент"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button>
@@ -460,14 +466,6 @@ b{font-weight:800}
   </div>
 </section>
 
-<!-- 2. PREINTRO -->
-<section class="sec" id="preintro" data-chap="Знакомство" data-dark>
-  <div class="wrap">
-    <img class="q" src="a/quote.webp" alt="" data-r="s">
-    <h2 id="quoteText">Как же круто, что в эпоху пресыщения ИИ мы снимаем видеоролик на основе <span>покадровой анимации</span>.</h2>
-  </div>
-</section>
-
 <!-- 3. INTRO ME -->
 <section class="sec light" id="intro-me" data-chap="Знакомство">
   <div class="wrap grid2">
@@ -477,7 +475,6 @@ b{font-weight:800}
     </div>
     <div class="portrait" data-r="r"><img src="a/damir.jpg" alt="Дамир Мубинов, чёрно-белый портрет" loading="lazy"></div>
   </div>
-  <div class="foot"><span>Фруктовый сад × BBDO</span><span>Режиссёрский тритмент Дамира Мубинова</span></div>
 </section>
 
 <!-- 4. INTRO TIMELAPSE -->
@@ -486,18 +483,17 @@ b{font-weight:800}
     <p class="p" style="font-size:clamp(20px,2.1vw,40px);line-height:1.45;max-width:1500px" data-r>Пока писал этот тритмент, с удовольствием вернулся к <span class="accent">stop-motion</span> — одному из самых классных стилей, с которыми я работал. Впрочем, о технологии поговорим чуть позже…</p>
     <div class="tl-row">
       <div class="torn tilt-l" data-r="l">
-        <div class="m r16 loading"><video class="lv" data-src="a/timelapse1.mp4" poster="a/timelapse1.jpg" muted loop playsinline></video></div>
+        <div class="m loading"><video class="lv" data-src="a/timelapse1.mp4" poster="a/timelapse1.jpg" muted loop playsinline></video></div>
         <img class="fr" src="a/frame-small.webp" alt="">
         <img class="tape" src="a/tape.webp" alt="" style="left:-9%;top:-12%;transform:rotate(-30deg)">
       </div>
       <div class="torn big tilt-r" data-r="r" style="--d:.2s">
-        <div class="m r16 loading"><video class="lv" data-src="a/timelapse2.mp4" poster="a/timelapse2.jpg" muted loop playsinline></video></div>
+        <div class="m loading"><video class="lv" data-src="a/timelapse2.mp4" poster="a/timelapse2.jpg" muted loop playsinline></video></div>
         <img class="fr" src="a/frame-big.webp" alt="">
         <img class="tape" src="a/tape.webp" alt="" style="right:-6%;top:-9%;width:24%;transform:rotate(35deg)">
       </div>
     </div>
   </div>
-  <div class="foot"><span>Фруктовый сад × BBDO</span><span>Режиссёрский тритмент Дамира Мубинова</span></div>
 </section>
 
 <!-- CH: ИСТОРИЯ -->
@@ -505,7 +501,7 @@ b{font-weight:800}
 
 <section class="sec dark" id="story" data-chap="История" data-dark>
   <div class="wrap grid2" style="--cols:.8fr 1fr">
-    <img class="sheet" src="a/brief-sheet.webp" alt="Лист «История из брифа»: сториборд агентства из пяти кадров" loading="lazy" data-r="l">
+    <div class="fly" data-fly><img class="sheet" src="a/brief-sheet.webp" alt="Лист «История из брифа»: сториборд агентства из пяти кадров"></div>
     <div class="stack">
       <h2 class="h2" style="color:var(--cream)" data-r>Бриф</h2>
       <p class="p" data-r style="--d:.12s">Еще раз вспомним, какая у нас история из брифа. Она очень простая: вся семья готовится к празднику по чек-листу.</p>
@@ -524,7 +520,6 @@ b{font-weight:800}
     </div>
     <div class="polaroid" data-r="r"><div class="m loading"><video class="lv" data-src="a/sm-lemon-ice.mp4" poster="a/sm-lemon-ice.jpg" muted loop playsinline></video></div></div>
   </div>
-  <div class="foot"><span>Фруктовый сад × BBDO</span><span>Режиссёрский тритмент Дамира Мубинова</span></div>
 </section>
 
 <section class="xp" id="sm-nuance" data-chap="Вызов" style="height:280vh" data-stops="0,.55,1">
@@ -545,7 +540,7 @@ b{font-weight:800}
       <span class="xp-hint">Нажмите, чтобы открыть крупно</span>
     </div>
     <span class="stk sticker fade" data-anchor="tl">Как переключается внимание</span>
-    <span class="stk big sticker fade" data-anchor="br">Главный вызов →</span>
+    <span class="stk big sticker fade" data-anchor="br">Главный вызов ↓</span>
   </div>
 </section>
 
@@ -555,7 +550,6 @@ b{font-weight:800}
     <p class="lead" data-r style="--d:.2s">Сохранить цепляющий stop-motion ролик, в котором зритель успевает прочитать все месседжи.</p>
     <p class="p" data-r style="--d:.4s">Иначе говоря, моя задача — направлять внимание зрителя так, чтобы эта РК сработала.</p>
   </div>
-  <div class="foot"><span>Фруктовый сад × BBDO</span><span>Режиссёрский тритмент Дамира Мубинова</span></div>
 </section>
 
 <!-- APPROACH -->
@@ -575,7 +569,6 @@ b{font-weight:800}
         <p class="swap-cap" id="swapcap">Герои видят надписи</p>
       </div>
     </div>
-    <div class="foot"><span>Фруктовый сад × BBDO</span><span>Режиссёрский тритмент Дамира Мубинова</span></div>
   </div>
 </section>
 
@@ -702,7 +695,6 @@ b{font-weight:800}
       <p style="margin-top:14px;font-weight:700;letter-spacing:.04em;color:#7C857A;font-size:clamp(15px,1.25vw,24px)">Референс на актёрскую игру</p>
     </div>
   </div>
-  <div class="foot"><span>Фруктовый сад × BBDO</span><span>Режиссёрский тритмент Дамира Мубинова</span></div>
 </section>
 
 <section class="sec light" id="acting-compare" data-chap="Реализация">
@@ -943,13 +935,6 @@ $$('[data-split]').forEach(function(h){
   var t=h.textContent; h.textContent='';
   var k=0; t.split(' ').forEach(function(w,wi){ if(wi)h.appendChild(document.createTextNode(' ')); var wd=document.createElement('span');wd.className='wd'; w.split('').forEach(function(c){var sp=document.createElement('span');sp.className='ch';sp.textContent=c;sp.style.transitionDelay=(k++*0.04)+'s';wd.appendChild(sp)}); h.appendChild(wd); });
 });
-(function(){var h=$('#quoteText'),out=[],i=0;
-  h.childNodes.forEach(function(n){
-    if(n.nodeType===3){n.textContent.split(/(\s+)/).forEach(function(w){if(!w)return; if(/^\s+$/.test(w)){out.push(document.createTextNode(w));return} var s=document.createElement('span');s.className='w';s.textContent=w;s.style.transitionDelay=(i++*0.06+.2)+'s';out.push(s)})}
-    else{var s=n.cloneNode(true);s.classList.add('w');s.style.transitionDelay=(i++*0.06+.2)+'s';out.push(s)}
-  });
-  h.textContent='';out.forEach(function(n){h.appendChild(n)});
-})();
 
 /* ---------- loader ---------- */
 html.classList.add('locked');
@@ -961,7 +946,7 @@ function setP(p){target=Math.max(target,p)}
 (function tick(){shown+=(target-shown)*0.12; if(target-shown<0.002)shown=target; bar.style.width=(shown*100)+'%'; pct.textContent=Math.round(shown*100)+'%'; if(shown<1)requestAnimationFrame(tick); else finish();})();
 var t0=Date.now(), finished=false;
 function finish(){ if(finished)return; finished=true; setTimeout(function(){ $('#loader').classList.add('done'); },Math.max(0,1400-(Date.now()-t0))); }
-var imgs=['a/cover.jpg','a/grain.webp','a/logo-chilly.webp','a/bbdo-light.webp','a/bg-green-smooth.jpg','a/quote.webp','a/damir.jpg'];
+var imgs=['a/cover.jpg','a/grain.webp','a/logo-chilly.webp','a/bbdo-light.webp','a/damir.jpg'];
 var parts={img:0,font:0,vid:0};
 function upd(){setP(parts.img*0.15+parts.font*0.05+parts.vid*0.8)}
 var loaded=0; imgs.forEach(function(s){var i=new Image();i.onload=i.onerror=function(){loaded++;parts.img=loaded/imgs.length;upd()};i.src=s});
@@ -994,7 +979,7 @@ $('#play').addEventListener('click',function(){
 
 /* ---------- reveal ---------- */
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.18,rootMargin:'0px 0px -6% 0px'});
-$$('[data-r],.chap-title,#preintro').forEach(function(el){io.observe(el)});
+$$('[data-r],.chap-title,[data-fly]').forEach(function(el){io.observe(el)});
 
 /* ---------- lazy looping videos ---------- */
 function bindLoading(v){ var m=v.closest('.m'); if(!m)return; var off=function(){m.classList.remove('loading')}; v.addEventListener('playing',off); v.addEventListener('loadeddata',off); v.addEventListener('waiting',function(){ if(!v.paused) m.classList.add('loading') }); }
@@ -1048,7 +1033,7 @@ function xpUpdate(o){
   o.pl.style.cssText='left:'+x+'px;top:'+y+'px;width:'+w+'px;height:'+h+'px';
   var f=1-clamp(e*1.6,0,1);
   o.fades.forEach(function(el){el.style.opacity=f; el.style.transform='translateY('+(-30*e)+'px)'});
-  o.stk.forEach(function(el){ el.style.opacity=f; if(el.dataset.anchor==='tl'){el.style.left=(b.x-24)+'px';el.style.top=(b.y-34)+'px'} else {el.style.left=(b.x+b.w-260)+'px';el.style.top=(b.y+b.h-20)+'px'} });
+  var fs=1-clamp(e*4,0,1); o.stk.forEach(function(el){ el.style.opacity=fs; el.style.visibility=fs<.02?'hidden':'visible'; if(el.dataset.anchor==='tl'){el.style.left=(b.x-24)+'px';el.style.top=(b.y-34)+'px'} else {el.style.left=(b.x+b.w-260)+'px';el.style.top=(b.y+b.h-20)+'px'} });
   var inView=r.top<vh&&r.bottom>0;
   if(e>.92&&inView){ if(!o.live){ o.live=true; o.pl.classList.add('live'); if(!o.v.src)o.v.src=o.pl.dataset.video; try{o.v.currentTime=0}catch(_){} var pr=o.v.play(); if(pr&&pr.catch)pr.catch(function(){}); } }
   else if(o.live&&(e<.75||!inView)){ o.live=false; o.pl.classList.remove('live'); o.v.pause(); }
@@ -1095,13 +1080,13 @@ function covUpdate(){
 })();
 
 /* ---------- header, progress, chapters ---------- */
-var top=$('#top'), chap=$('#chap'), prog=$('#prog'), secs=$$('main>section');
+var lastChap=null, chapT=null, top=$('#top'), chap=$('#chap'), prog=$('#prog'), secs=$$('main>section');
 function hdUpdate(){
   var y=scrollY, H=document.documentElement.scrollHeight-vh;
   prog.style.width=(clamp(y/H,0,1)*100)+'%';
-  top.classList.toggle('show',y>cov.offsetHeight-vh*.6);
   var cur=null; for(var i=0;i<secs.length;i++){var r=secs[i].getBoundingClientRect(); if(r.top<=60&&r.bottom>60){cur=secs[i];break}}
-  if(cur){chap.textContent=cur.dataset.chap||''; top.classList.toggle('on-dark',cur.hasAttribute('data-dark'))}
+  if(cur){ var c=cur.dataset.chap||''; top.classList.toggle('on-dark',cur.hasAttribute('data-dark'));
+    if(c!==lastChap){ lastChap=c; chap.textContent=c; clearTimeout(chapT); if(cur!==cov&&!cur.classList.contains('chap-title')){ top.classList.add('show'); chapT=setTimeout(function(){top.classList.remove('show')},2200);} else top.classList.remove('show'); } }
 }
 
 /* ---------- keyboard / arrows: jump between fragments ---------- */
