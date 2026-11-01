@@ -515,7 +515,12 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 .rig svg{left:0;top:28%;width:60.8%;height:auto;z-index:1;pointer-events:none}
 .rig .cam{z-index:2}
 .rig .lap{z-index:3}
-.tests{margin-top:clamp(56px,7vw,130px);display:flex;align-items:center;gap:clamp(14px,1.52vw,23px);padding:clamp(14px,1.4vw,22px);border-radius:18px;background:#F2F5EC;max-width:820px}
+.tests-seam{position:relative;height:0;z-index:30;display:flex;justify-content:center;padding:0 var(--pad)}
+.tests-seam .tests{position:absolute;top:0;transform:translateY(-50%);width:min(820px,calc(100% - 2*var(--pad)));box-shadow:0 18px 40px rgba(10,40,20,.25)}
+.tests-seam .tests[data-r]{transform:translateY(calc(-50% + 16px))}
+.tests-seam .tests[data-r].in{transform:translateY(-50%)}
+#tech{padding-bottom:clamp(120px,10vw,180px)}
+.tests{margin-top:0;display:flex;align-items:center;gap:clamp(14px,1.52vw,23px);padding:clamp(14px,1.4vw,22px);border-radius:18px;background:#F2F5EC;max-width:820px}
 .tests .m{width:clamp(117px,10.64vw,182px);flex:none;aspect-ratio:16/9;border-radius:10px}
 .tests p{font-size:clamp(14px,1.15vw,20px);line-height:1.45;color:var(--ink)}
 .tests p b{color:var(--g7)}
@@ -1012,13 +1017,15 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       <svg viewBox="0 0 620 460" aria-hidden="true"><path id="cable" d="M96 22 C 96 230, 170 330, 300 345 S 520 330, 600 300" fill="none" stroke="#E8711E" stroke-width="12" stroke-linecap="round"/><path d="M96 22 C 96 230, 170 330, 300 345 S 520 330, 600 300" fill="none" stroke="#FFE2B8" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 16"><animate attributeName="stroke-dashoffset" from="0" to="-52" dur="0.6s" repeatCount="indefinite"/></path><circle r="24" fill="#F2C14E" opacity="0.35"><animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#cable"/></animateMotion><animate attributeName="r" values="14;28;14" dur="0.9s" repeatCount="indefinite"/></circle><circle r="9" fill="#FFF6E0"><animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#cable"/></animateMotion></circle><circle r="9" fill="#FFF6E0"><animateMotion dur="1.8s" begin="0.9s" repeatCount="indefinite"><mpath href="#cable"/></animateMotion></circle></svg>
     </div>
   </div>
-  <div class="tests" data-r>
-        <div class="m loading"><video class="lv" data-src="a/cover3.mp4" poster="a/cover3-first.jpg" muted loop playsinline></video></div>
-        <p><b>Тесты проведены.</b> Dragonframe я знаю по другим проектам, а под этот ролик заново всё проверил на последней версии. Всё оки.</p>
-  </div>
  </div>
 </section>
 
+<div class="tests-seam">
+  <div class="tests" data-r="s">
+        <div class="m loading"><video class="lv" data-src="a/cover3.mp4" poster="a/cover3-first.jpg" muted loop playsinline></video></div>
+        <p><b>Тесты проведены.</b> Dragonframe я знаю по другим проектам, а под этот ролик заново всё проверил на последней версии. Всё оки.</p>
+  </div>
+</div>
 <!-- CH: АДАПТАЦИИ -->
 <section class="sec dark chap-title" data-chap="Адаптации" data-dark><div class="wrap"><h2 data-split>Адаптации</h2><div class="bar-lime"></div></div></section>
 
