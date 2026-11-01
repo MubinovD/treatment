@@ -159,6 +159,35 @@ b{font-weight:800}
   #howto .t p{font:400 17px/1.5 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#B9BEB5;max-width:22em}
   #howto .cubeslot{width:112px;height:112px;border-radius:28px;align-self:flex-start}
 }
+/* ---------- designed seams between sections (?seam=brand|paper|ribbon) ---------- */
+.seam{position:relative;height:0;z-index:30;pointer-events:none}
+.seam .band{position:absolute;left:-3vw;right:-3vw;top:0;height:var(--sh);transform:translateY(-50%) rotate(-.8deg);overflow:hidden}
+.seam{--sh:clamp(26px,2.4vw,40px)}
+/* brand: lime stripe with a running line of checks */
+body.seam-brand .seam .band{background:var(--lime);box-shadow:0 6px 18px rgba(10,40,20,.28);border-top:3px solid var(--g7);border-bottom:3px solid var(--g7)}
+body.seam-brand .seam .run{display:flex;white-space:nowrap;height:100%;align-items:center;animation:seamrun 40s linear infinite;will-change:transform}
+body.seam-brand .seam:nth-of-type(even) .run{animation-direction:reverse}
+body.seam-brand .seam .run span{flex:none;padding-right:2.2em;font:900 calc(var(--sh)*.36)/1 'Nunito',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--g7)}
+body.seam-brand .seam .run i{font-style:normal;display:inline-block;width:1.1em;height:1.1em;margin:0 .55em 0 0;vertical-align:-.2em;border:2px solid var(--g7);border-radius:3px;position:relative}
+body.seam-brand .seam .run i::after{content:"";position:absolute;left:28%;top:2%;width:30%;height:60%;border:solid var(--g7);border-width:0 3px 3px 0;transform:rotate(40deg)}
+@keyframes seamrun{to{transform:translateX(-50%)}}
+/* paper: long narrow cream strip */
+body.seam-paper .seam .band{background:#F2ECDD url(a/grain.webp) center/400px;box-shadow:0 8px 16px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.6);transform:translateY(-50%) rotate(-.8deg)}
+body.seam-paper .seam .band::before,body.seam-paper .seam .band::after{content:"";position:absolute;top:-30%;height:160%;width:clamp(60px,6vw,110px);background:rgba(169,207,70,.55);transform:rotate(4deg)}
+body.seam-paper .seam .band::before{left:18%}
+body.seam-paper .seam .band::after{right:22%;transform:rotate(-5deg)}
+body.seam-paper .seam .run{display:none}
+/* ribbon: festive satin ribbon with stitching and a bow */
+body.seam-ribbon .seam .band{background:linear-gradient(180deg,#8FB833 0%,#C6E46A 28%,#A9CF46 50%,#7FA82B 100%);box-shadow:0 8px 18px rgba(10,40,20,.3)}
+body.seam-ribbon .seam .band::before{content:"";position:absolute;left:0;right:0;top:4px;bottom:4px;border-top:2px dashed rgba(242,193,78,.95);border-bottom:2px dashed rgba(242,193,78,.95)}
+body.seam-ribbon .seam .run{display:none}
+.seam .bow{display:none}
+body.seam-ribbon .seam .bow{display:block;position:absolute;left:50%;top:0;width:calc(var(--sh)*3.4);transform:translate(-50%,-50%);filter:drop-shadow(0 6px 10px rgba(10,40,20,.35))}
+body.seam-ribbon .seam:nth-of-type(odd) .bow{left:78%}
+body.seam-ribbon .seam:nth-of-type(even) .bow{left:24%}
+@media (max-width:900px){.seam{--sh:24px}}
+@media (prefers-reduced-motion:reduce){.seam .run{animation:none}}
+
 /* ---------- desktop nav variants (?nav=rail|cube|dock|top) ---------- */
 body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTip,body:not(.nav-rail) #tocDim{display:none!important}
 #dock,#segbar,#seglbl{display:none}
@@ -441,28 +470,14 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 @media (min-width:901px){
   .paperwrap::before{content:"";position:absolute;top:0;bottom:0;right:0;width:58%;background:url(a/panel-tile.webp) left top/100% auto repeat-y;pointer-events:none}
   .paperwrap .sec{background:transparent}
-  .paperwrap.cutswrap::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:clamp(70px,9vw,150px);background:url(a/torn-soft.webp) left bottom/100% 100% no-repeat;pointer-events:none;z-index:-1}
-  .paperwrap{isolation:isolate}
-  .paperwrap.cutswrap::before{-webkit-mask:url(a/panel-tile.webp) left top/100% auto repeat-y;mask:url(a/panel-tile.webp) left top/100% auto repeat-y}
-  .paperwrap.cutswrap::before{background:linear-gradient(to top,rgb(4,65,34) 0,rgb(4,65,34) clamp(30px,3vw,60px),rgba(4,65,34,0) clamp(110px,12vw,220px)),url(a/panel-tile.webp) left top/100% auto repeat-y}
-  .paperwrap.cutswrap:has(.tear-top)::before{background:linear-gradient(to bottom,rgb(4,65,34) 0,rgb(4,65,34) clamp(30px,3vw,60px),rgba(4,65,34,0) clamp(110px,12vw,220px)),linear-gradient(to top,rgb(4,65,34) 0,rgb(4,65,34) clamp(30px,3vw,60px),rgba(4,65,34,0) clamp(110px,12vw,220px)),url(a/panel-tile.webp) left top/100% auto repeat-y}
   .paperwrap.cutswrap{padding-bottom:clamp(40px,5vw,90px)}
   .paperwrap .pic::before{display:none}
   .paperwrap .pic{padding-left:calc(9% + clamp(28px,3vw,56px))!important;padding-right:clamp(24px,3.8vw,76px)!important}
 }
 
 /* torn paper seams between sections */
-.tornin{padding-top:calc(clamp(70px,9vw,150px) + clamp(30px,4vw,70px))}
-.tornin::after{content:"";position:absolute;left:0;right:0;top:-1px;height:clamp(70px,9vw,150px);background:url(a/paper-torn-bottom.webp) left top/100% 100% no-repeat;pointer-events:none;z-index:1;filter:drop-shadow(0 6px 10px rgba(0,0,0,.18))}
+.tornin{padding-top:clamp(90px,9vw,150px)}
 #stopmo{padding-bottom:clamp(30px,4vw,60px);min-height:0}
-.paperwrap.cutswrap + .chap-title::after{content:"";position:absolute;left:0;right:0;top:0;height:min(32vh,260px);background:linear-gradient(rgb(4,65,34),rgba(4,65,34,0));pointer-events:none;z-index:0}
-.paperwrap.cutswrap + .chap-title .wrap{z-index:1}
-.tear-b::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:clamp(70px,9vw,150px);background:url(a/torn-soft.webp) left bottom/100% 100% no-repeat;pointer-events:none;z-index:8}
-.tear-b + .chap-title::after{content:"";position:absolute;left:0;right:0;top:0;height:min(32vh,260px);background:linear-gradient(rgb(4,65,34),rgba(4,65,34,0));pointer-events:none;z-index:0}
-.tear-b + .chap-title .wrap,.tear-t .wrap{z-index:1}
-.chap-title.tear-t::after{content:"";position:absolute;left:0;right:0;bottom:0;height:min(32vh,260px);background:linear-gradient(rgba(4,65,34,0),rgb(4,65,34));pointer-events:none;z-index:0}
-.tear-top{position:absolute;left:0;right:0;top:-1px;height:clamp(70px,9vw,150px);background:url(a/torn-soft.webp) left bottom/100% 100% no-repeat;transform:scaleY(-1);pointer-events:none;z-index:-1}
-.paperwrap.cutswrap:has(.tear-top){padding-top:clamp(40px,5vw,90px)}
 .nuance .say{margin-top:clamp(16px,1.6vw,26px)}
 .nuance .p{margin-top:clamp(28px,3vw,52px);color:#55605A}
 .nuance .good{margin-top:clamp(40px,5vw,90px);font-size:var(--body);color:var(--g7)}
@@ -535,7 +550,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 #style .thumbs button:hover{transform:translateY(-6px) rotate(-1deg)}
 #style .thumbs img{width:100%;height:100%;object-fit:cover}
 #style .counter{position:absolute;z-index:5;right:var(--pad);top:clamp(60px,9vh,100px);color:var(--cream);font-weight:800;letter-spacing:.2em;font-size:var(--small);opacity:0;transition:opacity .4s;background:rgba(16,12,8,.5);padding:8px 14px;border-radius:30px}
-#style .zoom{position:absolute;z-index:5;left:var(--pad);bottom:clamp(30px,6vh,80px);color:var(--cream);font-size:var(--small);font-weight:700;background:rgba(16,12,8,.55);border:0;padding:10px 16px;border-radius:30px;cursor:pointer;opacity:0;transition:opacity .4s}
+#style .zoom{position:absolute;z-index:5;left:var(--pad);bottom:clamp(30px,6vh,80px);color:rgba(255,255,255,.6);font-size:clamp(12px,.8vw,14px);font-weight:700;letter-spacing:.18em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.45);pointer-events:none;transition:opacity .4s}
 
 /* seasons */
 .vs{display:flex;align-items:center;justify-content:center;gap:clamp(14px,2.28vw,36px);flex-wrap:wrap}
@@ -627,7 +642,6 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
   #nav{display:none}
   #hint small{display:none}
   .xp,#att-ok{height:auto}
-  .tear-top{z-index:3}
   #approach{height:auto}
   #approach .stick{position:relative;height:auto}
   .swap-txt,.swap-cap{opacity:1;transform:none}
@@ -826,7 +840,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
   </div>
 </section>
 
-<section class="xp tear-b" id="att-ok" data-chap="Решение" data-stops="0,.6">
+<section class="xp" id="att-ok" data-chap="Решение" data-stops="0,.6">
   <div class="stick">
     <div style="width:100%;max-width:1680px;margin:0 auto">
       <div style="margin-bottom:clamp(18px,2.28vw,36px)">
@@ -852,6 +866,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
   </div>
 </section>
 
+<div class="seam" aria-hidden="true"></div>
 <!-- CH: АНИМАТИК -->
 <section class="sec dark chap-title" data-chap="Бордоматик" data-dark><div class="wrap"><h2 data-split>Бордоматик</h2><div class="bar-lime"></div></div></section>
 
@@ -869,9 +884,10 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 </section>
 
 <!-- CH: СТОРИБОРД -->
-<section class="sec dark chap-title tear-t" data-chap="Сториборд" data-dark><div class="wrap"><h2 data-split>Сториборд</h2><div class="bar-lime"></div></div></section>
+<section class="sec dark chap-title" data-chap="Сториборд" data-dark><div class="wrap"><h2 data-split>Сториборд</h2><div class="bar-lime"></div></div></section>
 
-<div class="paperwrap cutswrap"><div class="tear-top"></div>
+<div class="seam" aria-hidden="true"></div>
+<div class="paperwrap cutswrap">
 <section class="sec light sb" id="sb1" data-chap="Сториборд">
   <div class="txt"><span class="num">1</span>
     <h2 class="h2" data-r>1. Полка</h2>
@@ -915,6 +931,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 </div>
 
 <!-- CH: РЕАЛИЗАЦИЯ -->
+<div class="seam" aria-hidden="true"></div>
 <section class="sec dark chap-title" data-chap="Реализация" data-dark><div class="wrap"><h2 data-split>Реализация</h2><div class="bar-lime"></div></div></section>
 
 <section class="sec light" id="stopmo" data-chap="Реализация">
@@ -931,6 +948,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
   </div>
 </section>
 
+<div class="seam" aria-hidden="true"></div>
 <section class="sec dark tornin" id="stopmo-product" data-chap="Реализация" data-dark>
   <div class="wrap">
     <div class="pp">
@@ -1045,6 +1063,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 </div>
 
 <!-- CH: СТИЛЬ -->
+<div class="seam" aria-hidden="true"></div>
 <section class="sec dark chap-title" data-chap="Визуальный стиль" data-dark><div class="wrap"><h2 data-split>Визуальный стиль</h2><div class="bar-lime"></div></div></section>
 
 <section id="style" data-chap="Визуальный стиль" data-dark data-stops="0,.3,.5,.7,.92">
@@ -1056,7 +1075,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <div class="shade"></div>
     <div class="txt">
       <h2>Визуальный стиль</h2>
-      <p>Тёплая, уютная картинка между рекламной и кинематографичной. Без белой рекламной стерильности и без глубоких киношных теней. Лица всегда хорошо видны, изображение <b>немного приглушено</b>.</p>
+      <p>Картинка тёплая и уютная — что-то среднее между рекламой и кино. Без белой рекламной стерильности и глубоких киношных теней. Лица всегда хорошо видны, а изображение <b>немного приглушено</b>.</p>
     </div>
     <div class="thumbs">
       <button data-g="style" data-gi="1" aria-label="Открыть референс"><img src="a/style-boy.jpg" alt=""></button>
@@ -1064,7 +1083,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       <button data-g="style" data-gi="3" aria-label="Открыть референс"><img src="a/style-checkout.jpg" alt=""></button>
     </div>
     <span class="counter" id="stc">1 / 4</span>
-    <button class="zoom" id="stz">⤢ Открыть крупно</button>
+    <span class="zoom" id="stz">Референс</span>
   </div>
 </section>
 
@@ -1286,7 +1305,6 @@ ov.addEventListener('click',function(e){if(e.target===ov)closeOv()});
 var tx=null; ov.addEventListener('touchstart',function(e){tx=e.touches[0].clientX},{passive:true});
 ov.addEventListener('touchend',function(e){if(tx===null||!gal)return;var dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)stepGal(dx<0?1:-1);tx=null});
 $$('[data-g]').forEach(function(b){b.addEventListener('click',function(){openGal(b.dataset.g,+b.dataset.gi)})});
-$('#stz').addEventListener('click',function(){openGal('style',styleIdx)});
 
 /* ---------- YouTube ---------- */
 $$('.yt').forEach(function(y){y.addEventListener('click',function(){ if(y.querySelector('iframe'))return; var f=document.createElement('iframe'); f.src='https://www.youtube-nocookie.com/embed/'+y.dataset.id+'?autoplay=1&rel=0&modestbranding=1&playsinline=1'; f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen=true; y.appendChild(f); });});
@@ -1316,7 +1334,7 @@ function stUpdate(){
   var marks=[.3,.5,.7]; styleIdx=0;
   refs.forEach(function(el,i){ if(!i)return; var a=marks[i-1]-.12, q=ease(clamp((p-a)/.12,0,1)); el.style.transform='translateY('+((1-q)*100)+'%)'; if(q>.5)styleIdx=i; });
   refs[0].style.transform='scale('+(1+p*.06)+')';
-  stc.textContent=(styleIdx+1)+' / 4'; stc.style.opacity=tf; stz.style.opacity=tf; stz.style.pointerEvents=tf>.5?'auto':'none';
+  stc.textContent=(styleIdx+1)+' / 4'; stc.style.opacity=tf; stz.style.opacity=tf;
 }
 
 /* ---------- cover shrink ---------- */
@@ -1440,6 +1458,12 @@ function mUpdate(){
 /* ---------- nav variant switch ---------- */
 var NAV=(location.search.match(/[?&]nav=(rail|cube|dock|top)/)||[])[1]||'rail';
 document.body.classList.add('nav-'+NAV);
+var SEAM=(location.search.match(/[?&]seam=(brand|paper|ribbon)/)||[])[1]||'brand';
+document.body.classList.add('seam-'+SEAM);
+(function(){var t='',w=['Фруктовый сад','Новый год','Наурыз','Отметить','Фруктовый сад','Праздник'];for(var k=0;k<4;k++)w.forEach(function(x){t+='<span><i></i>'+x+'</span>'});
+var bow='<svg class="bow" viewBox="0 0 136 80"><defs><linearGradient id="bwg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C6E46A"/><stop offset="1" stop-color="#7FA82B"/></linearGradient></defs><path d="M68 40 C44 6,8 6,10 26 C12 44,44 46,68 40Z" fill="url(#bwg)" stroke="#F2C14E" stroke-width="2"/><path d="M68 40 C92 6,128 6,126 26 C124 44,92 46,68 40Z" fill="url(#bwg)" stroke="#F2C14E" stroke-width="2"/><path d="M62 42 L44 76 L54 72 L58 80 L66 46Z" fill="#7FA82B"/><path d="M74 42 L92 76 L82 72 L78 80 L70 46Z" fill="#7FA82B"/><rect x="58" y="30" width="20" height="20" rx="6" fill="#A9CF46" stroke="#F2C14E" stroke-width="2"/></svg>';
+document.querySelectorAll('.seam').forEach(function(e){e.innerHTML='<div class="band"><div class="run">'+t+t+'</div></div>'+bow;});})();
+
 var dock=$('#dock'), dPop=$('#dPop'), segbar=$('#segbar'), seglbl=$('#seglbl'), segT=null;
 function goCh(i){ var ch=chapters[i]; if(ch) scrollTo({top:ch.el.getBoundingClientRect().top+scrollY,behavior:'smooth'}); }
 chapters.forEach(function(ch,i){
