@@ -235,7 +235,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 .bar-lime{width:clamp(72px,5.32vw,106px);height:6px;border-radius:3px;background:var(--lime)}
 
 /* reveal */
-[data-r]{opacity:0;transform:translateY(34px);transition:opacity 1s var(--ease),transform 1s var(--ease);transition-delay:var(--d,0s)}
+[data-r]{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--d,0s)}
 [data-r="l"]{transform:translateX(-40px)}
 [data-r="r"]{transform:translateX(40px)}
 [data-r="s"]{transform:scale(.92)}
@@ -1204,6 +1204,9 @@ $('#play').addEventListener('click',function(){
 /* ---------- reveal ---------- */
 // reveal on the way down; reset when the element drops below the screen again (scrolling back up), so it replays
 var io=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting&&e.intersectionRatio>=.18){e.target.classList.add('in')} else if(e.boundingClientRect.top>innerHeight){e.target.classList.remove('in')} })},{threshold:[0,.18],rootMargin:'0px 0px -6% 0px'});
+// stagger: inside one block, each next element appears noticeably after the previous one (heading first, then text)
+(function(){ var seen=new Map(); $$('[data-r]').forEach(function(el){ var par=el.parentElement, i=seen.get(par)||0; seen.set(par,i+1);
+  var own=parseFloat((el.getAttribute('style')||'').replace(/.*--d:\s*([\d.]+)s.*/,'$1'))||0; var d=Math.max(own,i*0.45); el.style.setProperty('--d',d.toFixed(2)+'s'); }); })();
 $$('[data-r],.chap-title,[data-fly],#howto').forEach(function(el){io.observe(el)});
 
 /* ---------- lazy looping videos ---------- */
