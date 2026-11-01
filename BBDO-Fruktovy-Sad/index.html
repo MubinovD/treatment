@@ -183,7 +183,7 @@ b{font-weight:800}
 
 /* ---------- desktop nav variants (?nav=rail|cube|dock|top) ---------- */
 body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTip,body:not(.nav-rail) #tocDim{display:none!important}
-#dock,#segbar,#seglbl{display:none}
+#dock,#segbar,#seglbl,#segPop{display:none}
 @media (min-width:901px){
   /* B — cube, like on the phone, list opens as a popover */
   body.nav-cube #mcube{display:grid;place-items:center;position:fixed;z-index:48;left:24px;bottom:24px;width:58px;height:58px;border-radius:16px;border:0;cursor:pointer;background:rgba(15,40,22,.5);backdrop-filter:blur(10px) saturate(1.2);-webkit-backdrop-filter:blur(10px) saturate(1.2);color:var(--cream);font:800 13px/1 'Nunito',sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.16);opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:opacity .4s var(--ease),transform .4s var(--ease),background .3s}
