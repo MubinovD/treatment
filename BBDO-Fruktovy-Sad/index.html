@@ -432,6 +432,7 @@ b{font-weight:800}
   .audio-row,.music-part{grid-template-columns:1fr}
   .audio-row .ding{width:min(220px,60%);margin:0 auto}
   #nav{display:none}
+  #hint small{display:none}
   .xp{height:auto}
   #approach{height:auto}
   #approach .stick{position:relative;height:auto}
@@ -441,10 +442,8 @@ b{font-weight:800}
   .xp .stk{opacity:1}
   .dark{background:var(--g7)}
   .dark::before{background-attachment:scroll;background-size:cover}
-  #cv{transform-origin:50% 50%}
-  #cv video,#cv img{object-fit:contain}
-  #play{top:auto;bottom:16%;transform:translateX(-50%)}
-  #play.gone{transform:translateX(-50%) scale(.8)}
+  #cv{transform-origin:50% 50%;inset:auto;left:0;right:0;top:calc(50% - 37.5vw);height:75vw}
+  #cv video,#cv img{object-fit:cover}
   #top{padding:12px 16px}
   #top .who{display:none}
   .foot{display:none}
@@ -991,19 +990,20 @@ function setP(p){target=Math.max(target,p)}
 (function tick(){shown+=(target-shown)*0.12; if(target-shown<0.002)shown=target; bar.style.width=(shown*100)+'%'; pct.textContent=Math.round(shown*100)+'%'; if(shown<1)requestAnimationFrame(tick); else finish();})();
 var t0=Date.now(), finished=false;
 function finish(){ if(finished)return; finished=true; setTimeout(function(){ $('#loader').classList.add('done'); },Math.max(0,1400-(Date.now()-t0))); }
-var imgs=['a/cover-first.jpg','a/grain.webp','a/logo-chilly.webp','a/bbdo-light.webp','a/damir.jpg'];
+var MOB=matchMedia('(max-width:900px)').matches; if(MOB)$('#cv img').src='a/cover-43-first.jpg';
+var imgs=[MOB?'a/cover-43-first.jpg':'a/cover-first.jpg','a/grain.webp','a/logo-chilly.webp','a/bbdo-light.webp','a/damir.jpg'];
 var parts={img:0,font:0,vid:0};
 function upd(){setP(parts.img*0.15+parts.font*0.05+parts.vid*0.8)}
 var loaded=0; imgs.forEach(function(s){var i=new Image();i.onload=i.onerror=function(){loaded++;parts.img=loaded/imgs.length;upd()};i.src=s});
 (document.fonts&&document.fonts.ready||Promise.resolve()).then(function(){parts.font=1;upd()});
 // fetch cover video with progress so first play is instant
 (function(){
-  var url='a/cover.mp4';
+  var url=MOB?'a/cover-43.mp4':'a/cover.mp4';
   function fallback(){cvv.src=url;cvv.addEventListener('canplaythrough',function(){parts.vid=1;upd()},{once:true});cvv.load();setTimeout(function(){parts.vid=1;upd()},9000)}
   if(!window.fetch||!window.ReadableStream){fallback();return}
   fetch(url).then(function(r){
     if(!r.ok||!r.body)throw 0;
-    var total=+r.headers.get('content-length')||4811086, got=0, chunks=[], rd=r.body.getReader();
+    var total=+r.headers.get('content-length')||(MOB?4885245:4811086), got=0, chunks=[], rd=r.body.getReader();
     return (function pump(){return rd.read().then(function(x){ if(x.done){ var b=new Blob(chunks,{type:'video/mp4'}); cvv.src=URL.createObjectURL(b); parts.vid=1; upd(); return;} chunks.push(x.value); got+=x.value.length; parts.vid=clamp(got/total,0,.99); upd(); return pump(); })})();
   }).catch(fallback);
 })();
@@ -1018,7 +1018,10 @@ $('#play').addEventListener('click',function(){
   played=true; html.classList.remove('locked');
   var p=cvv.play(); if(p&&p.catch)p.catch(function(){});
   cv.classList.add('playing'); this.classList.add('gone');
-  setTimeout(function(){ if(scrollY<vh*.15)$('#hint').classList.add('show'); $('#nav').classList.add('show'); },600);
+  $('#nav').classList.add('show');
+  // «Листайте» — only once the cover is actually playing, plus 2 s
+  var showHint=function(){ setTimeout(function(){ if(scrollY<vh*.15)$('#hint').classList.add('show'); },2000); };
+  if(!cvv.paused&&cvv.readyState>2) showHint(); else cvv.addEventListener('playing',showHint,{once:true});
   measure();
 });
 
@@ -1107,7 +1110,7 @@ function covUpdate(){
   cv.style.transform='scale('+s+')'; cv.style.borderRadius=(e*(mob?14:28)/s)+'px';
   cv.style.boxShadow=e>0?'0 40px 90px rgba(0,0,0,'+(.45*e)+')':'none';
   var c=clamp((p-.36)/.16,0,1)*(1-clamp((p-.8)/.14,0,1)); cap.style.opacity=c; cap.style.transform='translateX(-50%) translateY('+((1-c)*16)+'px)';
-  if(mob){ var hv=Math.min(vh,innerWidth*9/16); cap.style.top=(vh/2+hv/2*s+22)+'px'; }
+  if(mob){ var hv=innerWidth*3/4; cap.style.top=(vh/2+hv/2*s+22)+'px'; }
   else cap.style.top=(vh*.42+vh*.58*s+18)+'px';
   clogos.style.opacity=1-e; cbb.style.opacity=.92*(1-e);
   if(played&&p>.05)$('#hint').classList.remove('show');
