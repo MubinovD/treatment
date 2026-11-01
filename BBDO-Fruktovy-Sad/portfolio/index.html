@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Дамир Мубинов — работы</title>
+<meta property="og:title" content="Дамир Мубинов — работы">
+<meta property="og:description" content="Режиссёр в тендере «Фруктовый сад» × BBDO">
+<meta property="og:image" content="https://treatment.mubinov.uz/BBDO-Fruktovy-Sad/a/og-papa.jpg">
+<meta name="theme-color" content="#FDFDFB">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://player.vimeo.com">
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Nunito:wght@400;600;700;800&display=swap&subset=cyrillic" rel="stylesheet">
+<style>
+:root{--g7:#1D5A2E;--g8:#143F20;--lime:#A9CF46;--paper:#FDFDFB;--ink:#2F3A31;--muted:#8A9187;--line:#E6EAE2}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:'Nunito',Arial,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
+a{color:inherit}
+.page{max-width:1120px;margin:0 auto;padding:clamp(28px,5vw,64px) clamp(16px,4vw,40px) clamp(40px,6vw,80px)}
+.back{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--muted);text-decoration:none;transition:color .2s}
+.back:hover{color:var(--g7)}
+header{margin:clamp(36px,6vw,72px) 0 clamp(28px,4vw,44px);max-width:36ch}
+h1{font-family:'Lobster',cursive;font-weight:400;font-size:clamp(34px,4.4vw,56px);line-height:1.1;color:var(--g7);margin-bottom:14px}
+header p{font-size:clamp(17px,1.4vw,20px);text-wrap:pretty}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2.2vw,28px)}
+.v{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#EEF1EA}
+.v iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.v.empty{display:grid;place-items:center;color:var(--muted);font-size:14px;font-weight:700}
+.cap{margin-top:10px;font-size:14px;color:var(--muted);font-weight:600}
+footer{margin-top:clamp(40px,6vw,72px);padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px 28px;font-size:15px;font-weight:700}
+footer a{color:var(--g7);text-decoration:none;border-bottom:2px solid var(--lime);padding-bottom:2px}
+footer a:hover{border-color:var(--g7)}
+[data-r]{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+[data-r].in{opacity:1;transform:none}
+@media (max-width:700px){.grid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){[data-r]{transition:none;opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back" href="../">← К тритменту</a>
+  <header data-r>
+    <h1>Привет!</h1>
+    <p>Я Дамир — режиссёр в тендере этого проекта. Вот мои работы:</p>
+  </header>
+  <div class="grid" id="grid"></div>
+  <footer data-r>
+    <a href="https://mubinov.uz" target="_blank" rel="noopener">Сайт — mubinov.uz</a>
+    <a id="vimeoLink" href="https://vimeo.com/" target="_blank" rel="noopener">Vimeo</a>
+  </footer>
+</div>
+<script>
+// Заполнить: id ролика Vimeo (число из ссылки vimeo.com/123456789) и подпись. Для приватных ссылок вида vimeo.com/123/abcd — h: 'abcd'.
+var WORKS=[
+  {id:'',h:'',title:''},
+  {id:'',h:'',title:''},
+  {id:'',h:'',title:''},
+  {id:'',h:'',title:''}
+];
+var VIMEO_PROFILE='';
+(function(){
+  var g=document.getElementById('grid');
+  WORKS.forEach(function(w,i){
+    var c=document.createElement('div'); c.setAttribute('data-r',''); c.style.setProperty('--d',(0.08*i+0.1)+'s');
+    var box=document.createElement('div'); box.className='v'+(w.id?'':' empty');
+    if(w.id){ var f=document.createElement('iframe'); f.loading='lazy'; f.allow='autoplay; fullscreen; picture-in-picture'; f.allowFullscreen=true; f.title=w.title||'Работа '+(i+1);
+      f.src='https://player.vimeo.com/video/'+w.id+'?'+(w.h?'h='+w.h+'&':'')+'dnt=1&title=0&byline=0&portrait=0&color=A9CF46'; box.appendChild(f); }
+    else box.textContent='Скоро';
+    c.appendChild(box);
+    if(w.title){ var p=document.createElement('p'); p.className='cap'; p.textContent=w.title; c.appendChild(p); }
+    g.appendChild(c);
+  });
+  if(VIMEO_PROFILE) document.getElementById('vimeoLink').href=VIMEO_PROFILE;
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
+  document.querySelectorAll('[data-r]').forEach(function(el){io.observe(el)});
+})();
+</script>
+</body>
+</html>
