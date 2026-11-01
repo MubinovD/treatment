@@ -159,32 +159,25 @@ b{font-weight:800}
   #howto .t p{font:400 17px/1.5 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#B9BEB5;max-width:22em}
   #howto .cubeslot{width:112px;height:112px;border-radius:28px;align-self:flex-start}
 }
-/* ---------- designed seams between sections (?seam=brand|paper|ribbon) ---------- */
+/* ---------- designed seams: paper strip; running brand line on adaptations ---------- */
 .seam{position:relative;height:0;z-index:30;pointer-events:none}
 .seam .band{position:absolute;left:-3vw;right:-3vw;top:0;height:var(--sh);transform:translateY(-50%) rotate(-.8deg);overflow:hidden}
 .seam{--sh:clamp(40px,3.6vw,62px)}
 /* brand: lime stripe with a running line of checks */
-body.seam-brand .seam .band{background:var(--lime);box-shadow:0 6px 18px rgba(10,40,20,.28);border-top:3px solid var(--g7);border-bottom:3px solid var(--g7)}
-body.seam-brand .seam .run{display:flex;white-space:nowrap;height:100%;align-items:center;animation:seamrun 40s linear infinite;will-change:transform}
-body.seam-brand .seam:nth-of-type(even) .run{animation-direction:reverse}
-body.seam-brand .seam .run span{flex:none;padding-right:5.5em;font:900 calc(var(--sh)*.36)/1 'Nunito',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--g7)}
-body.seam-brand .seam .run i{font-style:normal;display:inline-block;width:1.1em;height:1.1em;margin:0 .55em 0 0;vertical-align:-.2em;border:2px solid var(--g7);border-radius:3px;position:relative}
-body.seam-brand .seam .run i::after{content:"";position:absolute;left:28%;top:2%;width:30%;height:60%;border:solid var(--g7);border-width:0 3px 3px 0;transform:rotate(40deg)}
+.seam.brand .band{background:var(--lime);box-shadow:0 6px 18px rgba(10,40,20,.28);border-top:3px solid var(--g7);border-bottom:3px solid var(--g7)}
+.seam.brand .run{display:flex;white-space:nowrap;height:100%;align-items:center;animation:seamrun 40s linear infinite;will-change:transform}
+.seam.brand:nth-of-type(even) .run{animation-direction:reverse}
+.seam.brand .run span{flex:none;padding-right:5.5em;font:900 calc(var(--sh)*.36)/1 'Nunito',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--g7)}
+.seam.brand .run i{font-style:normal;display:inline-block;width:1.1em;height:1.1em;margin:0 .55em 0 0;vertical-align:-.2em;border:2px solid var(--g7);border-radius:3px;position:relative}
+.seam.brand .run i::after{content:"";position:absolute;left:28%;top:2%;width:30%;height:60%;border:solid var(--g7);border-width:0 3px 3px 0;transform:rotate(40deg)}
 @keyframes seamrun{to{transform:translateX(-50%)}}
 /* paper: long narrow cream strip */
-body.seam-paper .seam .band{background:#F2ECDD url(a/grain.webp) center/400px;box-shadow:0 8px 16px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.6);transform:translateY(-50%) rotate(-.8deg)}
-body.seam-paper .seam .band::before,body.seam-paper .seam .band::after{content:"";position:absolute;top:-30%;height:160%;width:clamp(60px,6vw,110px);background:rgba(169,207,70,.55);transform:rotate(4deg)}
-body.seam-paper .seam .band::before{left:18%}
-body.seam-paper .seam .band::after{right:22%;transform:rotate(-5deg)}
-body.seam-paper .seam .run{display:none}
-/* ribbon: festive satin ribbon with stitching and a bow */
-body.seam-ribbon .seam .band{background:linear-gradient(180deg,#8FB833 0%,#C6E46A 28%,#A9CF46 50%,#7FA82B 100%);box-shadow:0 8px 18px rgba(10,40,20,.3)}
-body.seam-ribbon .seam .band::before{content:"";position:absolute;left:0;right:0;top:4px;bottom:4px;border-top:2px dashed rgba(242,193,78,.95);border-bottom:2px dashed rgba(242,193,78,.95)}
-body.seam-ribbon .seam .run{display:none}
-.seam .bow{display:none}
-body.seam-ribbon .seam .bow{display:block;position:absolute;left:50%;top:0;width:calc(var(--sh)*3.4);transform:translate(-50%,-50%);filter:drop-shadow(0 6px 10px rgba(10,40,20,.35))}
-body.seam-ribbon .seam:nth-of-type(odd) .bow{left:78%}
-body.seam-ribbon .seam:nth-of-type(even) .bow{left:24%}
+.seam.paper .band{background:#F2ECDD url(a/grain.webp) center/400px;box-shadow:0 8px 16px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.6);transform:translateY(-50%) rotate(-.8deg)}
+.seam.paper .band::before,.seam.paper .band::after{content:"";position:absolute;top:-30%;height:160%;width:clamp(60px,6vw,110px);background:rgba(169,207,70,.55);transform:rotate(4deg)}
+.seam.paper .band::before{left:18%}
+.seam.paper .band::after{right:22%;transform:rotate(-5deg)}
+.seam.paper .run{display:none}
+.seam.paper .band{height:calc(var(--sh)*.8)}
 @media (max-width:900px){.seam{--sh:34px}}
 @media (prefers-reduced-motion:reduce){.seam .run{animation:none}}
 
@@ -1466,11 +1459,8 @@ function mUpdate(){
 /* ---------- nav variant switch ---------- */
 var NAV=(location.search.match(/[?&]nav=(rail|cube|dock|top)/)||[])[1]||'rail';
 document.body.classList.add('nav-'+NAV);
-var SEAM=(location.search.match(/[?&]seam=(brand|paper|ribbon)/)||[])[1]||'brand';
-document.body.classList.add('seam-'+SEAM);
 (function(){
-var bow='<svg class="bow" viewBox="0 0 136 80"><defs><linearGradient id="bwg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C6E46A"/><stop offset="1" stop-color="#7FA82B"/></linearGradient></defs><path d="M68 40 C44 6,8 6,10 26 C12 44,44 46,68 40Z" fill="url(#bwg)" stroke="#F2C14E" stroke-width="2"/><path d="M68 40 C92 6,128 6,126 26 C124 44,92 46,68 40Z" fill="url(#bwg)" stroke="#F2C14E" stroke-width="2"/><path d="M62 42 L44 76 L54 72 L58 80 L66 46Z" fill="#7FA82B"/><path d="M74 42 L92 76 L82 72 L78 80 L70 46Z" fill="#7FA82B"/><rect x="58" y="30" width="20" height="20" rx="6" fill="#A9CF46" stroke="#F2C14E" stroke-width="2"/></svg>';
-document.querySelectorAll('.seam').forEach(function(e){var l=e.getAttribute('data-l')||'',t='';for(var k=0;k<6;k++)t+='<span><i></i>Фруктовый сад</span>'+(l?'<span><i></i>'+l+'</span>':'');e.innerHTML='<div class="band"><div class="run">'+t+t+'</div></div>'+bow;});})();
+document.querySelectorAll('.seam').forEach(function(e){var l=e.getAttribute('data-l')||'',t='';for(var k=0;k<6;k++)t+='<span><i></i>Фруктовый сад</span>'+(l?'<span><i></i>'+l+'</span>':'');e.classList.add(l==='Адаптации'?'brand':'paper');e.innerHTML='<div class="band"><div class="run">'+t+t+'</div></div>';});})();
 
 var dock=$('#dock'), dPop=$('#dPop'), segbar=$('#segbar'), seglbl=$('#seglbl'), segT=null;
 function goCh(i){ var ch=chapters[i]; if(ch) scrollTo({top:ch.el.getBoundingClientRect().top+scrollY,behavior:'smooth'}); }
