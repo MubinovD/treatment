@@ -683,18 +683,20 @@ b{font-weight:800}
 <!-- CH: РЕАЛИЗАЦИЯ -->
 <section class="sec dark chap-title" data-chap="Реализация" data-dark><div class="wrap"><h2 data-split>Реализация</h2><div class="bar-lime"></div></div></section>
 
+<!-- HIDDEN for now (stopmo types):
 <section class="sec light" id="stopmo" data-chap="Реализация">
   <div class="wrap" style="text-align:center">
     <h2 class="h2" data-r>Стоп-моушен</h2>
-    <p class="p" data-r style="margin-top:14px;--d:.1s">В этой работе я разделяю широкое понятие стоп-моушена на два типа:</p>
+    <p class="p" data-r style="margin-top:14px;—d:.1s">В этой работе я разделяю широкое понятие стоп-моушена на два типа:</p>
     <div class="types" style="text-align:left">
       <div data-r="l"><div class="m sq loading"><video class="lv" data-src="a/real-stopmo.mp4" poster="a/real-stopmo.jpg" muted loop playsinline></video></div>
         <p class="p"><span class="accent">Реальный стоп-моушен</span>, в котором используются неподвижные предметы или застывшие люди(пиксиляция).</p></div>
-      <div data-r="r" style="--d:.15s"><div class="m wd loading"><video class="lv" data-src="a/pseudo-stopmo.mp4" poster="a/pseudo-stopmo.jpg" muted loop playsinline></video></div>
+      <div data-r="r" style="—d:.15s"><div class="m wd loading"><video class="lv" data-src="a/pseudo-stopmo.mp4" poster="a/pseudo-stopmo.jpg" muted loop playsinline></video></div>
         <p class="p"><span class="accent">Псевдо-стоп-моушен</span>, в котором никто не застывает. По сути это обычное видео, только с уменьшенной частотой кадров.</p></div>
     </div>
   </div>
 </section>
+-->
 
 <section class="sec dark" id="stopmo-product" data-chap="Реализация" data-dark>
   <div class="wrap">
@@ -1007,10 +1009,13 @@ $$('[data-r],.chap-title,[data-fly]').forEach(function(el){io.observe(el)});
 
 /* ---------- lazy looping videos ---------- */
 function bindLoading(v){ var m=v.closest('.m'); if(!m)return; var off=function(){m.classList.remove('loading')}; v.addEventListener('playing',off); v.addEventListener('loadeddata',off); v.addEventListener('waiting',function(){ if(!v.paused) m.classList.add('loading') }); }
-var vio=new IntersectionObserver(function(es){es.forEach(function(e){var v=e.target;
-  if(e.isIntersecting){ if(!v.src&&v.dataset.src){v.src=v.dataset.src;} var p=v.play(); if(p&&p.catch)p.catch(function(){}); }
-  else if(!v.paused) v.pause();
-})},{rootMargin:'35% 0px 35% 0px',threshold:0});
+// loops start only when (almost) fully in view, after a beat; scrolling back up rewinds them to frame 1
+var vio=new IntersectionObserver(function(es){es.forEach(function(e){var v=e.target, need=v.closest('.sb')?0.75:0.6;
+  if(!v.src&&v.dataset.src&&e.intersectionRatio>0){v.src=v.dataset.src;}
+  if(e.intersectionRatio>=need){ if(!v._t&&v.paused){ v._t=setTimeout(function(){v._t=null; var p=v.play(); if(p&&p.catch)p.catch(function(){});}, v.closest('.sb')?700:350); } }
+  else { clearTimeout(v._t); v._t=null;
+    if(e.intersectionRatio<0.15){ if(!v.paused)v.pause(); if(e.boundingClientRect.top>0){ try{v.currentTime=0}catch(_){} } } }
+})},{threshold:[0,0.15,0.6,0.75,1]});
 $$('video.lv').forEach(function(v){v.muted=true;bindLoading(v);vio.observe(v)});
 // preload sources a bit ahead of the viewport
 var pio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var v=e.target;if(!v.src&&v.dataset.src){v.preload='auto';v.src=v.dataset.src;} pio.unobserve(v)}})},{rootMargin:'150% 0px 150% 0px'});
