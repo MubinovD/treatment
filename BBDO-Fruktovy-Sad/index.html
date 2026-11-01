@@ -536,7 +536,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 /* sound */
 .audio-row{display:grid;grid-template-columns:minmax(160px,300px) minmax(0,60ch);gap:clamp(24px,4vw,72px);align-items:center}
 .music-part{display:grid;grid-template-columns:minmax(0,60ch) minmax(0,1fr);gap:clamp(24px,4vw,72px);align-items:center;margin-top:clamp(56px,6vw,100px);padding-top:clamp(40px,4vw,64px);border-top:1px solid #E6EAE2}
-.ding{position:relative;width:100%;aspect-ratio:1;margin:0;display:grid;place-items:center}
+.ding{position:relative;width:100%;aspect-ratio:1;margin:0;padding:0;border:0;background:none;font:inherit;color:inherit;display:grid;place-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}.ding:focus{outline:none}.ding:focus-visible .box{outline:3px solid var(--yellow);outline-offset:6px}.ding .box{transition:transform .25s var(--ease),border-color .25s,box-shadow .25s}.ding:hover .box{transform:scale(1.07) rotate(-2deg);border-color:var(--g6);box-shadow:0 14px 34px rgba(29,90,46,.2)}.ding:active .box{transform:scale(.94);transition-duration:.08s}.ding .ding-cap{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-size:14px;font-weight:700;color:var(--g7);padding:7px 14px;border-radius:999px;background:#F3EFE6;transition:background .25s,transform .25s var(--ease)}.ding .ding-cap svg{width:18px;height:18px;fill:var(--g7)}.ding .ding-cap svg .w{fill:none;stroke:var(--g7);stroke-width:2;stroke-linecap:round}.ding:hover .ding-cap{background:var(--yellow);transform:translateX(-50%) translateY(-2px)}.ding.hit .box svg{animation:tickhit .4s var(--ease) forwards}.ding.hit .ring{animation:ringhit .9s ease-out forwards}.ding.hit .ring:nth-child(2){animation-delay:.08s}.ding.hit .ring:nth-child(3){animation-delay:.16s}.ding.hit .box{animation:boxhit .45s var(--ease)}.ding.hit .ding-cap .w{animation:wv .5s ease-in-out 2}@keyframes tickhit{0%{stroke-dashoffset:120}100%{stroke-dashoffset:0}}@keyframes ringhit{0%,25%{transform:scale(.7);opacity:0}32%{opacity:1}100%{transform:scale(1.9);opacity:0}}@keyframes boxhit{0%{transform:scale(.92)}55%{transform:scale(1.1)}100%{transform:scale(1.07) rotate(-2deg)}}@keyframes wv{50%{opacity:.2}}
 .ding .box{width:42%;aspect-ratio:1;border:7px solid var(--g7);border-radius:18%;display:grid;place-items:center;background:#fff;position:relative;z-index:2}
 .ding .box svg{width:78%;stroke:var(--lime);stroke-width:14;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:120;stroke-dashoffset:120;animation:tick 2.6s var(--ease) infinite}
 .ding .ring{position:absolute;inset:29%;border-radius:50%;border:4px solid var(--lime);opacity:0;animation:ring 2.6s ease-out infinite}
@@ -1103,10 +1103,10 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 <section class="sec light" id="sound" data-chap="Аудиоряд">
   <div class="wrap">
     <div class="audio-row">
-      <div class="ding" data-r="s" aria-hidden="true"><span class="ring"></span><span class="ring"></span><span class="ring"></span><div class="box"><svg viewBox="0 0 100 100"><path d="M22 54 L42 72 L80 30"/></svg></div></div>
+      <button type="button" class="ding" id="ding" data-r="s" aria-label="Послушать звук галочки"><span class="ring"></span><span class="ring"></span><span class="ring"></span><span class="box"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M22 54 L42 72 L80 30"/></svg></span><span class="ding-cap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path class="w" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/></svg>Нажмите на галочку</span></button>
       <div class="stack">
         <h2 class="h2" data-r>Звук</h2>
-        <p class="p" data-r style="--d:.1s">Каждая отметка должна сопровождаться звуком успеха, на который, кстати, и может реагировать наш герой. <span class="accent">Я бы даже сказал, что саунд-дизайн тут сильно важнее музыки.</span></p>
+        <p class="p" data-r style="--d:.1s"><span class="accent">Я считаю, что саунд-дизайн в этом ролике важнее музыки:</span> он привлекает внимание к нужным деталям, а значит, и к тексту. Особое внимание хочу уделить галочкам: каждую отметку сопровождает звук успеха, на который, кстати, может реагировать наш герой.</p>
       </div>
     </div>
     <div class="music-part" id="music">
@@ -1437,6 +1437,11 @@ var rt; addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(func
 addEventListener('load',function(){measure();frame()});
 measure(); frame();
 })();
+</script>
+<script>
+(function(){var b=document.getElementById('ding');if(!b)return;var a=new Audio('a/sound-checkbox.mp3');a.preload='auto';var t;
+b.addEventListener('click',function(){try{a.currentTime=0;var p=a.play();if(p&&p.catch)p.catch(function(){});}catch(e){}
+b.classList.remove('hit');void b.offsetWidth;b.classList.add('hit');clearTimeout(t);t=setTimeout(function(){b.classList.remove('hit')},1200);});})();
 </script>
 </body>
 </html>
