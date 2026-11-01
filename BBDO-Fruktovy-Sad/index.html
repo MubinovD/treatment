@@ -119,7 +119,7 @@ b{font-weight:800}
 
 
 /* ---------- mobile contents: cube + bottom sheet ---------- */
-#mcube,#msheet,#mshade,#mintro{display:none}
+#mcube,#msheet,#mshade,#howto{display:none}
 @media (max-width:900px){
   #mcube{display:grid;place-items:center;position:fixed;z-index:48;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:15px;border:0;background:rgba(15,40,22,.58);backdrop-filter:blur(10px) saturate(1.2);-webkit-backdrop-filter:blur(10px) saturate(1.2);color:var(--cream);font:800 13px/1 'Nunito',sans-serif;letter-spacing:.02em;box-shadow:0 8px 24px rgba(0,0,0,.18);opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:opacity .4s var(--ease),transform .4s var(--ease),background .3s}
   #mcube.on{opacity:1;transform:none;pointer-events:auto}
@@ -139,19 +139,30 @@ b{font-weight:800}
   #msheet li a i{font-style:normal;font-size:12px;font-weight:800;opacity:.45;width:20px}
   #msheet li.cur a{background:rgba(169,207,70,.16);color:var(--lime)}
   #msheet li.cur a i{opacity:.9}
-  #mintro{display:flex;position:fixed;inset:0;z-index:51;flex-direction:column;justify-content:flex-end;padding:0 24px calc(96px + env(safe-area-inset-bottom));background:rgba(8,20,11,.0);opacity:0;pointer-events:none;transition:opacity .5s}
-  #mintro.on{opacity:1;pointer-events:auto}
-  #mintro .t{color:var(--cream);max-width:20em}
-  #mintro .t b{display:block;font-family:'Lobster',cursive;font-weight:400;font-size:34px;line-height:1.1;margin-bottom:10px}
-  #mintro .t p{font-size:17px;line-height:1.45;color:var(--mint)}
-  #mintro .t p em{font-style:normal;color:var(--lime);font-weight:800}
-  #mintro button{margin-top:22px;align-self:flex-start;border:0;border-radius:30px;background:var(--lime);color:var(--g8);font:800 16px/1 'Nunito',sans-serif;padding:14px 26px}
-  #mintro .arrow{position:absolute;left:30px;bottom:calc(76px + env(safe-area-inset-bottom));width:2px;height:22px;background:var(--lime);border-radius:2px;animation:drip 1.4s ease-in-out infinite}
-  body.mintro #mcube{z-index:52}
-  body.mintro #msheet{z-index:52}
-  body.mintro #mshade{background:rgba(8,20,11,.86)}
 }
 
+/* ---------- mobile how-to block ---------- */
+@media (max-width:900px){
+  #howto{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:26px;min-height:92svh;padding:70px 24px}
+  #howto .t b{display:block;font-family:'Lobster',cursive;font-weight:400;font-size:40px;line-height:1.05;color:var(--cream);margin-bottom:12px}
+  #howto .t p{font-size:17px;line-height:1.5;color:var(--mint);max-width:22em}
+  #howto .t p em{font-style:normal;color:var(--lime);font-weight:800}
+  .demo{position:relative;width:200px;height:300px;border-radius:26px;border:2px solid rgba(243,239,230,.25);background:rgba(243,239,230,.05);overflow:hidden;align-self:center;margin-top:6px}
+  .demo .ln{position:absolute;left:18px;height:6px;border-radius:4px;background:rgba(243,239,230,.16)}
+  .demo .cb{position:absolute;left:12px;bottom:12px;width:34px;height:34px;border-radius:10px;background:rgba(15,40,22,.9);box-shadow:0 0 0 1px rgba(243,239,230,.25);display:grid;place-items:center;z-index:2}
+  .demo .cb i{display:block;width:12px;height:2px;margin:1.5px 0;border-radius:2px;background:var(--cream);opacity:.75}
+  .demo .cb i:nth-child(2){width:8px;background:var(--lime);opacity:1}
+  .demo .sh{position:absolute;left:6px;right:6px;bottom:6px;height:66%;border-radius:16px;background:rgba(15,40,22,.95);box-shadow:0 0 0 1px rgba(243,239,230,.18);transform-origin:12% 100%;padding:14px 12px;display:flex;flex-direction:column;gap:9px;transform:scale(.12);opacity:0}
+  .demo .sh span{height:7px;border-radius:4px;background:rgba(243,239,230,.35)}
+  .demo .sh span.c{background:var(--lime)}
+  .demo .tap{position:absolute;left:18px;bottom:18px;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.55);z-index:3;opacity:0}
+  #howto.in .demo .sh{animation:dsheet 4.4s var(--ease) .6s infinite}
+  #howto.in .demo .tap{animation:dtap 4.4s ease .6s infinite}
+  #howto.in .demo .cb{animation:dcube 4.4s ease .6s infinite}
+}
+@keyframes dtap{0%{opacity:0;transform:scale(1.6)}10%{opacity:1;transform:scale(1)}18%{opacity:0;transform:scale(.8)}100%{opacity:0}}
+@keyframes dcube{0%,9%{transform:none}13%{transform:scale(.88)}18%,100%{transform:none}}
+@keyframes dsheet{0%,14%{transform:scale(.12);opacity:0}26%,66%{transform:none;opacity:1}78%,100%{transform:scale(.12);opacity:0}}
 /* ---------- sections ---------- */
 .sec{position:relative;min-height:86vh;min-height:86svh;padding:clamp(72px,6.84vw,106px) var(--pad);display:flex;align-items:center;overflow:hidden}
 .light{background:var(--paper)}
@@ -563,7 +574,6 @@ b{font-weight:800}
 <button id="mcube" aria-label="Содержание"><span class="bars"><i></i><i></i><i></i></span><span class="n" id="mcubeN">01<small>/15</small></span></button>
 <div id="mshade"></div>
 <div id="msheet" role="dialog" aria-label="Содержание"><div class="grab"></div><h4>Содержание</h4><ol id="mlist"></ol></div>
-<div id="mintro"><span class="arrow"></span><div class="t"><b>Содержание</b><p>В левом нижнем углу — <em>содержание тритмента</em>. Нажмите на него, чтобы перейти к любой теме.</p></div><button id="mintroOk">Понятно</button></div>
 <div id="hint"><span></span>Листайте<small>или стрелки ↓ на клавиатуре</small></div>
 <nav id="nav" aria-label="Навигация по тритменту">
   <button id="up" aria-label="Предыдущий фрагмент"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button>
@@ -583,6 +593,11 @@ b{font-weight:800}
     <button id="play" aria-label="Начать"><span class="disc"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></span>Начать</button>
     <p id="cvcap"><b>Да, это стоп-моушен!</b> Тот стиль, в котором мы будем снимать ролик.</p>
   </div>
+</section>
+
+<section class="sec dark" id="howto">
+  <div class="t" data-r><b>Содержание</b><p>Дальше в левом нижнем углу будет кнопка с <em>содержанием</em>. Нажмите на неё, чтобы перейти к любой теме.</p></div>
+  <div class="demo" data-r="s" aria-hidden="true"><span class="ln" style="top:26px;width:70%"></span><span class="ln" style="top:44px;width:52%"></span><span class="ln" style="top:72px;width:78%"></span><span class="ln" style="top:90px;width:64%"></span><span class="ln" style="top:108px;width:72%"></span><span class="ln" style="top:136px;width:40%"></span><div class="sh"><span style="width:60%"></span><span style="width:48%"></span><span class="c" style="width:56%"></span><span style="width:44%"></span><span style="width:62%"></span><span style="width:38%"></span></div><span class="cb"><i></i><i></i><i></i></span><span class="tap"></span></div>
 </section>
 
 <!-- 3. INTRO ME -->
@@ -1087,7 +1102,7 @@ setTimeout(function(){setP(1)},20000); // never block forever
 
 /* ---------- cover: play gate ---------- */
 var played=false, cv=$('#cv');
-function blockEv(e){ if(!played||document.body.classList.contains('mintro')){ if(e.target.closest&&e.target.closest('#msheet'))return; e.preventDefault(); } }
+function blockEv(e){ if(!played){ e.preventDefault(); } }
 addEventListener('wheel',blockEv,{passive:false});
 addEventListener('touchmove',blockEv,{passive:false});
 $('#play').addEventListener('click',function(){
@@ -1104,7 +1119,7 @@ $('#play').addEventListener('click',function(){
 /* ---------- reveal ---------- */
 // reveal on the way down; reset when the element drops below the screen again (scrolling back up), so it replays
 var io=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting&&e.intersectionRatio>=.18){e.target.classList.add('in')} else if(e.boundingClientRect.top>innerHeight){e.target.classList.remove('in')} })},{threshold:[0,.18],rootMargin:'0px 0px -6% 0px'});
-$$('[data-r],.chap-title,[data-fly]').forEach(function(el){io.observe(el)});
+$$('[data-r],.chap-title,[data-fly],#howto').forEach(function(el){io.observe(el)});
 
 /* ---------- lazy looping videos ---------- */
 function bindLoading(v){ var m=v.closest('.m'); if(!m)return; var off=function(){m.classList.remove('loading')}; v.addEventListener('playing',off); v.addEventListener('loadeddata',off); v.addEventListener('waiting',function(){ if(!v.paused) m.classList.add('loading') }); }
@@ -1256,34 +1271,20 @@ function tocTipCheck(){ if(tocTipDone||innerWidth<=900)return; if(scrollY>cov.of
 
 
 /* ---------- mobile contents ---------- */
-var isM=function(){return innerWidth<=900}, mcube=$('#mcube'), msheet=$('#msheet'), mshade=$('#mshade'), mlist=$('#mlist'), mintro=$('#mintro'), mcubeN=$('#mcubeN');
+var isM=function(){return innerWidth<=900}, mcube=$('#mcube'), msheet=$('#msheet'), mshade=$('#mshade'), mlist=$('#mlist'), mcubeN=$('#mcubeN'), howto=$('#howto');
 chapters.forEach(function(ch,i){ var li=document.createElement('li'); li.innerHTML='<a><i>'+String(i+1).padStart(2,'0')+'</i>'+(LABEL[ch.name]||ch.name)+'</a>'; li.firstChild.addEventListener('click',function(){ msClose(); setTimeout(function(){ scrollTo({top:ch.el.getBoundingClientRect().top+scrollY,behavior:'smooth'}); },120); }); mlist.appendChild(li); ch.mli=li; });
 function msOpen(){ msheet.classList.add('on'); mshade.classList.add('on'); var c=mlist.querySelector('li.cur'); if(c) c.scrollIntoView({block:'center'}); }
-function msClose(){ msheet.classList.remove('on'); if(!document.body.classList.contains('mintro')) mshade.classList.remove('on'); }
-mcube.addEventListener('click',function(){ if(document.body.classList.contains('mintro')){ mEndIntro(); return; } msheet.classList.contains('on')?msClose():msOpen(); });
-mshade.addEventListener('click',function(){ if(document.body.classList.contains('mintro')) mEndIntro(); else msClose(); });
+function msClose(){ msheet.classList.remove('on'); mshade.classList.remove('on'); }
+mcube.addEventListener('click',function(){ msheet.classList.contains('on')?msClose():msOpen(); });
+mshade.addEventListener('click',msClose);
 var msy=null; msheet.addEventListener('touchstart',function(e){msy=e.touches[0].clientY},{passive:true});
 msheet.addEventListener('touchend',function(e){ if(msy!==null&&e.changedTouches[0].clientY-msy>70&&msheet.scrollTop<=0) msClose(); msy=null; });
 function mUpdate(){
   if(!isM())return;
-  var past=scrollY>cov.offsetHeight-vh*.5;
+  var past=howto.getBoundingClientRect().bottom<vh*.55;
   mcube.classList.toggle('on',past&&played);
   if(curIdx>=0){ mcubeN.innerHTML=String(curIdx+1).padStart(2,'0')+'<small>/'+chapters.length+'</small>'; chapters.forEach(function(ch,i){ ch.mli.classList.toggle('cur',i===curIdx); }); }
-  if(past&&played&&!mIntroDone) mStartIntro();
 }
-var mIntroDone=false; try{mIntroDone=localStorage.getItem('fsMIntro')==='1'}catch(_){}
-var mIntroT=[];
-function mStartIntro(){ mIntroDone=true; try{localStorage.setItem('fsMIntro','1')}catch(_){}
-  mIntroT.push(setTimeout(function(){
-    document.body.classList.add('mintro'); mshade.classList.add('on'); mcube.classList.add('on');
-    mIntroT.push(setTimeout(function(){ msOpen(); },500));
-    mIntroT.push(setTimeout(function(){ msheet.classList.remove('on'); mintro.classList.add('on'); },2300));
-    mIntroT.push(setTimeout(mEndIntro,9000));
-  },700));
-}
-function mEndIntro(){ mIntroT.forEach(clearTimeout); mIntroT=[]; mintro.classList.remove('on'); msheet.classList.remove('on'); mshade.classList.remove('on'); document.body.classList.remove('mintro'); }
-$('#mintroOk').addEventListener('click',mEndIntro);
-mintro.addEventListener('click',function(e){ if(e.target===mintro) mEndIntro(); });
 
 /* ---------- main loop ---------- */
 var ticking=false;
