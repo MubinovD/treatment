@@ -433,6 +433,10 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 .types .p{margin-top:18px;font-size:clamp(14px,1.06vw,21px);line-height:1.4}
 .types .sq{aspect-ratio:1/1.008;max-width:520px;margin:0 auto}
 .types .wd{aspect-ratio:900/506}
+.p.kv{padding-left:16px;border-left:4px solid var(--lime)}
+@media (min-width:901px){#stopmo .types{grid-template-columns:auto auto;justify-content:center;align-items:start}#stopmo .types .m{height:min(40vh,360px);width:auto;max-width:none}#stopmo .types .sq{aspect-ratio:224/226}#stopmo .types .p{max-width:34ch}}
+.hyb{margin:clamp(28px,3.4vw,56px) auto 0;max-width:46ch;text-align:center;font-size:var(--lead);line-height:1.4;color:var(--g8);font-weight:600;text-wrap:balance}
+.hyb b{color:var(--g7);background:linear-gradient(transparent 62%,rgba(169,207,70,.45) 62%)}
 
 /* product / people */
 .pp{display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:clamp(18px,2.28vw,46px);align-items:center}
@@ -864,20 +868,19 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 <!-- CH: РЕАЛИЗАЦИЯ -->
 <section class="sec dark chap-title" data-chap="Реализация" data-dark><div class="wrap"><h2 data-split>Реализация</h2><div class="bar-lime"></div></div></section>
 
-<!-- HIDDEN for now (stopmo types):
 <section class="sec light" id="stopmo" data-chap="Реализация">
   <div class="wrap" style="text-align:center">
     <h2 class="h2" data-r>Стоп-моушен</h2>
-    <p class="p" data-r style="margin-top:14px;—d:.1s">В этой работе я разделяю широкое понятие стоп-моушена на два типа:</p>
+    <p class="p" data-r style="margin:14px auto 0;--d:.1s">В этой работе я разделяю широкое понятие стоп-моушена на два типа:</p>
     <div class="types" style="text-align:left">
       <div data-r="l"><div class="m sq loading"><video class="lv" data-src="a/real-stopmo.mp4" poster="a/real-stopmo.jpg" muted loop playsinline></video></div>
-        <p class="p"><span class="accent">Реальный стоп-моушен</span>, в котором используются неподвижные предметы или застывшие люди(пиксиляция).</p></div>
-      <div data-r="r" style="—d:.15s"><div class="m wd loading"><video class="lv" data-src="a/pseudo-stopmo.mp4" poster="a/pseudo-stopmo.jpg" muted loop playsinline></video></div>
+        <p class="p"><span class="accent">Реальный стоп-моушен</span>, в котором используются неподвижные предметы или застывшие люди (пиксиляция).</p></div>
+      <div data-r="r" style="--d:.15s"><div class="m wd loading"><video class="lv" data-src="a/pseudo-stopmo.mp4" poster="a/pseudo-stopmo.jpg" muted loop playsinline></video></div>
         <p class="p"><span class="accent">Псевдо-стоп-моушен</span>, в котором никто не застывает. По сути это обычное видео, только с уменьшенной частотой кадров.</p></div>
     </div>
+    <p class="hyb" data-r style="--d:.3s">У нас <b>гибрид</b>: соки оживают покадрово, а людей снимаем вживую с пониженной частотой кадров.</p>
   </div>
 </section>
--->
 
 <section class="sec dark" id="stopmo-product" data-chap="Реализация" data-dark>
   <div class="wrap">
@@ -934,6 +937,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       <h2 class="h2" data-r>Фотоаппарат и Dragonframe</h2>
       <p class="p" data-r style="--d:.12s">Для покадровой съёмки нам понадобится фотоаппарат вместо кинокамеры, но с возможностью поставить на него кинооптику. Фотоаппарат подключаем к компьютеру со специальным софтом — Dragonframe.</p>
       <p class="p" data-r style="--d:.2s">Программа сразу показывает получившуюся анимацию, и лишние кадры можно убрать <span class="accent">прямо на съёмочной площадке</span>.</p>
+      <p class="p kv" data-r style="--d:.3s">Бонус такого способа: каждый кадр — это фото в высоком разрешении. В некоторых сценах они могут заменить отдельный фотосет для <b>KV</b>.</p>
       <div class="tests" data-r style="--d:.9s">
         <div class="m loading"><video class="lv" data-src="a/cover3.mp4" poster="a/cover3-first.jpg" muted loop playsinline></video></div>
         <p><b>Тесты проведены.</b> Dragonframe я знаю по другим проектам, а под этот ролик заново всё проверил на последней версии. Всё оки.</p>
