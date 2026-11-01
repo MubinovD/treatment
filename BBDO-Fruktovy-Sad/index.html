@@ -1144,8 +1144,8 @@ function covUpdate(){
   cv.style.transform='scale('+s+')'; cv.style.borderRadius=(e*(mob?14:28)/s)+'px';
   cv.style.boxShadow=e>0?'0 40px 90px rgba(0,0,0,'+(.45*e)+')':'none';
   var c=clamp((p-.36)/.16,0,1)*(1-clamp((p-.8)/.14,0,1)); cap.style.opacity=c; cap.style.transform='translateX(-50%) translateY('+((1-c)*16)+'px)';
-  if(mob){ var hv=innerWidth*3/4; cap.style.top=(vh/2+hv/2*s+22)+'px'; }
-  else cap.style.top=(vh*.42+vh*.58*s+18)+'px';
+  if(mob){ var hv=innerWidth*3/4; cap.style.top=(vh/2+hv/2*s+30)+'px'; }
+  else cap.style.top=(vh*.42+vh*.58*s+Math.max(34,vh*.05))+'px';
   clogos.style.opacity=1-e; cbb.style.opacity=.92*(1-e);
   if(played&&p>.05)$('#hint').classList.remove('show');
 }
