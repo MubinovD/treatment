@@ -369,7 +369,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 .torn-title img{position:absolute;inset:0;width:100%;height:100%;max-width:none}
 .torn-title h2{position:relative;font-family:'Lobster',cursive;font-weight:400;font-size:clamp(49px,6.08vw,114px);color:var(--paper);line-height:1.1;white-space:nowrap}
 #challenge .lead{font-size:clamp(23px,2.28vw,43px);max-width:34ch;margin:clamp(27px,3.04vw,53px) auto 0;color:var(--g7)}
-#challenge .p{font-weight:700;max-width:56ch;margin:22px auto 0;font-size:clamp(16px,1.3vw,24px)}
+#challenge .p{font-weight:600;max-width:56ch;margin:22px auto 0;font-size:clamp(16px,1.3vw,24px)}
 
 /* approach swap */
 #approach{height:150vh;position:relative;background:var(--paper)}
@@ -436,6 +436,9 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 #stopmo{padding-bottom:clamp(30px,4vw,60px);min-height:0}
 .paperwrap.cutswrap + .chap-title::after{content:"";position:absolute;left:0;right:0;top:0;height:min(32vh,260px);background:linear-gradient(rgb(4,65,34),rgba(4,65,34,0));pointer-events:none;z-index:0}
 .paperwrap.cutswrap + .chap-title .wrap{z-index:1}
+.nuance .say{margin-top:clamp(16px,1.6vw,26px)}
+.nuance .p{margin-top:clamp(28px,3vw,52px);color:#55605A}
+.nuance .good{margin-top:clamp(40px,5vw,90px);font-size:var(--body);color:var(--g7)}
 /* stop-motion types */
 .types{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(22px,3.04vw,53px);align-items:end;margin-top:clamp(22px,2.28vw,38px)}
 .types .m{border-radius:var(--r)}
@@ -745,11 +748,11 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 <section class="xp" id="sm-nuance" data-chap="Вызов" data-stops="0,.6">
   <div class="stick">
     <div class="wrap grid2" style="--cols:.8fr 1.2fr">
-      <div class="stack xp-text" data-r>
-        <h2 class="h2">Но есть нюанс…</h2>
-        <p class="lead">Бо́льшую часть текста зритель может не успеть прочитать.</p>
-        <p class="p">Он не может смотреть на две части кадра одновременно, а игровая часть забирает всё внимание, потому что она активнее текста. <b>При этом текст очень важен:</b> в нём инсайт про подготовку к празднику. Если зритель его пропустит, ролик не донесёт главного.</p>
-        <p class="p accent">Хорошая новость: решения есть, о них я расскажу дальше.</p>
+      <div class="xp-text nuance">
+        <h2 class="h2" data-r>но есть нюанс…</h2>
+        <p class="say" data-r>Бо́льшую часть текста зритель может не успеть прочитать.</p>
+        <p class="p" data-r>Он не может смотреть на две части кадра одновременно, а игровая часть забирает всё внимание, потому что она активнее текста. При этом текст очень важен: в нём инсайт про подготовку к празднику. Если зритель его пропустит, ролик не донесёт главного.</p>
+        <p class="good" data-r>Хорошая новость! Решение есть, о нём расскажу дальше.</p>
       </div>
       <div class="xp-slot"></div>
     </div>
@@ -760,15 +763,14 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       
     </div>
     <span class="stk sticker" data-anchor="tl">Как переключается внимание</span>
-    <span class="stk big sticker" data-anchor="br">Главный вызов ↓</span>
   </div>
 </section>
 
 <section class="sec light" id="challenge" data-chap="Вызов">
   <div class="wrap">
-    <div class="torn-title" data-r="s"><img src="a/torn-green.webp" alt=""><h2>Главный вызов</h2></div>
-    <p class="lead" data-r style="--d:.2s">Сохранить цепляющий stop-motion ролик, в котором зритель успевает прочитать все месседжи.</p>
-    <p class="p" data-r style="--d:.4s">Иначе говоря, моя задача — направлять внимание зрителя так, чтобы эта РК сработала.</p>
+    <div class="torn-title"><img src="a/torn-green.webp" alt=""><h2>Главный вызов</h2></div>
+    <p class="lead" data-r style="--d:.5s">Сохранить цепляющий stop‑motion ролик, в котором зритель успевает прочитать все месседжи.</p>
+    <p class="p" data-r style="--d:1.8s;margin-top:clamp(48px,6vw,110px)">Иначе говоря, моя задача — направлять внимание зрителя так, чтобы эта РК сработала.</p>
   </div>
 </section>
 
@@ -797,14 +799,14 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <div style="width:100%;max-width:1680px;margin:0 auto">
       <div style="margin-bottom:clamp(18px,2.28vw,36px)">
         <h2 class="h2">Как это работает</h2>
-        <p class="p" style="margin-top:12px">Героиня сама смотрит на текст, и строка появляется в тот момент, когда туда переходит взгляд зрителя.</p>
+        <p class="p" style="margin-top:12px">Героиня поворачивает взгляд на текст, когда в нём появляется шутка, — и взгляд зрителя переходит вслед за ней.</p>
       </div>
       <div class="grid2" style="--cols:1.25fr 1fr">
         <div class="xp-slot"></div>
         <div class="steps">
           <p><i>1</i>смотрим на героя и узнаём ситуацию</p>
           <p><i>2</i>вслед за его взглядом читаем текст</p>
-          <p><i>3</i>видим реакцию героя</p>
+          <p><i>3</i>видим реакцию героя на текст</p>
         </div>
       </div>
     </div>
@@ -1060,7 +1062,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
   <div class="wrap">
     <p class="kicker" data-r>Новый год и Наурыз</p>
     <h2 class="h2" data-r style="--d:.05s;margin-top:8px">Художка и свет</h2>
-    <p class="p" data-r style="--d:.15s;margin-top:16px">Художка меняется в соответствии с праздником — здесь я полностью поддерживаю бриф. А световые решения могут быть противоположными: вечер в Новом году против дня в Наурызе.</p>
+    <p class="p" data-r style="--d:.15s;margin-top:16px">Художка меняется в соответствии с праздником. А световые решения могут быть противоположными: вечер в Новом году против дня в Наурызе.</p>
     <div class="arts">
       <button data-g="art" data-gi="0" data-r="l"><img src="a/art-ny.jpg" alt="Новый год: тёплый вечерний свет, праздничный стол" loading="lazy"></button>
       <button data-g="art" data-gi="1" data-r="r" style="--d:.15s"><img src="a/art-nauryz.jpg" alt="Наурыз: мягкий дневной свет, весенний стол" loading="lazy"></button>
