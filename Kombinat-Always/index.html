@@ -180,6 +180,10 @@ b{font-weight:700}
 .bmatic .yt{position:relative;width:100%;max-width:1280px;margin:0 auto;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
 .bmatic .yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .bmatic .ytlink{display:inline-block;margin-top:clamp(20px,2.5vw,40px);background:var(--gold);color:var(--ink);font-weight:700;padding:14px 32px;border-radius:40px;text-decoration:none}
+.bmatic .bm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,2.5vw,48px);text-align:left}
+.bmatic h3{color:#fff;margin-top:clamp(14px,1.5vw,24px);font-size:clamp(20px,1.7vw,32px)}
+.bmatic .ytlink{margin-top:clamp(12px,1.2vw,20px)}
+@media (max-width:760px){.bmatic .bm-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -469,11 +473,21 @@ b{font-weight:700}
 </section>
 
 <!-- boardomatic -->
-<section class="sec bmatic" id="boardomatic" data-title="Бордоматик" data-dark>
+<section class="sec bmatic" id="boardomatic" data-title="Бордоматики" data-dark>
   <div class="wrap">
-    <h2 class="r">Бордоматик</h2>
-    <div class="yt r d1"><iframe src="https://www.youtube-nocookie.com/embed/sCPIgJ0TphU?rel=0" title="Бордоматик Always Platinum" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>
-    <p class="r d2"><a class="ytlink" href="https://youtu.be/sCPIgJ0TphU" target="_blank" rel="noopener">Смотреть на YouTube</a></p>
+    <h2 class="r">Бордоматики</h2>
+    <div class="bm-grid">
+      <div class="r d1">
+        <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/KXkxeLC5PWw?rel=0" title="Бордоматик 1: салют и софит" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>
+        <h3>1. Салют и софит</h3>
+        <a class="ytlink" href="https://youtu.be/KXkxeLC5PWw" target="_blank" rel="noopener">Смотреть на YouTube</a>
+      </div>
+      <div class="r d2">
+        <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/sCPIgJ0TphU?rel=0" title="Бордоматик 2: софит, без салюта" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>
+        <h3>2. Софит, без салюта</h3>
+        <a class="ytlink" href="https://youtu.be/sCPIgJ0TphU" target="_blank" rel="noopener">Смотреть на YouTube</a>
+      </div>
+    </div>
   </div>
 </section>
 
