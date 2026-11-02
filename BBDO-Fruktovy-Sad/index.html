@@ -42,7 +42,7 @@ html.locked,html.locked body{overflow:hidden;height:100%;touch-action:none}
 body{background:var(--paper);color:var(--ink);font-family:'Nunito',Arial,sans-serif;font-size:var(--body);line-height:1.5;overflow-x:clip;-webkit-font-smoothing:antialiased}
 html{overflow-x:clip}
 html,body{touch-action:pan-y pinch-zoom;overscroll-behavior-x:none}
-img,video{display:block;max-width:100%}
+img,video{display:block;max-width:100%;height:auto}
 a{color:inherit}
 b{font-weight:800}
 .lob{font-family:'Lobster','Brush Script MT',cursive;font-weight:400;letter-spacing:0}
@@ -274,7 +274,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 .dark .foot{color:rgba(243,239,230,.32)}
 
 /* ---------- cover ---------- */
-#cover{height:230vh;position:relative;background:var(--g9)}
+#cover{height:230vh;height:230lvh;position:relative;background:var(--g9)}
 #cover .stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:grid;place-items:center}
 #cover .stick::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,var(--g6),var(--g8) 60%,var(--g9));}
 #cover .stick::after{content:"";position:absolute;inset:0;background:url(a/grain.webp) center/cover;opacity:.55;pointer-events:none}
@@ -347,7 +347,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 
 /* expand player (attention tests) */
 .xp{position:relative;background:var(--paper)}
-.xp{height:140vh}
+.xp{height:140vh;height:140lvh}
 .xp .stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;align-items:center;padding:clamp(72px,6.84vw,106px) var(--pad)}
 .xp .fade{transition:none}
 .xp-slot{aspect-ratio:16/9;width:100%;position:relative}
@@ -394,7 +394,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 #challenge .p{font-weight:600;max-width:56ch;margin:22px auto 0;font-size:clamp(16px,1.3vw,24px)}
 
 /* approach swap */
-#approach{height:150vh;position:relative;background:var(--paper)}
+#approach{height:150vh;height:150lvh;position:relative;background:var(--paper)}
 #approach .stick{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;padding:clamp(63px,6.08vw,91px) var(--pad);overflow:hidden}
 .swap{position:relative;aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;box-shadow:0 26px 60px rgba(20,40,20,.25)}
 .swap>*{position:absolute;inset:0}
@@ -409,7 +409,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 .steps{display:flex;flex-direction:column;gap:clamp(14px,1.22vw,20px)}
 .xp .steps p{opacity:0;transform:translateY(12px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .xp .steps p.on{opacity:1;transform:none}
-#att-ok{height:230vh}
+#att-ok{height:230vh;height:230lvh}
 #att-ok .grid2{gap:clamp(40px,5vw,110px);align-items:center}
 #att-ok .steps{gap:clamp(22px,2.2vw,40px)}
 .steps p{font-weight:700;color:var(--g7);font-size:clamp(18px,1.37vw,26px);line-height:1.3;display:flex;gap:.6em}
@@ -528,7 +528,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 .cuts .pic>*{position:relative}
 .cuts .m{border-radius:14px;aspect-ratio:16/9;box-shadow:0 20px 50px rgba(0,0,0,.35)}
 .pair{display:flex;align-items:center;gap:clamp(8px,1vw,16px);width:100%}
-.pair .m{flex:1}
+.pair .m{flex:1;min-width:0}
 .pair .plus{color:var(--lime);font-family:'Lobster',cursive;font-size:clamp(27px,2.28vw,43px)}
 .trio{display:flex;flex-direction:column;gap:clamp(12px,1.4vw,22px);width:100%}
 .trio .pair p{flex:1.1;color:var(--cream);font-size:clamp(14px,1.05vw,19px);line-height:1.35}
@@ -536,7 +536,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 .numc{display:grid;place-items:center;width:clamp(27px,1.98vw,35px);height:clamp(27px,1.98vw,35px);border-radius:50%;background:var(--lime);color:var(--g7);font-weight:900;flex:none}
 
 /* style sequence */
-#style{height:520vh;position:relative;background:#1a1410}
+#style{height:520vh;height:520lvh;position:relative;background:#1a1410}
 #style .stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
 #style .ref{position:absolute;inset:0;will-change:transform}
 #style .ref img{width:100%;height:100%;object-fit:cover}
@@ -667,7 +667,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
   #style .txt{top:16%;transform:none}
   #style .shade{width:100%;background:linear-gradient(180deg,rgba(16,12,8,.86) 0%,rgba(16,12,8,.6) 50%,rgba(16,12,8,.1) 100%)}
   .pair .plus{font-size:28px}
-  .trio .pair{display:grid;grid-template-columns:auto 1fr auto 1fr;align-items:center}
+  .trio .pair{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center}
   .trio .pair p{grid-column:1/-1;order:9}
   .xp .stk{display:none}
   .cuts .txt .p{font-size:18px}
@@ -723,9 +723,9 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <div class="cvdim"></div>
     <div id="cv">
       <video id="cvv" muted loop playsinline preload="auto"></video>
-      <img src="a/cover3-first.jpg" alt="Стоп-моушен обложка: покадрово собираются логотип «Фруктовый сад» и пачки сока">
+      <img src="a/cover3-first.jpg" alt="Стоп-моушен обложка: покадрово собираются логотип «Фруктовый сад» и пачки сока" width="1920" height="1080">
     </div>
-    <div class="logos"><img src="a/logo-chilly.webp" alt="Chilly Production"></div><img class="bbdo" src="a/bbdo-light.webp" alt="BBDO">
+    <div class="logos"><img src="a/logo-chilly.webp" alt="Chilly Production" width="2048" height="576"></div><img class="bbdo" src="a/bbdo-light.webp" alt="BBDO" width="900" height="258">
     <button id="play" aria-label="Начать"><span class="disc"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></span>Начать</button>
     <p id="cvcap"><b>Да, это стоп-моушен!</b> Тот стиль, в котором мы будем снимать ролик.</p>
   </div>
@@ -743,7 +743,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       <h2 class="h2" data-r>Рад знакомству!</h2>
       <p class="p" data-r style="font-size:var(--lead);line-height:1.4;--d:.15s">Меня зовут Дамир, я режиссёр-постановщик из Ташкента и обожаю технические вызовы.</p>
     </div>
-    <div class="portrait" data-r="r"><img src="a/damir.jpg" alt="Дамир Мубинов, чёрно-белый портрет" loading="lazy"></div>
+    <div class="portrait" data-r="r"><img src="a/damir.jpg" alt="Дамир Мубинов, чёрно-белый портрет" loading="lazy" width="1000" height="1500"></div>
   </div>
 </section>
 
@@ -753,14 +753,14 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <p class="say" data-r>Пока писал этот тритмент, я с головой ушёл в <span class="accent">stop-motion</span> — один из самых интересных жанров видео, с которыми я работал. Впрочем, о технологии поговорим чуть позже…</p>
     <div class="tl-row">
       <div class="torn tilt-l" data-r="l">
-        <div class="m loading"><video class="lv" data-src="a/timelapse1.mp4" poster="a/timelapse1.jpg" muted loop playsinline></video></div>
-        <img class="fr" src="a/frame-small.webp" alt="">
-        <img class="tape" src="a/tape.webp" alt="" style="left:8%;top:12%;width:28%;transform:translate(-50%,-50%) rotate(-38deg)">
+        <div class="m loading"><video class="lv" data-src="a/timelapse1.mp4" poster="a/timelapse1.jpg" muted loop playsinline width="1280" height="720"></video></div>
+        <img class="fr" src="a/frame-small.webp" alt="" width="1176" height="738">
+        <img class="tape" src="a/tape.webp" alt="" style="left:8%;top:12%;width:28%;transform:translate(-50%,-50%) rotate(-38deg)" width="700" height="239">
       </div>
       <div class="torn big tilt-r" data-r="r" style="--d:.2s">
-        <div class="m loading"><video class="lv" data-src="a/timelapse2.mp4" poster="a/timelapse2.jpg" muted loop playsinline></video></div>
-        <img class="fr" src="a/frame-big.webp" alt="">
-        <img class="tape" src="a/tape.webp" alt="" style="right:5.5%;top:8%;width:22%;transform:translate(50%,-50%) rotate(38deg)">
+        <div class="m loading"><video class="lv" data-src="a/timelapse2.mp4" poster="a/timelapse2.jpg" muted loop playsinline width="1280" height="720"></video></div>
+        <img class="fr" src="a/frame-big.webp" alt="" width="1744" height="1062">
+        <img class="tape" src="a/tape.webp" alt="" style="right:5.5%;top:8%;width:22%;transform:translate(50%,-50%) rotate(38deg)" width="700" height="239">
       </div>
     </div>
   </div>
@@ -771,12 +771,12 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 
 <section class="sec dark" id="story" data-chap="История" data-dark>
   <div class="wrap grid2" style="--cols:.8fr 1fr">
-    <div class="fly" data-fly><img class="sheet" src="a/brief-sheet.webp" alt="Лист «История из брифа»: сториборд агентства из пяти кадров"></div>
+    <div class="fly" data-fly><img class="sheet" src="a/brief-sheet.webp" alt="Лист «История из брифа»: сториборд агентства из пяти кадров" width="941" height="1672"></div>
     <div class="stack">
       <h2 class="h2" style="color:var(--cream)" data-r>Бриф</h2>
       <p class="p" data-r style="--d:.12s">Еще раз вспомним, какая у нас история из брифа. Она очень простая: вся семья готовится к празднику по чек-листу.</p>
       <div class="bar-lime" data-r style="--d:.2s"></div>
-      <p class="y" data-r style="--d:.3s">Дальше покажу уже срежиссированный сториборд.</p>
+      <p class="y" data-r style="--d:.3s">Это сториборд агентства. Свой, режиссёрский, покажу чуть позже.</p>
     </div>
   </div>
 </section>
@@ -788,7 +788,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       <h2 class="h2" data-r>Stop-motion — это хорошо</h2>
       <p class="p" data-r style="--d:.12s">Эта стилистика сильно цепляет внимание зрителя. Из-за оборванных, резких движений глаз постоянно замечает изменения, в отличие от плавного видео. Для рекламы это огромный плюс: <span class="accent">такой ролик точно заметят</span>.</p>
     </div>
-    <div class="polaroid" data-r="r"><div class="m loading"><video class="lv" data-src="a/sm-lemon-ice.mp4" poster="a/sm-lemon-ice.jpg" muted loop playsinline></video></div></div>
+    <div class="polaroid" data-r="r"><div class="m loading"><video class="lv" data-src="a/sm-lemon-ice.mp4" poster="a/sm-lemon-ice.jpg" muted loop playsinline width="222" height="226"></video></div></div>
   </div>
 </section>
 
@@ -804,7 +804,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       <div class="xp-slot"></div>
     </div>
     <div class="xp-player" data-video="a/att-farm.mp4" data-poster="a/att-farm.jpg" data-title="Тест внимания «Ферма»" data-disc="Это тест на внимание. Я показываю, куда смотрит зритель и сколько текста он успевает прочитать.">
-      <img src="a/att-farm.jpg" alt="Тест внимания «Ферма»: трактор в стоп-моушене забирает взгляд, текст слева прочитан наполовину" loading="lazy">
+      <img src="a/att-farm.jpg" alt="Тест внимания «Ферма»: трактор в стоп-моушене забирает взгляд, текст слева прочитан наполовину" loading="lazy" width="1920" height="1080">
       <video muted loop playsinline preload="none"></video>
       <button class="xp-btn" aria-label="Смотреть тест внимания" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></button>
       
@@ -815,7 +815,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 
 <section class="sec light" id="challenge" data-chap="Вызов">
   <div class="wrap">
-    <div class="torn-title"><img src="a/torn-green.webp" alt=""><h2>Главный вызов</h2></div>
+    <div class="torn-title"><img src="a/torn-green.webp" alt="" width="900" height="308"><h2>Главный вызов</h2></div>
     <p class="lead" data-r style="--d:.5s">Сохранить цепляющий stop‑motion ролик, в котором зритель успевает прочитать все месседжи.</p>
     <p class="p" data-r style="--d:1.8s;margin-top:clamp(48px,6vw,110px)">Иначе говоря, моя задача — направлять внимание зрителя так, чтобы эта РК сработала.</p>
   </div>
@@ -831,8 +831,8 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       </div>
       <div data-r="r">
         <div class="swap" id="swap">
-          <div class="m loading" style="border-radius:0"><video class="lv" data-src="a/side-eye.mp4" poster="a/side-eye.jpg" muted loop playsinline></video></div>
-          <img class="b" src="a/papa-looks.jpg" alt="Кадр из ролика: папа в магазине с пачкой сока косится на надпись «Папа: 1 большой закуп, 2 «ой, забыл…»»" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+          <div class="m loading" style="border-radius:0"><video class="lv" data-src="a/side-eye.mp4" poster="a/side-eye.jpg" muted loop playsinline width="640" height="360"></video></div>
+          <img class="b" src="a/papa-looks.jpg" alt="Кадр из ролика: папа в магазине с пачкой сока косится на надпись «Папа: 1 большой закуп, 2 «ой, забыл…»»" loading="lazy" style="width:100%;height:100%;object-fit:cover" width="1760" height="1015">
         </div>
         <p class="p swap-txt" id="swaptxt"><span class="accent">Герои тоже видят нашу графику и реагируют на неё!</span> Восприятие устроено так, что если актёр смотрит на надпись, мы тоже начинаем её читать.</p>
       </div>
@@ -857,7 +857,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       </div>
     </div>
     <div class="xp-player" data-video="a/att-sister.mp4" data-poster="a/att-sister.jpg" data-title="Тест внимания: правильный тайминг" data-disc="Тот же тест на внимание, только текст появляется вслед за взглядом героини.">
-      <img src="a/att-sister.jpg" alt="Тест внимания: правильный тайминг, весь текст прочитан" loading="lazy">
+      <img src="a/att-sister.jpg" alt="Тест внимания: правильный тайминг, весь текст прочитан" loading="lazy" width="1920" height="1080">
       <video muted loop playsinline preload="none"></video>
       <button class="xp-btn" aria-label="Смотреть тест внимания" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></button>
       
@@ -871,16 +871,16 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 <section class="sec dark chap-title" data-chap="Бордоматик" data-dark><div class="wrap"><h2 data-split>Бордоматик</h2><div class="bar-lime"></div></div></section>
 
 <section class="sec dark media-sec" id="animatic" data-chap="Бордоматик" data-dark>
-  <div class="torn-title cream" data-r="s"><img src="a/torn-cream.webp" alt=""><h2>Чёрно-белая версия</h2></div>
-  <div class="yt" data-id="PBTlkvO4V1o" data-r="s"><img src="a/animatic.jpg" alt="Бордоматик: кадр с сыном и титром «Сын: 0,5 комнат украшено, 1 стакан сока выпит»" loading="lazy"><span class="pb"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></span><span class="lbl">▶ Бордоматик · YouTube</span></div>
+  <div class="torn-title cream" data-r="s"><img src="a/torn-cream.webp" alt="" width="900" height="308"><h2>Чёрно-белая версия</h2></div>
+  <div class="yt" data-id="PBTlkvO4V1o" data-r="s"><img src="a/animatic.jpg" alt="Бордоматик: кадр с сыном и титром «Сын: 0,5 комнат украшено, 1 стакан сока выпит»" loading="lazy" width="1280" height="720"><span class="pb"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></span><span class="lbl">▶ Бордоматик · YouTube</span></div>
   <p class="sub an-note" data-r>Музыка, графика и саунд-дизайн в бордоматике пока черновые.</p>
   <p class="note-stk" data-r><b>Важно!</b> В бордоматике читаемость текста пока хромает. Поэтому ниже пример в цвете: тут только две сцены, но по ним видно, как текст будет играть в готовом ролике.</p>
 </section>
 
 <section class="sec dark media-sec" id="animatic-color" data-chap="Бордоматик" data-dark>
   <div class="flow-arrow" id="flowArrow" aria-hidden="true"><svg viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet"><path class="ln" d="M30 4 C 18 80, 42 160, 30 268"/><path class="hd" d="M14 254 L30 284 L46 254"/></svg></div>
-  <div class="torn-title cream" data-r="s"><img src="a/torn-cream.webp" alt=""><h2>Color Animatic</h2></div>
-  <div class="yt" data-id="CELZ5f1hzDw" data-r="s"><img src="a/animatic-color.jpg" alt="Цветная версия первой сцены: рука берёт пачку «Фруктовый сад» Яблоко с полки, титр «Отметить Новый год»" loading="lazy"><span class="pb"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></span><span class="lbl">▶ Color Animatic · YouTube</span></div>
+  <div class="torn-title cream" data-r="s"><img src="a/torn-cream.webp" alt="" width="900" height="308"><h2>Color Animatic</h2></div>
+  <div class="yt" data-id="CELZ5f1hzDw" data-r="s"><img src="a/animatic-color.jpg" alt="Цветная версия первой сцены: рука берёт пачку «Фруктовый сад» Яблоко с полки, титр «Отметить Новый год»" loading="lazy" width="1280" height="720"><span class="pb"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></span><span class="lbl">▶ Color Animatic · YouTube</span></div>
 </section>
 
 <!-- CH: СТОРИБОРД -->
@@ -894,7 +894,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <h2 class="h2" data-r>1. Полка</h2>
     <p class="p" data-r style="--d:.12s">Полка с соками.<br>Справа — свободная глубина под инфографику.<br>Соки двигаются покадрово, так что хук ролика сразу работает на продукт.<br>В кадр входит рука и тянется к соку.</p>
   </div>
-  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb1.mp4" poster="a/sb1.jpg" muted loop playsinline></video></div></div>
+  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb1.mp4" poster="a/sb1.jpg" muted loop playsinline width="1280" height="720"></video></div></div>
 </section>
 
 <section class="sec light sb" id="sb2" data-chap="Сториборд">
@@ -903,7 +903,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <h2 class="h2" data-r>2. Папа</h2>
     <p class="p" data-r style="--d:.12s"><b>POV полки.</b> Отца пока не видно — только руку, которая потянулась к соку в предыдущем кадре. Рука раздвигает соки, и сквозь щель мы видим отца. Наши живые соки расступаются в стороны и окончательно открывают кадр. Параллельно появляется текст, и на моменте с «Ой, забыл» отец смотрит на него и пожимает плечами.</p>
   </div>
-  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb2.mp4" poster="a/sb2.jpg" muted loop playsinline></video></div></div>
+  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb2.mp4" poster="a/sb2.jpg" muted loop playsinline width="1280" height="720"></video></div></div>
 </section>
 
 <section class="sec light sb" id="sb3" data-chap="Сториборд">
@@ -912,7 +912,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <h2 class="h2" data-r>3. Мама и дочь</h2>
     <p class="p" data-r style="--d:.12s">Мама ставит тарелку с баурсаками и уходит. Дочь, оглядываясь ей вслед, хватает свежий хрустящий баурсак (мы это слышим) и кусает его.<br><br>Параллельно появляется титр «Мама и дочь: 3 салата в процессе, 30 баурсаков готово», и после укуса 30 зачёркивается и меняется на 29. На переднем плане чья-то рука тянется к соку.</p>
   </div>
-  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb3.mp4" poster="a/sb3.jpg" muted loop playsinline></video></div>
+  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb3.mp4" poster="a/sb3.jpg" muted loop playsinline width="1280" height="720"></video></div>
     <p class="note" data-r style="--d:1.6s">Я объединил кадры 3 и 4, потому что они умещаются в один ракурс.</p></div>
 </section>
 
@@ -922,7 +922,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <h2 class="h2" data-r>4. Сын</h2>
     <p class="p" data-r style="--d:.12s">А это рука её братишки, который опередил её, налил себе стакан сока и с хитрым прищуром выпивает его.</p>
   </div>
-  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb4.mp4" poster="a/sb4.jpg" muted loop playsinline></video></div></div>
+  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb4.mp4" poster="a/sb4.jpg" muted loop playsinline width="1280" height="720"></video></div></div>
 </section>
 
 <section class="sec light sb" id="sb5" data-chap="Сториборд">
@@ -931,7 +931,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <h2 class="h2" data-r>5. Пэкшот</h2>
     <p class="p" data-r style="--d:.12s">Мы видим, как вся семья вместе с бабушкой и дедушкой сидит за столом, смеётся и счастливо поднимает стаканы, и в момент, когда они начинают пить, фокус переходит на продукт на переднем плане.</p>
   </div>
-  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb5.mp4" poster="a/sb5.jpg" muted loop playsinline></video></div></div>
+  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb5.mp4" poster="a/sb5.jpg" muted loop playsinline width="1280" height="720"></video></div></div>
 </section>
 </div>
 
@@ -944,9 +944,9 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <h2 class="h2" data-r>Стоп-моушен</h2>
     <p class="p" data-r style="margin:14px auto 0;--d:.1s">В этой работе я разделяю широкое понятие стоп-моушена на два типа:</p>
     <div class="types" style="text-align:left">
-      <div data-r="l"><div class="m sq loading"><video class="lv" data-src="a/real-stopmo.mp4" poster="a/real-stopmo.jpg" muted loop playsinline></video></div>
+      <div data-r="l"><div class="m sq loading"><video class="lv" data-src="a/real-stopmo.mp4" poster="a/real-stopmo.jpg" muted loop playsinline width="224" height="226"></video></div>
         <p class="p"><span class="accent">Реальный стоп-моушен</span>, в котором используются неподвижные предметы или застывшие люди (пиксиляция).</p></div>
-      <div data-r="r" style="--d:.15s"><div class="m wd loading"><video class="lv" data-src="a/pseudo-stopmo.mp4" poster="a/pseudo-stopmo.jpg" muted loop playsinline></video></div>
+      <div data-r="r" style="--d:.15s"><div class="m wd loading"><video class="lv" data-src="a/pseudo-stopmo.mp4" poster="a/pseudo-stopmo.jpg" muted loop playsinline width="360" height="202"></video></div>
         <p class="p"><span class="accent">Псевдо-стоп-моушен</span>, в котором никто не застывает. По сути это обычное видео, только с уменьшенной частотой кадров.</p></div>
     </div>
     <p class="hyb" data-r style="--d:.3s">У нас <b>гибрид</b>: соки оживают покадрово, а людей снимаем вживую с пониженной частотой кадров.</p>
@@ -958,7 +958,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
   <div class="wrap">
     <div class="pp">
       <div data-r="l"><p class="lbl">ПРОДУКТ</p><p class="p">Для продукта используем классический стоп-моушен: соки живут и шевелятся в кадре, как в этом примере.</p></div>
-      <div class="m shadow loading" data-r="s" style="aspect-ratio:4/3"><video class="lv" data-src="a/shelf-splice.mp4" poster="a/shelf-splice.jpg" muted loop playsinline></video></div>
+      <div class="m shadow loading" data-r="s" style="aspect-ratio:4/3"><video class="lv" data-src="a/shelf-splice.mp4" poster="a/shelf-splice.jpg" muted loop playsinline width="1280" height="960"></video></div>
       <div data-r="r"><p class="lbl">ЛЮДИ</p><p class="p">Людей мы снимаем в процессе игры: фотоаппарат щёлкает кадры подряд, пока актёры двигаются. Люди — подвижные элементы, и так мы экономим время.</p></div>
     </div>
   </div>
@@ -972,7 +972,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       <p class="p" data-r style="--d:.15s">В видео эмоция мимолётна, и мы считываем её интуитивно. При 15 FPS эмоцию нужно задержать в кадре, иначе она покажется случайной. Поэтому актёры будут позировать, как на фотосъёмке, и в ролик попадают только самые удачные эмоции.</p>
     </div>
     <div data-r="r">
-      <div class="m r16 shadow loading"><video class="lv" data-src="a/dodo2.mp4" poster="a/dodo2.jpg" muted loop playsinline></video></div>
+      <div class="m r16 shadow loading"><video class="lv" data-src="a/dodo2.mp4" poster="a/dodo2.jpg" muted loop playsinline width="1920" height="1080"></video></div>
       <p style="margin-top:14px;font-weight:700;letter-spacing:.04em;color:#7C857A;font-size:clamp(15px,1.25vw,24px)">Референс на актёрскую игру</p>
     </div>
   </div>
@@ -982,18 +982,18 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
   <div class="wrap cmp">
     <div class="col" data-r="l">
       <p class="k">ВИДЕО</p><h3>Эмоция мимолётна</h3>
-      <div class="m loading"><video class="lv" data-src="a/v-woman.mp4" poster="a/v-woman.jpg" muted loop playsinline></video></div>
+      <div class="m loading"><video class="lv" data-src="a/v-woman.mp4" poster="a/v-woman.jpg" muted loop playsinline width="400" height="226"></video></div>
       <div class="row">
-        <div class="m loading"><video class="lv" data-src="a/v-man.mp4" poster="a/v-man.jpg" muted loop playsinline></video></div>
-        <div class="m loading"><video class="lv" data-src="a/v-dark.mp4" poster="a/v-dark.jpg" muted loop playsinline></video></div>
+        <div class="m loading"><video class="lv" data-src="a/v-man.mp4" poster="a/v-man.jpg" muted loop playsinline width="336" height="226"></video></div>
+        <div class="m loading"><video class="lv" data-src="a/v-dark.mp4" poster="a/v-dark.jpg" muted loop playsinline width="296" height="226"></video></div>
       </div>
     </div>
     <div class="col" data-r="r" style="--d:.15s">
       <p class="k">СТОП-МОУШЕН</p><h3>Эмоция зафиксирована</h3>
-      <div class="m loading"><video class="lv" data-src="a/sm-coffee.mp4" poster="a/sm-coffee.jpg" muted loop playsinline></video></div>
+      <div class="m loading"><video class="lv" data-src="a/sm-coffee.mp4" poster="a/sm-coffee.jpg" muted loop playsinline width="480" height="200"></video></div>
       <div class="row">
-        <div class="m loading"><video class="lv" data-src="a/sm-girl.mp4" poster="a/sm-girl.jpg" muted loop playsinline></video></div>
-        <div class="m loading"><video class="lv" data-src="a/dodo2.mp4" poster="a/dodo2.jpg" muted loop playsinline></video></div>
+        <div class="m loading"><video class="lv" data-src="a/sm-girl.mp4" poster="a/sm-girl.jpg" muted loop playsinline width="400" height="226"></video></div>
+        <div class="m loading"><video class="lv" data-src="a/dodo2.mp4" poster="a/dodo2.jpg" muted loop playsinline width="1920" height="1080"></video></div>
       </div>
     </div>
   </div>
@@ -1011,8 +1011,8 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       <p class="p" data-r style="--d:.2s">Программа сразу показывает получившуюся анимацию, и лишние кадры можно убрать <span class="accent">прямо на съёмочной площадке</span>.</p>
     </div>
     <div class="rig" data-r="r">
-      <img class="cam" src="a/camera.webp" alt="Фотоаппарат Sony с кинообъективом на переходнике" loading="lazy">
-      <img class="lap" src="a/laptop.webp" alt="Ноутбук с интерфейсом Dragonframe" loading="lazy">
+      <img class="cam" src="a/camera.webp" alt="Фотоаппарат Sony с кинообъективом на переходнике" loading="lazy" width="1400" height="933">
+      <img class="lap" src="a/laptop.webp" alt="Ноутбук с интерфейсом Dragonframe" loading="lazy" width="1400" height="982">
       <svg viewBox="0 0 620 460" aria-hidden="true"><path id="cable" d="M96 22 C 96 230, 170 330, 300 345 S 520 330, 600 300" fill="none" stroke="#E8711E" stroke-width="12" stroke-linecap="round"/><path d="M96 22 C 96 230, 170 330, 300 345 S 520 330, 600 300" fill="none" stroke="#FFE2B8" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 16"><animate attributeName="stroke-dashoffset" from="0" to="-52" dur="0.6s" repeatCount="indefinite"/></path><circle r="24" fill="#F2C14E" opacity="0.35"><animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#cable"/></animateMotion><animate attributeName="r" values="14;28;14" dur="0.9s" repeatCount="indefinite"/></circle><circle r="9" fill="#FFF6E0"><animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#cable"/></animateMotion></circle><circle r="9" fill="#FFF6E0"><animateMotion dur="1.8s" begin="0.9s" repeatCount="indefinite"><mpath href="#cable"/></animateMotion></circle></svg>
     </div>
   </div>
@@ -1022,7 +1022,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 
 <div class="tests-seam">
   <div class="tests" data-r="s">
-        <div class="m loading"><video class="lv" data-src="a/cover3.mp4" poster="a/cover3-first.jpg" muted loop playsinline></video></div>
+        <div class="m loading"><video class="lv" data-src="a/cover3.mp4" poster="a/cover3-first.jpg" muted loop playsinline width="1920" height="1080"></video></div>
         <p><b>Тесты проведены.</b> Dragonframe я знаю по другим проектам, а под этот ролик заново всё проверил на последней версии. Всё оки.</p>
   </div>
 </div>
@@ -1037,7 +1037,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <h2 class="h2" data-r style="--d:.05s">3 секунды</h2>
     <p class="p" data-r style="--d:.15s">Трёхсекундная версия состоит из пэкшотного кадра, где вся семья сидит за столом.</p>
   </div>
-  <div class="pic"><div class="m" style="width:100%" data-r="s"><img src="a/packshot.jpg" alt="Пэкшот: семья поднимает стаканы за столом" loading="lazy"></div></div>
+  <div class="pic"><div class="m" style="width:100%" data-r="s"><img src="a/packshot.jpg" alt="Пэкшот: семья поднимает стаканы за столом" loading="lazy" width="1280" height="720"></div></div>
 </section>
 
 <section class="sec light cuts" id="cuts6" data-chap="Адаптации">
@@ -1048,8 +1048,8 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
   </div>
   <div class="pic" style="flex-direction:column">
     <div class="pair" data-r="s">
-      <span class="numc">1</span><div class="m"><img src="a/cut-shelf.jpg" alt="Полка: рука берёт сок" loading="lazy"></div>
-      <span class="numc">2</span><div class="m"><img src="a/packshot.jpg" alt="Пэкшот: семья за столом" loading="lazy"></div>
+      <span class="numc">1</span><div class="m"><img src="a/cut-shelf.jpg" alt="Полка: рука берёт сок" loading="lazy" width="1280" height="720"></div>
+      <span class="numc">2</span><div class="m"><img src="a/packshot.jpg" alt="Пэкшот: семья за столом" loading="lazy" width="1280" height="720"></div>
     </div>
     <p data-r style="--d:.3s;color:var(--cream);font-size:clamp(14px,1.06vw,20px);text-align:center">Полка — рука берёт сок, а следом вся семья празднует.</p>
   </div>
@@ -1063,9 +1063,9 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <p class="p" data-r style="--d:.25s;font-weight:800;color:var(--sage);font-size:clamp(15px,1.2vw,22px)">Каты подлежат обсуждению в зависимости от задач по размещению.</p>
   </div>
   <div class="pic"><div class="trio">
-    <div class="pair" data-r="r"><div class="m"><img src="a/cut-papa.jpg" alt="Папа" loading="lazy"></div><span class="plus">+</span><div class="m"><img src="a/packshot.jpg" alt="Пэкшот" loading="lazy"></div><p><b>Папа</b> — берёт сок, появляется его текст, потом вся семья празднует.</p></div>
-    <div class="pair" data-r="r" style="--d:.15s"><div class="m"><img src="a/cut-daughter.jpg" alt="Дочь" loading="lazy"></div><span class="plus">+</span><div class="m"><img src="a/packshot.jpg" alt="Пэкшот" loading="lazy"></div><p><b>Дочь</b> — украла баурсак, в следующем кадре пэкшот.</p></div>
-    <div class="pair" data-r="r" style="--d:.3s"><div class="m"><img src="a/cut-son.jpg" alt="Сын" loading="lazy"></div><span class="plus">+</span><div class="m"><img src="a/packshot.jpg" alt="Пэкшот" loading="lazy"></div><p><b>Сын</b> — налил себе сок, улыбнулся, и вся семья празднует.</p></div>
+    <div class="pair" data-r="r"><div class="m"><img src="a/cut-papa.jpg" alt="Папа" loading="lazy" width="1280" height="720"></div><span class="plus">+</span><div class="m"><img src="a/packshot.jpg" alt="Пэкшот" loading="lazy" width="1280" height="720"></div><p><b>Папа</b> — берёт сок, появляется его текст, потом вся семья празднует.</p></div>
+    <div class="pair" data-r="r" style="--d:.15s"><div class="m"><img src="a/cut-daughter.jpg" alt="Дочь" loading="lazy" width="1280" height="720"></div><span class="plus">+</span><div class="m"><img src="a/packshot.jpg" alt="Пэкшот" loading="lazy" width="1280" height="720"></div><p><b>Дочь</b> — украла баурсак, в следующем кадре пэкшот.</p></div>
+    <div class="pair" data-r="r" style="--d:.3s"><div class="m"><img src="a/cut-son.jpg" alt="Сын" loading="lazy" width="1280" height="720"></div><span class="plus">+</span><div class="m"><img src="a/packshot.jpg" alt="Пэкшот" loading="lazy" width="1280" height="720"></div><p><b>Сын</b> — налил себе сок, улыбнулся, и вся семья празднует.</p></div>
   </div></div>
 </section>
 </div>
@@ -1076,19 +1076,19 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 
 <section id="style" data-chap="Визуальный стиль" data-dark data-stops="0,.3,.5,.7,.92">
   <div class="stick">
-    <div class="ref" data-i="0"><img src="a/style-main.jpg" alt="Референс: семья в тёплой кухне, солнце из окна, дети в масках" loading="lazy"></div>
-    <div class="ref" data-i="1" style="transform:translateY(100%)"><img src="a/style-boy.jpg" alt="Референс: мальчик в кепке на кухне, родители на фоне" loading="lazy"></div>
-    <div class="ref" data-i="2" style="transform:translateY(100%)"><img src="a/style-breakfast.jpg" alt="Референс: семья за завтраком на кухне, мягкий свет из окна" loading="lazy"></div>
-    <div class="ref" data-i="3" style="transform:translateY(100%)"><img src="a/style-checkout.jpg" alt="Референс: семья у кассы, удивлённый мальчик" loading="lazy"></div>
+    <div class="ref" data-i="0"><img src="a/style-main.jpg" alt="Референс: семья в тёплой кухне, солнце из окна, дети в масках" loading="lazy" width="1920" height="1080"></div>
+    <div class="ref" data-i="1" style="transform:translateY(100%)"><img src="a/style-boy.jpg" alt="Референс: мальчик в кепке на кухне, родители на фоне" loading="lazy" width="960" height="540"></div>
+    <div class="ref" data-i="2" style="transform:translateY(100%)"><img src="a/style-breakfast.jpg" alt="Референс: семья за завтраком на кухне, мягкий свет из окна" loading="lazy" width="960" height="540"></div>
+    <div class="ref" data-i="3" style="transform:translateY(100%)"><img src="a/style-checkout.jpg" alt="Референс: семья у кассы, удивлённый мальчик" loading="lazy" width="960" height="540"></div>
     <div class="shade"></div>
     <div class="txt">
       <h2>Визуальный стиль</h2>
       <p>Картинка тёплая и уютная — что-то среднее между рекламой и кино. Без белой рекламной стерильности и глубоких киношных теней. Лица всегда хорошо видны, а изображение <b>немного приглушено</b>.</p>
     </div>
     <div class="thumbs">
-      <button data-g="style" data-gi="1" aria-label="Открыть референс"><img src="a/style-boy.jpg" alt=""></button>
-      <button data-g="style" data-gi="2" aria-label="Открыть референс"><img src="a/style-breakfast.jpg" alt=""></button>
-      <button data-g="style" data-gi="3" aria-label="Открыть референс"><img src="a/style-checkout.jpg" alt=""></button>
+      <button data-g="style" data-gi="1" aria-label="Открыть референс"><img src="a/style-boy.jpg" alt="" width="960" height="540"></button>
+      <button data-g="style" data-gi="2" aria-label="Открыть референс"><img src="a/style-breakfast.jpg" alt="" width="960" height="540"></button>
+      <button data-g="style" data-gi="3" aria-label="Открыть референс"><img src="a/style-checkout.jpg" alt="" width="960" height="540"></button>
     </div>
     <span class="counter" id="stc">1 / 4</span>
     <span class="zoom" id="stz">Референс</span>
@@ -1113,10 +1113,10 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       <p class="p" data-r style="--d:.2s">В версии Наурыза же мы скидываем весь груз в виде одежды и переходим на более весенне-летнюю одежду, а на маме — платок.</p>
     </div>
     <div class="costumes" data-r="r">
-      <button data-g="costume" data-gi="0"><img src="a/costume-papa.jpg" alt="Папа: новогодний и наурызовский образ" loading="lazy"></button>
-      <button data-g="costume" data-gi="1"><img src="a/costume-mama.jpg" alt="Мама: новогодний и наурызовский образ" loading="lazy"></button>
-      <button data-g="costume" data-gi="2"><img src="a/costume-son.jpg" alt="Сын: новогодний и наурызовский образ" loading="lazy"></button>
-      <button data-g="costume" data-gi="3"><img src="a/costume-daughter.jpg" alt="Дочь: новогодний и наурызовский образ" loading="lazy"></button>
+      <button data-g="costume" data-gi="0"><img src="a/costume-papa.jpg" alt="Папа: новогодний и наурызовский образ" loading="lazy" width="1536" height="1024"></button>
+      <button data-g="costume" data-gi="1"><img src="a/costume-mama.jpg" alt="Мама: новогодний и наурызовский образ" loading="lazy" width="1536" height="1024"></button>
+      <button data-g="costume" data-gi="2"><img src="a/costume-son.jpg" alt="Сын: новогодний и наурызовский образ" loading="lazy" width="1536" height="1024"></button>
+      <button data-g="costume" data-gi="3"><img src="a/costume-daughter.jpg" alt="Дочь: новогодний и наурызовский образ" loading="lazy" width="1536" height="1024"></button>
     </div>
   </div>
 </section>
@@ -1127,8 +1127,8 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <h2 class="h2" data-r style="--d:.05s;margin-top:8px">Художка и свет</h2>
     <p class="p" data-r style="--d:.15s;margin-top:16px">Художка меняется в соответствии с праздником. А световые решения могут быть противоположными: вечер в Новом году против дня в Наурызе.</p>
     <div class="arts">
-      <button data-g="art" data-gi="0" data-r="l"><img src="a/art-ny.jpg" alt="Новый год: тёплый вечерний свет, праздничный стол" loading="lazy"></button>
-      <button data-g="art" data-gi="1" data-r="r" style="--d:.15s"><img src="a/art-nauryz.jpg" alt="Наурыз: мягкий дневной свет, весенний стол" loading="lazy"></button>
+      <button data-g="art" data-gi="0" data-r="l"><img src="a/art-ny.jpg" alt="Новый год: тёплый вечерний свет, праздничный стол" loading="lazy" width="1600" height="900"></button>
+      <button data-g="art" data-gi="1" data-r="r" style="--d:.15s"><img src="a/art-nauryz.jpg" alt="Наурыз: мягкий дневной свет, весенний стол" loading="lazy" width="1600" height="900"></button>
     </div>
   </div>
 </section>
@@ -1138,12 +1138,12 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
     <h2 class="h2" data-r>Кастинг</h2>
     <p class="p" data-r style="--d:.1s;margin-top:16px">Задание по кастингу, указанное в брифе, — идеальное, и мне здесь ничего не хочется менять. Для этого проекта актёрские скиллы мне важны так же, как и типаж: например, ту же хитрость подростка мы сможем отыграть хитрым прищуром.</p>
     <div class="cast">
-      <figure data-g="cast" data-gi="0" data-r style="--d:.05s"><img src="a/cast-papa.jpg" alt="Папа" loading="lazy"><figcaption>Папа</figcaption></figure>
-      <figure data-g="cast" data-gi="1" data-r style="--d:.12s"><img src="a/cast-mama.jpg" alt="Мама" loading="lazy"><figcaption>Мама</figcaption></figure>
-      <figure data-g="cast" data-gi="2" data-r style="--d:.19s"><img src="a/cast-son.jpg" alt="Сын" loading="lazy"><figcaption>Сын</figcaption></figure>
-      <figure data-g="cast" data-gi="3" data-r style="--d:.26s"><img src="a/cast-daughter.jpg" alt="Дочь" loading="lazy"><figcaption>Дочь</figcaption></figure>
-      <figure data-g="cast" data-gi="4" data-r style="--d:.33s"><img src="a/cast-grandma.jpg" alt="Бабушка" loading="lazy"><figcaption>Бабушка</figcaption></figure>
-      <figure data-g="cast" data-gi="5" data-r style="--d:.4s"><img src="a/cast-grandpa.jpg" alt="Дедушка" loading="lazy"><figcaption>Дедушка</figcaption></figure>
+      <figure data-g="cast" data-gi="0" data-r style="--d:.05s"><img src="a/cast-papa.jpg" alt="Папа" loading="lazy" width="1536" height="1024"><figcaption>Папа</figcaption></figure>
+      <figure data-g="cast" data-gi="1" data-r style="--d:.12s"><img src="a/cast-mama.jpg" alt="Мама" loading="lazy" width="1536" height="1024"><figcaption>Мама</figcaption></figure>
+      <figure data-g="cast" data-gi="2" data-r style="--d:.19s"><img src="a/cast-son.jpg" alt="Сын" loading="lazy" width="1536" height="1024"><figcaption>Сын</figcaption></figure>
+      <figure data-g="cast" data-gi="3" data-r style="--d:.26s"><img src="a/cast-daughter.jpg" alt="Дочь" loading="lazy" width="1536" height="1024"><figcaption>Дочь</figcaption></figure>
+      <figure data-g="cast" data-gi="4" data-r style="--d:.33s"><img src="a/cast-grandma.jpg" alt="Бабушка" loading="lazy" width="1536" height="1024"><figcaption>Бабушка</figcaption></figure>
+      <figure data-g="cast" data-gi="5" data-r style="--d:.4s"><img src="a/cast-grandpa.jpg" alt="Дедушка" loading="lazy" width="1536" height="1024"><figcaption>Дедушка</figcaption></figure>
     </div>
   </div>
 </section>
@@ -1158,7 +1158,7 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
       <p class="p" data-r style="color:var(--mint);--d:.1s">Сама же графика у нас будет жить: текст — появляться, а галочки — анимироваться. Важно, что графика будет двигаться активнее, чем текст, чтобы читаемость текста не терялась.</p>
       <div class="pills" data-r style="--d:.2s"><span>Графика — активная</span><span>Текст — почти статичен</span></div>
     </div>
-    <img src="a/titr-papa.webp" alt="Анимация титра «Папа»: текст появляется и стоит, чекбоксы и галочки активно анимируются" loading="lazy" data-r="s" style="width:100%">
+    <img src="a/titr-papa.webp" alt="Анимация титра «Папа»: текст появляется и стоит, чекбоксы и галочки активно анимируются" loading="lazy" data-r="s" style="width:100%" width="910" height="488">
   </div>
 </section>
 
@@ -1187,12 +1187,12 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 
 <!-- THANKS -->
 <section class="sec" id="thanks" data-chap="Рахмат!" data-dark>
-  <img class="bg" src="a/thanks.jpg" alt="Новогодний стол с пачкой «Фруктовый сад» в тёплом вечернем свете" loading="lazy">
+  <img class="bg" src="a/thanks.jpg" alt="Новогодний стол с пачкой «Фруктовый сад» в тёплом вечернем свете" loading="lazy" width="1600" height="900">
   <div class="gr"></div>
-  <div class="logos"><img src="a/logo-chilly.webp" alt="Chilly Production"></div><img class="bbdo" src="a/bbdo-light.webp" alt="BBDO">
+  <div class="logos"><img src="a/logo-chilly.webp" alt="Chilly Production" width="2048" height="576"></div><img class="bbdo" src="a/bbdo-light.webp" alt="BBDO" width="900" height="258">
   <div class="end">
-    <div class="torn-title" data-r="s"><img src="a/torn-green.webp" alt=""><h2>Рахмат!</h2></div>
-    <div class="torn-note" data-r style="--d:.3s"><img src="a/torn-cream.webp" alt=""><p>Буду рад вопросам и любой обратной связи.</p></div>
+    <div class="torn-title" data-r="s"><img src="a/torn-green.webp" alt="" width="900" height="308"><h2>Рахмат!</h2></div>
+    <div class="torn-note" data-r style="--d:.3s"><img src="a/torn-cream.webp" alt="" width="900" height="308"><p>Буду рад вопросам и любой обратной связи.</p></div>
     <p class="sign">Режиссёрский тритмент Дамира Мубинова<br><a href="portfolio/" target="_blank" rel="noopener">Портфолио</a></p>
   </div>
 </section>
