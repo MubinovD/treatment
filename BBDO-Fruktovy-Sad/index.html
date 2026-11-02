@@ -443,7 +443,8 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 /* storyboard */
 .sb{padding:0;display:grid;grid-template-columns:minmax(0,.42fr) minmax(0,.58fr);align-items:stretch;min-height:100vh;min-height:100svh}
 .sb .txt{padding:clamp(72px,6.08vw,99px) clamp(18px,3.04vw,53px) clamp(72px,6.08vw,99px) var(--pad);display:flex;flex-direction:column;justify-content:center;gap:clamp(14px,1.22vw,20px);position:relative}
-.sb .dur{position:relative;display:inline-block;align-self:flex-start;width:fit-content;font-size:clamp(13px,.95vw,16px);font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--g7);background:rgba(169,207,70,.35);padding:5px 12px 6px;border-radius:30px;margin-bottom:clamp(10px,1vw,16px)}
+.sb .m .dur{position:absolute;right:clamp(8px,1vw,14px);bottom:clamp(8px,1vw,14px);z-index:3;font-size:clamp(12px,.85vw,15px);font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:rgba(15,40,22,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:6px 12px 7px;border-radius:30px;opacity:0;transform:translateY(6px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.sb .m.in .dur{opacity:1;transform:none;transition-delay:1.8s}
 .sb .num{position:absolute;font-family:'Lobster',cursive;color:var(--lime);opacity:.18;font-size:clamp(198px,22.8vw,426px);line-height:1;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
 .sb .txt>*:not(.num){position:relative}
 .sb .h2{font-size:clamp(40px,3.5vw,64px)}
@@ -890,48 +891,43 @@ body:not(.nav-rail) #toc,body:not(.nav-rail) #tocEdge,body:not(.nav-rail) #tocTi
 <div class="paperwrap cutswrap">
 <section class="sec light sb" id="sb1" data-chap="Сториборд">
   <div class="txt"><span class="num">1</span>
-    <p class="dur" data-r>1,5 сек</p>
     <h2 class="h2" data-r>1. Полка</h2>
     <p class="p" data-r style="--d:.12s">Полка с соками.<br>Справа — свободная глубина под инфографику.<br>Соки двигаются покадрово, так что хук ролика сразу работает на продукт.<br>В кадр входит рука и тянется к соку.</p>
   </div>
-  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb1.mp4" poster="a/sb1.jpg" muted loop playsinline width="1280" height="720"></video></div></div>
+  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb1.mp4" poster="a/sb1.jpg" muted loop playsinline width="1280" height="720"></video><span class="dur">1,5 сек</span></div></div>
 </section>
 
 <section class="sec light sb" id="sb2" data-chap="Сториборд">
   <div class="txt"><span class="num">2</span>
-    <p class="dur" data-r>2 сек</p>
     <h2 class="h2" data-r>2. Папа</h2>
     <p class="p" data-r style="--d:.12s"><b>POV полки.</b> Отца пока не видно — только руку, которая потянулась к соку в предыдущем кадре. Рука раздвигает соки, и сквозь щель мы видим отца. Наши живые соки расступаются в стороны и окончательно открывают кадр. Параллельно появляется текст, и на моменте с «Ой, забыл» отец смотрит на него и пожимает плечами.</p>
   </div>
-  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb2.mp4" poster="a/sb2.jpg" muted loop playsinline width="1280" height="720"></video></div></div>
+  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb2.mp4" poster="a/sb2.jpg" muted loop playsinline width="1280" height="720"></video><span class="dur">2 сек</span></div></div>
 </section>
 
 <section class="sec light sb" id="sb3" data-chap="Сториборд">
   <div class="txt"><span class="num">3</span>
-    <p class="dur" data-r>2,5 сек</p>
     <h2 class="h2" data-r>3. Мама и дочь</h2>
     <p class="p" data-r style="--d:.12s">Мама ставит тарелку с баурсаками и уходит. Дочь, оглядываясь ей вслед, хватает свежий хрустящий баурсак (мы это слышим) и кусает его.<br><br>Параллельно появляется титр «Мама и дочь: 3 салата в процессе, 30 баурсаков готово», и после укуса 30 зачёркивается и меняется на 29. На переднем плане чья-то рука тянется к соку.</p>
   </div>
-  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb3.mp4" poster="a/sb3.jpg" muted loop playsinline width="1280" height="720"></video></div>
+  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb3.mp4" poster="a/sb3.jpg" muted loop playsinline width="1280" height="720"></video><span class="dur">2,5 сек</span></div>
     <p class="note" data-r style="--d:1.6s">Я объединил кадры 3 и 4, потому что они умещаются в один ракурс.</p></div>
 </section>
 
 <section class="sec light sb" id="sb4" data-chap="Сториборд">
   <div class="txt"><span class="num">4</span>
-    <p class="dur" data-r>2 сек</p>
     <h2 class="h2" data-r>4. Сын</h2>
     <p class="p" data-r style="--d:.12s">А это рука её братишки, который опередил её, налил себе стакан сока и с хитрым прищуром выпивает его.</p>
   </div>
-  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb4.mp4" poster="a/sb4.jpg" muted loop playsinline width="1280" height="720"></video></div></div>
+  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb4.mp4" poster="a/sb4.jpg" muted loop playsinline width="1280" height="720"></video><span class="dur">2 сек</span></div></div>
 </section>
 
 <section class="sec light sb" id="sb5" data-chap="Сториборд">
   <div class="txt"><span class="num">5</span>
-    <p class="dur" data-r>2 сек</p>
     <h2 class="h2" data-r>5. Пэкшот</h2>
     <p class="p" data-r style="--d:.12s">Мы видим, как вся семья вместе с бабушкой и дедушкой сидит за столом, смеётся и счастливо поднимает стаканы, и в момент, когда они начинают пить, фокус переходит на продукт на переднем плане.</p>
   </div>
-  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb5.mp4" poster="a/sb5.jpg" muted loop playsinline width="1280" height="720"></video></div></div>
+  <div class="pic"><div class="m loading" data-r="s"><video class="lv" data-src="a/sb5.mp4" poster="a/sb5.jpg" muted loop playsinline width="1280" height="720"></video><span class="dur">2 сек</span></div></div>
 </section>
 </div>
 
