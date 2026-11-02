@@ -4,336 +4,509 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Always Platinum — режиссёрский тритмент Дамира Мубинова</title>
-<meta name="description" content="Режиссёрский тритмент Дамира Мубинова для ролика Always Platinum × Комбинат.">
-<meta property="og:title" content="Always Platinum — режиссёрский тритмент">
-<meta property="og:description" content="Дамир Мубинов · Chilly Production">
-<meta property="og:image" content="https://treatment.mubinov.uz/Kombinat-Always/a/pack.webp">
+<title>Always Platinum · режиссёрские заметки</title>
+<meta name="description" content="Always Platinum · режиссёрские заметки. Дамир Мубинов.">
+<meta property="og:title" content="Always Platinum · режиссёрские заметки">
+<meta property="og:description" content="Дамир Мубинов">
+<meta property="og:image" content="https://treatment.mubinov.uz/Kombinat-Always/a/cover.jpg">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://treatment.mubinov.uz/Kombinat-Always/">
-<meta name="theme-color" content="#823b95">
+<meta name="theme-color" content="#120d18">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap&subset=cyrillic" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&family=Martian+Mono:wght@400&display=swap&subset=cyrillic" rel="stylesheet">
+<link rel="preload" as="image" href="a/cover.jpg">
 <style>
 :root{
-  --paper:#fff;--ink:#1c1426;--muted:#6b6275;--hair:#e6e1ea;
-  --violet:#823b95;--magenta:#a33893;--indigo:#513b8d;--gold:#e8c878;--cream:#fdffdb;--red:#e0202e;--night:#120d18;
-  --pad:clamp(20px,6vw,128px);
-  --chapter:clamp(44px,6vw,96px);
-  --h2:clamp(30px,3.6vw,58px);
-  --lead:clamp(19px,1.5vw,26px);
-  --body:clamp(16px,1.15vw,20px);
-  --small:clamp(13px,.9vw,16px);
+  --paper:#fff;--ink:#1c1426;--text:#3a3045;--muted:#6b6275;--hair:#e6e1ea;
+  --violet:#823b95;--magenta:#a33893;--indigo:#513b8d;--gold:#e8c878;--night:#120d18;--lilac:#f4eff7;
+  --pad:clamp(20px,6.6vw,128px);
+  --h1:clamp(40px,4vw,76px);
+  --h2:clamp(32px,2.9vw,56px);
+  --chapter:clamp(48px,4.4vw,84px);
+  --body:clamp(17px,1.36vw,26px);
+  --mono:clamp(13px,1.1vw,20px);
+  --gap:clamp(16px,2.5vw,48px);
   --ease:cubic-bezier(.2,.7,.2,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{background:var(--violet);-webkit-text-size-adjust:100%}
-body{background:var(--paper);color:var(--ink);font-family:'Montserrat',Arial,sans-serif;font-size:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
+html{background:var(--night);-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:'Montserrat',Arial,sans-serif;font-size:var(--body);line-height:1.46;-webkit-font-smoothing:antialiased;overflow-x:clip}
 img{display:block;max-width:100%}
-b,strong{font-weight:700}
+b{font-weight:700}
+.mono{font-family:'Martian Mono','Courier New',monospace;font-size:var(--mono);color:var(--muted)}
 
 /* reveal */
-.r{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.r{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .r.in{opacity:1;transform:none}
-.r.d1{transition-delay:.15s}.r.d2{transition-delay:.3s}.r.d3{transition-delay:.45s}
+.d1{transition-delay:.12s}.d2{transition-delay:.24s}.d3{transition-delay:.36s}
 @media (prefers-reduced-motion:reduce){.r{opacity:1;transform:none;transition:none}}
 
+/* media */
+.m{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;background:#ece6f0}
+.cap{margin-top:12px}
+
+/* full-bleed photo slides */
+.bleed{position:relative;min-height:100svh;display:flex;align-items:center;padding:var(--pad);overflow:hidden;background:var(--night);color:#fff}
+.bleed>img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.bleed .shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,13,24,.88) 0%,rgba(18,13,24,.55) 45%,rgba(18,13,24,.05) 100%)}
+.bleed .inner{position:relative;max-width:720px;display:flex;flex-direction:column;gap:24px}
+.bleed h2{font-size:var(--h2);font-weight:800;line-height:1.1}
+.bleed p{color:var(--lilac)}
+
 /* cover */
-.cover{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
-  background:radial-gradient(120% 90% at 50% 0%,var(--magenta) 0%,var(--violet) 45%,var(--indigo) 100%);color:#fff;padding:var(--pad);overflow:hidden}
-.fab{position:absolute;inset:0;background-size:cover;background-position:center;pointer-events:none}
-.fab.tr{background-image:url(a/fabric-tr.webp)}
-.fab.bl{background-image:url(a/fabric-bl.webp)}
-.cover .kicker{font-size:var(--small);letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:600}
-.cover h1{font-size:clamp(52px,9vw,150px);line-height:.95;font-weight:800;letter-spacing:-.02em;margin:.25em 0 .3em}
-.cover h1 span{display:block;font-size:.42em;letter-spacing:.32em;color:var(--gold);font-weight:700;margin-top:.35em}
-.cover p{font-size:var(--lead);font-weight:500;opacity:.92}
-.logos{position:absolute;left:0;right:0;bottom:clamp(20px,4vw,48px);display:flex;justify-content:center;align-items:center;gap:clamp(20px,4vw,56px);opacity:.85}
-.logos img{height:clamp(22px,2.4vw,34px);width:auto}
-.down{position:absolute;bottom:clamp(80px,10vw,120px);left:50%;transform:translateX(-50%);width:22px;height:22px;border-right:2px solid rgba(255,255,255,.7);border-bottom:2px solid rgba(255,255,255,.7);rotate:45deg;animation:bob 2.2s ease-in-out infinite}
-@keyframes bob{50%{translate:0 8px}}
+.cover .inner{gap:clamp(32px,3vw,56px)}
+.cover .brand{display:flex;flex-direction:column;gap:4px}
+.cover .brand img{width:clamp(220px,23vw,440px);height:auto}
+.cover .plat{font-family:'Martian Mono',monospace;font-size:var(--mono);letter-spacing:.35em;color:var(--gold)}
+.cover h1{font-size:var(--h1);font-weight:800;line-height:1.08}
+.cover .name{font-size:clamp(19px,1.56vw,30px);font-weight:500;color:var(--hair);margin-top:16px}
+.cover .chilly{position:absolute;left:var(--pad);top:clamp(24px,5vw,96px);font-family:'Martian Mono',monospace;font-size:var(--mono);letter-spacing:.1em;color:#d9d2e0}
+.cover .komb{position:absolute;right:var(--pad);bottom:clamp(24px,5vw,96px);width:clamp(90px,7.8vw,150px);height:auto}
+.down{position:absolute;left:50%;bottom:clamp(28px,4vw,56px);width:20px;height:20px;border-right:2px solid rgba(255,255,255,.6);border-bottom:2px solid rgba(255,255,255,.6);rotate:45deg;translate:-50% 0;animation:bob 2.2s ease-in-out infinite}
+@keyframes bob{50%{translate:-50% 8px}}
 
-/* chapter dividers */
-.chapter{position:relative;min-height:80svh;display:flex;align-items:center;justify-content:center;text-align:center;
-  background:linear-gradient(160deg,var(--violet),var(--indigo));color:#fff;padding:var(--pad);overflow:hidden}
-.chapter h2{font-size:var(--chapter);line-height:1.02;font-weight:800;letter-spacing:-.01em;position:relative}
-.chapter .num{display:block;font-size:var(--small);letter-spacing:.32em;color:var(--gold);font-weight:600;margin-bottom:1.2em}
+/* white slides */
+.sec{padding:clamp(80px,9vw,160px) var(--pad)}
+.wrap{max-width:1664px;margin:0 auto}
+.sec h2{font-size:var(--h2);font-weight:800;line-height:1.1;color:var(--ink)}
+.sec p{color:var(--text)}
+.head{display:grid;grid-template-columns:minmax(0,560px) minmax(0,1fr);gap:clamp(24px,3.75vw,72px);align-items:start;margin-bottom:var(--gap)}
+.head p{max-width:960px}
+.stack{display:flex;flex-direction:column;gap:20px}
+.split{display:grid;grid-template-columns:minmax(0,560px) minmax(0,1fr);gap:clamp(24px,3.75vw,72px);align-items:center}
+.split.rev{grid-template-columns:minmax(0,1fr) minmax(0,560px)}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.7vw,32px)}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,1.7vw,32px)}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.act .mono{color:var(--violet);margin-top:20px}
+.act h3{font-size:clamp(22px,1.7vw,32px);font-weight:800;line-height:1.2;margin:8px 0 10px}
+.act p{font-size:clamp(16px,1.25vw,24px)}
+.label{font-family:'Martian Mono',monospace;font-size:var(--mono);color:var(--violet)}
 
-/* content sections */
-.sec{padding:clamp(72px,10vw,160px) var(--pad)}
-.sec+.sec{padding-top:0}
-.col{max-width:640px;margin:0 auto}
-.wide{max-width:1180px;margin:0 auto}
-.sec h3{font-size:var(--h2);line-height:1.1;font-weight:800;margin-bottom:.7em;letter-spacing:-.01em}
-.sec p+p{margin-top:1em}
-.lead{font-size:var(--lead);line-height:1.5}
-.label{font-size:var(--small);letter-spacing:.2em;text-transform:uppercase;color:var(--violet);font-weight:700;margin-bottom:1em;display:block}
-.muted{color:var(--muted)}
+/* approach with fabric */
+.approach{position:relative;min-height:100svh;display:flex;align-items:center;justify-content:flex-end;padding:var(--pad);overflow:hidden;background:#fff}
+.approach>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.approach .inner{position:relative;width:min(720px,100%);margin-right:clamp(0px,2vw,32px);display:flex;flex-direction:column;gap:24px}
+.approach h2{font-size:var(--h2);font-weight:800;line-height:1.1}
+.approach p{color:var(--text)}
 
-/* acts */
-.acts{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,32px);margin-top:clamp(32px,4vw,56px)}
-.act{border-top:3px solid var(--violet);padding-top:1.1em}
-.act .n{font-size:clamp(40px,4vw,64px);font-weight:800;color:var(--violet);line-height:1}
-.act h4{font-size:var(--lead);font-weight:700;margin:.5em 0 .4em}
-.act p{color:var(--ink)}
-.flow{list-style:none;counter-reset:f;margin-top:1.2em}
-.flow li{counter-increment:f;padding:.55em 0 .55em 2.4em;position:relative;border-bottom:1px solid var(--hair)}
-.flow li::before{content:counter(f);position:absolute;left:0;top:.55em;width:1.6em;height:1.6em;border-radius:50%;background:var(--violet);color:#fff;font-size:.8em;font-weight:700;display:grid;place-items:center}
+/* structure */
+.steps{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:24px;margin-top:var(--gap)}
+.steps div{border-top:2px solid var(--violet);padding-top:24px;display:flex;flex-direction:column;gap:16px}
+.steps .mono{color:var(--violet)}
+.steps p{font-size:clamp(16px,1.25vw,24px);line-height:1.4}
 
-/* compare cards */
-.two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2vw,32px);margin-top:clamp(32px,4vw,56px)}
-.card{border-radius:24px;padding:clamp(24px,3vw,44px);background:#f6f2f8}
-.card h4{font-size:var(--lead);font-weight:800;margin-bottom:.6em}
-.card .tag{display:inline-block;font-size:var(--small);font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.35em .9em;border-radius:99px;background:var(--violet);color:#fff;margin-bottom:1em}
-.card.pick{background:var(--night);color:#f4eff7}
-.card.pick .tag{background:var(--red)}
-.card.dim{background:#f3f1f4;color:var(--muted)}
-.card.dim .tag{background:#b9b1c2}
+/* chapter */
+.chapter{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center;padding:var(--pad);overflow:hidden;
+  background:linear-gradient(160deg,var(--magenta) 0%,var(--violet) 45%,var(--indigo) 100%);color:#fff}
+.chapter>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+.chapter>*:not(img){position:relative}
+.chapter .k{font-family:'Martian Mono',monospace;font-size:var(--mono);letter-spacing:.3em;color:var(--gold)}
+.chapter h2{font-size:var(--chapter);font-weight:800;line-height:1.05}
+.chapter p{font-size:clamp(18px,1.46vw,28px);color:var(--lilac)}
 
-/* gush mood plate */
-.gush{position:relative;border-radius:24px;overflow:hidden;aspect-ratio:16/9;margin-top:clamp(32px,4vw,56px);
-  background:radial-gradient(38% 70% at 50% 18%,rgba(224,32,46,.95),rgba(224,32,46,.25) 55%,transparent 75%),radial-gradient(30% 40% at 50% 78%,rgba(255,196,140,.35),transparent 70%),var(--night)}
-.gush .beam{position:absolute;left:50%;top:-10%;width:60%;height:120%;translate:-50% 0;background:conic-gradient(from 168deg at 50% 0%,transparent 0deg,rgba(255,60,70,.28) 12deg,rgba(255,60,70,.28) 24deg,transparent 36deg);filter:blur(8px)}
-.gush .cap{position:absolute;left:clamp(16px,2.5vw,36px);bottom:clamp(14px,2vw,28px);color:#fff;font-size:var(--small);opacity:.85}
+/* gush */
+.gush{min-height:100svh;display:flex;align-items:center;padding:var(--pad);color:#fff;
+  background:radial-gradient(ellipse at 78% 42%,#e0202e 0%,#8e1424 24%,#3a0e1c 48%,#120d18 74%)}
+.gush .inner{max-width:760px;display:flex;flex-direction:column;gap:32px}
+.gush .k{font-family:'Martian Mono',monospace;font-size:var(--mono);letter-spacing:.2em;color:var(--gold)}
+.gush h2{font-size:clamp(52px,5vw,96px);font-weight:800;line-height:1.02}
+.gush .lead{font-size:clamp(19px,1.56vw,30px);line-height:1.4}
+.gush p{color:var(--lilac)}
 
-/* product */
-.product{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(24px,4vw,72px);align-items:center}
-.product img{border-radius:24px;background:linear-gradient(160deg,#f6f2f8,#ece4f1);padding:clamp(16px,3vw,40px)}
+/* emotion steps */
+.emo{display:grid;grid-template-columns:minmax(0,1056fr) minmax(0,600fr);gap:clamp(24px,3.75vw,72px);align-items:center}
+.emo .m{aspect-ratio:960/536}
+.phases{display:flex;flex-direction:column;gap:40px}
+.phases div{display:flex;align-items:center;gap:24px}
+.phases .n{width:56px;font-size:clamp(40px,2.9vw,56px);font-weight:800;line-height:1}
+.phases p{line-height:1.3}
+
+/* pill */
+.pill{display:inline-block;font-size:clamp(15px,1.25vw,24px);font-weight:700;color:#fff;background:var(--violet);padding:8px 20px;border-radius:24px}
+.titlerow{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-bottom:clamp(24px,2vw,40px)}
+
+/* ab cards */
+.card{padding:clamp(28px,2.5vw,48px);border:2px solid var(--hair);border-radius:24px;display:flex;flex-direction:column;gap:20px}
+.card h3{font-size:clamp(22px,1.77vw,34px);font-weight:800;line-height:1.2}
+.card.a,.card.a p,.card.a h3,.card.a .mono{color:var(--muted)}
+.card.b{border-color:var(--violet)}
+.card.b .mono{color:var(--violet)}
+.card.b h3{color:var(--ink)}
 
 /* storyboard */
-.sb{background:var(--night);color:#f4eff7}
-.sb .label{color:var(--gold)}
-.frames{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,28px);margin-top:clamp(32px,4vw,56px)}
-.fr{border-radius:16px;background:#1d1626;padding:clamp(18px,2vw,28px);border:1px solid #2c2436}
-.fr .t{font-size:var(--small);color:var(--gold);font-weight:700;letter-spacing:.08em}
-.fr h4{font-size:var(--lead);font-weight:700;margin:.45em 0 .5em;line-height:1.25}
-.fr p{font-size:var(--body);color:#cfc6d8}
-.fr.key{border-color:var(--red);background:linear-gradient(180deg,rgba(224,32,46,.18),#1d1626 60%)}
-.sb .note{margin-top:2em;color:#a89fb2;font-size:var(--small)}
+.sb{background:var(--indigo);color:#fff}
+.sb h2{color:#fff}
+.sb .sbhead{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:var(--gap)}
+.sb .mono{color:var(--gold)}
+.sb p{color:var(--lilac);font-size:clamp(16px,1.25vw,24px)}
+.sb .fr{display:flex;flex-direction:column;gap:16px}
+.sb .part+.part{margin-top:clamp(56px,6vw,112px)}
 
 /* thanks */
-.thanks{min-height:90svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;
-  background:radial-gradient(120% 90% at 50% 100%,var(--magenta) 0%,var(--violet) 45%,var(--indigo) 100%);color:#fff;padding:var(--pad)}
-.thanks h2{font-size:clamp(56px,9vw,150px);font-weight:800;line-height:1}
-.thanks p{font-size:var(--lead);max-width:640px;margin-top:.8em;opacity:.92}
-.thanks .sig{margin-top:2.4em;font-size:var(--small);letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.thanks{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;padding:var(--pad);overflow:hidden;
+  background:linear-gradient(160deg,var(--magenta) 0%,var(--violet) 45%,var(--indigo) 100%);color:#fff}
+.thanks>img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+.thanks>*:not(.bg){position:relative}
+.thanks h2{font-size:var(--chapter);font-weight:800;line-height:1.05}
+.thanks p{max-width:720px;font-size:clamp(18px,1.46vw,28px);color:var(--lilac)}
+.thanks .la{position:absolute;left:var(--pad);bottom:clamp(24px,5vw,96px);width:clamp(110px,10.4vw,200px);height:auto}
+.thanks .lk{position:absolute;right:var(--pad);bottom:clamp(20px,4.2vw,80px);width:clamp(90px,7.8vw,150px);height:auto}
 
 /* nav */
-.nav{position:fixed;right:clamp(12px,2vw,28px);top:50%;translate:0 -50%;z-index:20;display:flex;flex-direction:column;gap:12px;opacity:0;transition:opacity .4s}
+.nav{position:fixed;right:clamp(10px,1.4vw,24px);top:50%;translate:0 -50%;z-index:20;display:flex;flex-direction:column;gap:11px;opacity:0;transition:opacity .4s}
 .nav.on{opacity:1}
-.nav a{display:block;width:9px;height:9px;border-radius:50%;background:rgba(130,59,149,.3);position:relative}
+.nav a{display:block;width:8px;height:8px;border-radius:50%;background:rgba(130,59,149,.3);position:relative}
 .nav a.cur{background:var(--violet)}
-.nav a span{position:absolute;right:20px;top:50%;translate:0 -50%;white-space:nowrap;font-size:12px;font-weight:600;color:var(--violet);background:#fff;padding:3px 9px;border-radius:99px;box-shadow:0 2px 10px rgba(28,20,38,.12);opacity:0;pointer-events:none;transition:opacity .2s}
-.nav a:hover span{opacity:1}
 .nav.dark a{background:rgba(255,255,255,.35)}.nav.dark a.cur{background:#fff}
+.nav a span{position:absolute;right:18px;top:50%;translate:0 -50%;white-space:nowrap;font-size:12px;font-weight:700;color:var(--violet);background:#fff;padding:3px 10px;border-radius:99px;box-shadow:0 2px 10px rgba(28,20,38,.14);opacity:0;pointer-events:none;transition:opacity .2s}
+.nav a:hover span{opacity:1}
 
-@media (max-width:860px){
-  .acts,.two,.frames,.product{grid-template-columns:1fr}
+@media (max-width:900px){
+  .head,.split,.split.rev,.emo{grid-template-columns:1fr}
+  .split.rev>.m{order:-1}
+  .g3,.g2,.steps{grid-template-columns:1fr}
+  .g4{grid-template-columns:1fr 1fr}
+  .steps{gap:8px}
+  .bleed .shade{background:linear-gradient(180deg,rgba(18,13,24,.35) 0%,rgba(18,13,24,.85) 70%)}
+  .bleed{align-items:flex-end}
+  .approach{align-items:flex-end}
+  .approach .inner{background:rgba(255,255,255,.88);padding:20px;border-radius:16px;margin:0}
   .nav{display:none}
-  .logos{flex-wrap:wrap}
 }
 </style>
 </head>
 <body>
-
 <nav class="nav" id="nav"></nav>
 
-<header class="cover" data-dark>
-  <div class="fab tr"></div><div class="fab bl"></div>
-  <div class="kicker r">Режиссёрский тритмент</div>
-  <h1 class="r d1">Always<span>PLATINUM</span></h1>
-  <p class="r d2">Дамир Мубинов</p>
+<!-- cover -->
+<header class="bleed cover" id="cover" data-dark>
+  <img class="bg" src="a/cover.jpg" alt="Пустой кинозал с синими бархатными креслами">
+  <div class="shade"></div>
+  <p class="chilly">CHILLY PRODUCTION</p>
+  <div class="inner">
+    <div class="brand r"><img src="a/logo-always.png" alt="Логотип Always"><span class="plat">PLATINUM</span></div>
+    <div class="r d1"><h1>Режиссёрские заметки</h1><p class="name">Дамир Мубинов</p></div>
+  </div>
+  <img class="komb" src="a/logo-kombinat.png" alt="Логотип Комбинат">
   <div class="down"></div>
-  <div class="logos"><img src="a/chilly.png" alt="Chilly Production"><img src="a/kombinat-white.png" alt="Комбинат"></div>
 </header>
 
 <main>
 
-<section class="sec" id="intro" data-title="Привет">
-  <div class="col">
-    <p class="lead r"><b>Привет!</b> В этом проекте хорошо развивается тонкая драма: с помощью игры актёров, движения камеры и света мы создаём ситуацию, в которой девушки узнают себя.</p>
+<!-- intro -->
+<section class="bleed" id="intro" data-title="Привет" data-dark>
+  <img class="bg" src="a/intro.jpg" alt="Тёмный кинозал, ряды синих кресел уходят вправо">
+  <div class="shade"></div>
+  <div class="inner">
+    <h2 class="r">Привет!</h2>
     <p class="r d1">Меня зовут Дамир, я режиссёр рекламы с 2019 года.</p>
+    <p class="r d2">Люблю, когда все режиссёрские, операторские и монтажные решения работают на задачу, а нужные смыслы доносятся быстро и однозначно, без побочных. В 15 секундах это особенно важно.</p>
   </div>
 </section>
 
-<section class="sec" id="approach" data-title="Подход">
-  <div class="col">
-    <span class="label r">Подход</span>
-    <p class="r d1">Я люблю, когда все режиссёрские, операторские и монтажные решения работают на задачу, а нужные смыслы доносятся быстро и однозначно, без побочных. В формате 15 секунд это особенно важно.</p>
-    <p class="r d2">Поэтому сначала строим прочный фундамент — рекламную механику, а уже на ней строим наши решения.</p>
+<!-- approach -->
+<section class="approach" id="approach" data-title="Подход">
+  <img src="a/approach-fabric.webp" alt="">
+  <div class="inner">
+    <h2 class="r">Подход</h2>
+    <p class="r d1">В этом проекте хорошо раскрывается тонкая драма. Игрой актёров, движением камеры и светом мы создаём ситуацию, в которой девушки <b>узнают себя</b>.</p>
+    <p class="r d2">Чтобы это сработало, нужно выстроить точную последовательность кадров и серию акцентов. Поэтому сначала строим прочный фундамент — <b>рекламную механику</b>, а уже на ней наши решения.</p>
   </div>
 </section>
 
-<section class="chapter" data-dark><div class="fab tr"></div><h2 class="r"><span class="num">01</span>Механика ролика</h2></section>
-
+<!-- mechanics -->
 <section class="sec" id="mechanics" data-title="Механика">
-  <div class="wide">
-    <div class="col" style="margin-left:0">
-      <p class="lead r">Раз мы в атмосфере кинозала, разберём рекламную механику в трёх актах.</p>
+  <div class="wrap">
+    <div class="stack" style="margin-bottom:var(--gap)">
+      <h2 class="r">Механика ролика</h2>
+      <p class="r d1" style="color:var(--muted)">Раз мы в кинозале, разберу её в трёх актах.</p>
     </div>
-    <div class="acts">
-      <div class="act r"><div class="n">1</div><h4>Ситуация</h4><p>Девушка с подругой в кинотеатре, в общественном месте, в критические дни.</p></div>
-      <div class="act r d1"><div class="n">2</div><h4>Триггер</h4><p>Девушка встаёт, и подъём вызывает gush-момент. Возникает интрига: сработала защита или нет.</p></div>
-      <div class="act r d2"><div class="n">3</div><h4>Развязка</h4><p>Хеппи-энд. Героиня пользуется Always Platinum, беспокоиться не о чем.</p></div>
+    <div class="g3">
+      <div class="act r"><img class="m" src="a/act1.jpg" alt="Конец сеанса, зал встаёт" loading="lazy"><p class="mono">Акт 1</p><h3>Ситуация</h3><p>У девушки критические дни, а она с подругой в кино, среди людей.</p></div>
+      <div class="act r d1"><img class="m" src="a/act2.jpg" alt="Героиня встаёт в красном луче" loading="lazy"><p class="mono">Акт 2</p><h3>Триггер</h3><p>Фильм закончился, героиня встаёт и в этот момент чувствует gush. Сработала защита или нет?</p></div>
+      <div class="act r d2"><img class="m" src="a/act3.jpg" alt="Подруги уходят, улыбаясь" loading="lazy"><p class="mono">Акт 3</p><h3>Развязка</h3><p>Хеппи-энд. Героиня пользуется Always Platinum, и беспокоиться не о чем.</p></div>
     </div>
   </div>
 </section>
 
-<section class="sec">
-  <div class="col">
-    <span class="label r">Структура ролика</span>
-    <ol class="flow r d1">
-      <li>Кинотеатр, сеанс закончился.</li>
-      <li>Героиня с подругой встаёт.</li>
-      <li>Красный световой эффект. На лице героини gush, испуг сменяется улыбкой.</li>
-      <li>Продуктовая часть: продукт, демо, доказательство.</li>
-      <li>Героиня с подругой, улыбаясь, уходят.</li>
-      <li>Пэкшот.</li>
-    </ol>
-  </div>
-</section>
-
-<section class="sec" id="trigger" data-title="Триггер">
-  <div class="col">
-    <span class="label r">Триггер</span>
-    <h3 class="r">Героиня встаёт последней</h3>
-    <p class="r d1">Будет классно, если героиня с подругой немного задержатся и встанут чуть позже остальных. Это даст визуальный акцент: все уходят, а наши героини ещё сидят.</p>
-    <p class="r d2"><b>И самое главное — мы видим причину gush-момента.</b> Мы ловим момент, когда девушка встаёт, и понимаем, почему она на мгновение испытала страх: потому что она встала.</p>
-  </div>
-</section>
-
-<section class="chapter" data-dark><div class="fab bl"></div><h2 class="r"><span class="num">02</span>Gush-момент</h2></section>
-
-<section class="sec" id="gush" data-title="Gush-момент">
-  <div class="wide">
-    <div class="col" style="margin-left:0">
-      <p class="lead r">Вот мы и добрались до хука ролика — момента, когда ставки высоки и может произойти что угодно.</p>
-      <p class="r d1">В нашем инструментарии два зрелищных эффекта: красный софит и салют. Оба выглядят эффектно и доносят метафору. Предлагаю два варианта на выбор.</p>
+<!-- structure -->
+<section class="sec" id="structure" data-title="Структура" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="r">Структура ролика</h2>
+    <div class="steps r d1">
+      <div><p class="mono">01</p><p>Сеанс закончился, зал встаёт</p></div>
+      <div><p class="mono">02</p><p>Героиня с подругой встают последними</p></div>
+      <div><p class="mono">03</p><p>Красный свет, gush. Тревога сменяется <b>улыбкой</b></p></div>
+      <div><p class="mono">04</p><p>Продукт, демо, доказательство</p></div>
+      <div><p class="mono">05</p><p>Сумка: рука прячет пачку Always</p></div>
+      <div><p class="mono">06</p><p>Хеппи-шот: подруги уходят, улыбаясь</p></div>
+      <div><p class="mono">07</p><p>Пэкшот</p></div>
     </div>
-    <div class="gush r"><div class="beam"></div><div class="cap">Свет проектора становится красным, зал гаснет</div></div>
-    <div class="two">
-      <div class="card r">
-        <span class="tag">Вариант 1</span>
-        <h4>Салют и софит</h4>
-        <p>Чтобы мы увидели салют и почувствовали тревогу вместе с героиней, камера опускается с обычной высоты вниз и снимает героиню снизу вверх. Так получаем эффектный кадр, а салют на фоне высоты зала выглядит уместнее, чем на фоне кресел и людей.</p>
-        <p>Салют делаем графикой.</p>
+  </div>
+</section>
+
+<!-- chapter: story -->
+<section class="chapter" id="story" data-title="История" data-dark>
+  <img src="a/chapter-fabric.webp" alt="">
+  <p class="k r">ПО СЮЖЕТУ</p>
+  <h2 class="r d1">История</h2>
+  <p class="r d2">От конца сеанса до пэкшота</p>
+</section>
+
+<!-- situation -->
+<section class="sec" id="situation" data-title="Ситуация">
+  <div class="wrap split">
+    <div class="stack">
+      <p class="label r">Акт 1</p>
+      <h2 class="r">Ситуация: кинозал</h2>
+      <p class="r d1">Сеанс закончился. В зале зажигается свет, люди встают и тянутся к выходу. Героиня с подругой ещё сидят.</p>
+    </div>
+    <img class="m r d1" src="a/situation.jpg" alt="Конец сеанса: зал с синими креслами, люди уходят, подруги ещё сидят" loading="lazy">
+  </div>
+</section>
+
+<!-- trigger -->
+<section class="sec" id="trigger" data-title="Триггер" style="padding-top:0">
+  <div class="wrap split rev">
+    <img class="m r" src="a/trigger.jpg" alt="Зал уже встал, подруги поднимаются последними" loading="lazy">
+    <div class="stack">
+      <p class="label r">Акт 2</p>
+      <h2 class="r">Триггер: она встаёт</h2>
+      <p class="r d1">Будет классно, если героиня с подругой задержатся и встанут чуть позже остальных. Все уходят, а наши героини сидят — так зритель понимает, куда смотреть.</p>
+      <p class="r d2">И самое главное: мы ловим момент подъёма и понимаем, почему она на мгновение испытала страх. <b>Потому что она встала.</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- gush -->
+<section class="gush" id="gush" data-title="Gush-момент" data-dark>
+  <div class="inner">
+    <p class="k r">ХУК РОЛИКА</p>
+    <h2 class="r d1">Gush-момент</h2>
+    <p class="lead r d2"><b>Секунда, когда ставки высоки и может произойти что угодно.</b></p>
+    <p class="r d3">У нас есть два зрелищных инструмента — красный софит и салют. Оба доносят метафору. Предлагаю два варианта на выбор.</p>
+  </div>
+</section>
+
+<!-- emotion refs -->
+<section class="sec" id="emotion" data-title="Эмоция">
+  <div class="wrap">
+    <div class="head">
+      <h2 class="r">Эмоция</h2>
+      <p class="r d1">Насколько я знаю, у Always уже были кампании, построенные на эмоции gush-момента. У нас главная метафора — свет, но эмоция всё равно остаётся ключевым моментом <b>узнавания</b>.</p>
+    </div>
+    <div class="g3">
+      <div class="r"><img class="m gif" data-src="a/ref-goodbye-gush.gif" alt="Always Ultra Thin, Goodbye Gush Fears: девушка в автобусе"><p class="mono cap">Always · Goodbye Gush Fears</p></div>
+      <div class="r d1"><img class="m gif" data-src="a/ref-wtg-1.gif" alt="Always, What the Gush Moments: реакция героини"><p class="mono cap">Always · What the Gush</p></div>
+      <div class="r d2"><img class="m gif" data-src="a/ref-wtg-2.gif" alt="Always, What the Gush Moments: вторая героиня"><p class="mono cap">Always · What the Gush</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- our heroine's emotion -->
+<section class="sec" id="emotion-hero" data-title="Эмоция героини" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <h2 class="r">Эмоция нашей героини</h2>
+      <p class="r d1">Та же секунда у нас: спокойствие, мгновенная неловкость и сразу улыбка.</p>
+    </div>
+    <div class="emo">
+      <img class="m gif r" data-src="a/emotion.gif" alt="Тест эмоций героини: спокойствие, неловкость, улыбка">
+      <div class="phases">
+        <div class="r"><span class="n" style="color:#a35bb8">1</span><p>Фильм закончился</p></div>
+        <div class="r d1"><span class="n" style="color:#c0566a">2</span><p><b>Секунда неизвестности</b></p></div>
+        <div class="r d2"><span class="n" style="color:#3f9a4e">3</span><p>Всё в порядке</p></div>
       </div>
-      <div class="card pick r d1">
-        <span class="tag">Вариант 2 · фаворит</span>
-        <h4>Свет</h4>
-        <p>Снимаем всю ситуацию одним кадром: камера подлетает к героине через весь зал до крупного эмоционального плана. Встав, героиня попадает в луч кинопроектора — конечно, это специально поставленный нами свет. В нужный момент холодный свет проектора становится красным, а зал приглушается ещё сильнее: убираем лишние акценты с уходящих людей и оставляем чувства девушки.</p>
-        <p>Красный свет падает на героиню сзади, а спереди её освещает мягкий тёплый свет, чтобы не уйти в хоррор. В конце кадра девушка улыбается.</p>
-        <p>Мне нравится этот вариант: он лучше передаёт эмоции и не отвлекает от девушки и её чувств.</p>
+    </div>
+  </div>
+</section>
+
+<!-- v1 -->
+<section class="sec" id="v1" data-title="Вариант 1" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <h2 class="r">Вариант 1. Салют и софит</h2>
+      <p class="r d1">Чтобы увидеть салют и почувствовать тревогу вместе с героиней, камера опускается с обычной высоты вниз и снимает её снизу вверх. Кадр получается эффектным, а салют на фоне высокого тёмного потолка уместнее, чем на фоне кресел и людей. Салют делаем графикой.</p>
+    </div>
+    <div class="g2">
+      <div class="r"><img class="m gif" data-src="a/v1-previz.gif" alt="3D-превиз: камера опускается и смотрит на героиню снизу вверх"><p class="mono cap">Превиз: камера опускается вниз</p></div>
+      <div class="r d1"><img class="m" src="a/v1-lowangle.jpg" alt="Ракурс снизу вверх: салют на тёмном потолке над героиней" loading="lazy"><p class="mono cap">Финальная позиция камеры, она уходит вниз появляется салют над головой</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- v2 -->
+<section class="sec" id="v2" data-title="Вариант 2" style="padding-top:0">
+  <div class="wrap">
+    <div class="titlerow"><h2 class="r">Вариант 2. Софит</h2><span class="pill r d1">Мой фаворит</span></div>
+    <div class="g4 r">
+      <img class="m" src="a/v2-a.jpg" alt="Камера пролетает через зал" loading="lazy">
+      <img class="m" src="a/v2-b.jpg" alt="Подруги встают" loading="lazy">
+      <img class="m" src="a/act2.jpg" alt="Луч проектора становится красным" loading="lazy">
+      <img class="m" src="a/v2-d.jpg" alt="Героиня улыбается в конце кадра" loading="lazy">
+    </div>
+    <div class="g2" style="margin-top:clamp(24px,2vw,40px);column-gap:clamp(24px,3.75vw,72px)">
+      <p class="r">Снимаем всю ситуацию одним кадром: камера пролетает через зал к героине до крупного эмоционального плана. Встав, она попадает в луч кинопроектора (конечно, это наш свет), и в нужный момент холодный луч становится красным. Свет в зале гаснет ещё сильнее, внимание уходит от людей к её чувствам.</p>
+      <div class="stack" style="gap:24px">
+        <p class="r d1">Сзади — красный контровой, спереди — мягкий тёплый свет, чтобы не уйти в ненужный хоррор. В конце кадра она улыбается.</p>
+        <p class="r d2"><b>Этот вариант лучше передаёт эмоции и не отвлекает от девушки.</b></p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="sec" id="smile" data-title="Улыбка">
-  <div class="wide">
-    <div class="col" style="margin-left:0">
-      <span class="label r">Ключевое решение</span>
-      <h3 class="r">Улыбка — решающий фактор</h3>
-      <p class="r d1">Чтобы наглядно передать переход от страха к уверенности, я предлагаю показать улыбку ещё до продукт-шотов. Так мы не оставляем девушку «протёкшей» до продуктовой части и передаём уверенность: казус не произошёл и не произойдёт. А продуктовый блок объясняет почему.</p>
-      <p class="r d2">Продукт-шоты делят ролик на две части, и момент улыбки определяет, как зритель считывает видеоряд.</p>
+<!-- smile -->
+<section class="sec" id="smile" data-title="Улыбка" style="padding-top:0">
+  <div class="wrap split">
+    <div class="stack" style="gap:24px">
+      <h2 class="r">Улыбка — решающий фактор</h2>
+      <p class="r d1">Чтобы наглядно передать переход от страха к уверенности и спокойствию, предлагаю показать улыбку <b>ещё до продуктшотов</b>.</p>
+      <p class="r d2">Так мы не оставляем девушку «протёкшей» перед продуктом и передаём уверенность: казус не произошёл и не произойдёт. А продуктовый блок объясняет почему.</p>
     </div>
-    <div class="two">
-      <div class="card dim r">
-        <span class="tag">Вариант А</span>
-        <h4>Улыбка после продукт-шота</h4>
-        <p>Это воспринимается так, будто страх всё же оправдался, и продукт подан как решение уже случившейся проблемы. После продукт-шота мы видим параллельную вселенную, где у неё был продукт.</p>
-      </div>
-      <div class="card pick r d1">
-        <span class="tag">Вариант Б · предлагаю</span>
-        <h4>Улыбка до продукт-шотов</h4>
-        <p>Мы лишь на мгновение ощущаем риск, когда девушка встаёт, но почти сразу она понимает, что беспокоиться не о чем: страх сменяется улыбкой. В этой версии продуктовая часть становится причиной, по которой девушка улыбается.</p>
-      </div>
+    <img class="m r d1" src="a/smile.jpg" alt="Героиня улыбается в кинозале" loading="lazy">
+  </div>
+</section>
+
+<!-- smile A/B -->
+<section class="sec" id="smile-ab" data-title="До или после" style="padding-top:0">
+  <div class="wrap">
+    <div class="stack" style="margin-bottom:var(--gap)">
+      <h2 class="r">Улыбка: до или после продукта</h2>
+      <p class="r d1" style="max-width:1100px">Продуктшоты делят ролик на две части, и момент улыбки определяет, как зритель считывает видеоряд.</p>
+    </div>
+    <div class="g2" style="gap:clamp(16px,2vw,40px)">
+      <div class="card a r"><p class="mono">Gush → продукт → улыбка</p><h3>А. Улыбка после продуктшота</h3><p>Страх как будто оправдался, и продукт решает уже случившуюся проблему. После продуктшота мы видим параллельную вселенную, где у неё был продукт.</p></div>
+      <div class="card b r d1"><p class="mono">Gush → улыбка → продукт</p><h3>Б. Улыбка до продуктшота</h3><p>Мы лишь на мгновение ощутили риск, но она почти сразу понимает, что беспокоиться не о чем. Продукт — <b>причина, по которой она улыбается</b>.</p></div>
     </div>
   </div>
 </section>
 
-<section class="chapter" data-dark><div class="fab tr"></div><h2 class="r"><span class="num">03</span>Финал</h2></section>
-
-<section class="sec" id="weapon" data-title="Супероружие">
-  <div class="wide product">
-    <div>
-      <span class="label r">Сумка</span>
-      <h3 class="r">Супероружие</h3>
-      <p class="r d1">Сразу после продуктовой части предлагаю поставить кадр с сумкой — как возвращение от продукта к разрешённой ситуации. Продукт в сумке выглядит стильно: он её спас и уберёг от протекания. Поэтому нам важно его увидеть.</p>
-      <p class="r d2">И я добавляю короткий жест: рука прячет пачку в сумку. Это даёт два плюса:</p>
-      <ol class="flow r d3">
-        <li>Продукт выглядит как секретное супероружие, которое у девушки всегда с собой.</li>
-        <li>Мы снимаем вопрос: в жизни прокладки не торчат из сумки напоказ, их прячут.</li>
-      </ol>
+<!-- product -->
+<section class="sec" id="product" data-title="Продукт и демо" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <h2 class="r">Продукт и демо</h2>
+      <p class="r d1">По демо: вариант с шёлком действительно хорош. Также можно снять классический вариант с ватным диском — он нагляднее.</p>
     </div>
-    <img class="r d1" src="a/pack.webp" alt="Always Platinum" loading="lazy">
+    <div class="g3">
+      <div class="r"><img class="m" src="a/demo-silk.jpg" alt="Демо: прокладка на шёлке, капля впитывается" loading="lazy"><p class="mono cap">Шёлк</p></div>
+      <div class="r d1"><img class="m" src="a/demo-cotton.jpg" alt="Демо: ватный диск прижимают к прокладке" loading="lazy"><p class="mono cap">Ватный диск</p></div>
+      <div class="r d2"><img class="m" src="a/demo-drop.jpg" alt="Демо: капля на поверхности прокладки" loading="lazy"><p class="mono cap">Капля, как в брифе</p></div>
+    </div>
   </div>
 </section>
 
-<section class="sec" id="exit" data-title="Уход">
-  <div class="col">
-    <span class="label r">Уход</span>
-    <h3 class="r">Хеппи-шот</h3>
-    <p class="r d1">После кадра с сумкой, его продолжением, мы видим наших героинь: они, улыбаясь, идут на камеру и мимо неё, освобождая кадр под пэкшот.</p>
-    <p class="r d2">Суть кадра — хеппи-энд: всё сложилось наилучшим образом. Счастлива героиня, счастлива подруга.</p>
+<!-- weapon -->
+<section class="sec" id="weapon" data-title="Супероружие" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <h2 class="r">Супероружие</h2>
+      <p class="r d1">Сразу после продуктовой части ставлю кадр с сумкой — возвращение от продукта к разрешённой ситуации. Продукт в сумке выглядит стильно: он её подстраховал, поэтому нам важно его увидеть. И добавляю короткий жест: рука прячет пачку в сумку.</p>
+    </div>
+    <div class="g3 r" style="gap:16px">
+      <img class="m" src="a/bag1.jpg" alt="Пачка Always видна в сумке" loading="lazy">
+      <img class="m" src="a/bag2.jpg" alt="Рука прячет пачку" loading="lazy">
+      <img class="m" src="a/bag3.jpg" alt="Пачка спрятана в сумке" loading="lazy">
+    </div>
+    <div class="g2" style="margin-top:var(--gap);column-gap:clamp(24px,3.75vw,72px)">
+      <p class="r"><b>1.</b> Продукт выглядит как секретное супероружие, которое у девушки всегда с собой.</p>
+      <p class="r d1"><b>2.</b> Мы отбиваем вопрос: в жизни прокладки не торчат из сумки напоказ, их тоже прячут.</p>
+    </div>
   </div>
 </section>
 
+<!-- exit -->
+<section class="sec" id="exit" data-title="Уход" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <h2 class="r">Уход</h2>
+      <p class="r d1">После сумки мы видим наших героинь — это продолжение того же кадра. Они уходят, улыбаясь, мимо камеры и открывают пэкшот. Суть кадра — хеппи-шот: всё произошло наилучшим образом.</p>
+    </div>
+    <div class="g3 r" style="gap:16px">
+      <img class="m" src="a/exit1.jpg" alt="Подруги идут на камеру и смеются" loading="lazy">
+      <img class="m" src="a/exit2.jpg" alt="Подруги вышли из кадра, остался зал" loading="lazy">
+      <img class="m" src="a/exit3.jpg" alt="Пустой зал под пэкшот" loading="lazy">
+    </div>
+    <p class="mono r" style="margin-top:var(--gap)">Идут на камеру → выходят из кадра → пэкшот</p>
+  </div>
+</section>
+
+<!-- storyboard -->
 <section class="sec sb" id="storyboard" data-title="Сториборд" data-dark>
-  <div class="wide">
-    <span class="label r">Сториборд · 15 секунд</span>
-    <h3 class="r">Кадр за кадром</h3>
-    <div class="frames">
-      <div class="fr r"><div class="t">0:00 — 0:02</div><h4>Конец сеанса</h4><p>Общий план зала. В приглушённом свете люди встают и тянутся к выходу. Героиня с подругой ещё сидят.</p></div>
-      <div class="fr r d1"><div class="t">0:02 — 0:03</div><h4>Камера летит к героиням</h4><p>Через зал к двум подругам. Они встают последними, мы ловим этот момент.</p></div>
-      <div class="fr key r d2"><div class="t">0:03 — 0:05</div><h4>Gush</h4><p>Крупный план. Героиня поднимается в кадр, луч проектора становится красным, зал гаснет. Секунда испуга — и улыбка. В варианте 1 склейка на ракурс снизу, над головой салют.</p></div>
-      <div class="fr r"><div class="t">0:05 — 0:07</div><h4>Always Platinum</h4><p>Продукт крупно.</p></div>
-      <div class="fr r d1"><div class="t">0:07 — 0:10</div><h4>Демо</h4><p>Защита от протеканий и скорость впитывания.</p></div>
-      <div class="fr r d2"><div class="t">0:10 — 0:11</div><h4>Сумка</h4><p>Пачка в сумке героини, рука прячет её внутрь.</p></div>
-      <div class="fr r"><div class="t">0:11 — 0:13</div><h4>Хеппи-шот</h4><p>Подруги, улыбаясь, идут на камеру и мимо неё, освобождая кадр.</p></div>
-      <div class="fr r d1"><div class="t">0:13 — 0:15</div><h4>Пэкшот</h4><p>Пачка Always Platinum и логотип.</p></div>
+  <div class="wrap">
+    <div class="part">
+      <div class="sbhead"><h2 class="r">Сториборд</h2><p class="mono r d1">1 / 3 · 0:00–0:05</p></div>
+      <div class="g3">
+        <div class="fr r"><img class="m" src="a/sb01.jpg" alt="Сториборд: титры на экране, зал уходит, подруги ещё сидят" loading="lazy"><p class="mono">01 · 0:00–0:02</p><p>Сеанс закончился, зал встаёт. Героиня с подругой чуть задержались и только собираются вставать.</p></div>
+        <div class="fr r d1"><img class="m" src="a/sb02.jpg" alt="Сториборд: героиня в розовом встаёт, подруга ещё сидит" loading="lazy"><p class="mono">02 · 0:02–0:03</p><p>Подруги встают последними. Камера ловит подъём героини.</p></div>
+        <div class="fr r d2"><img class="m" src="a/sb03.jpg" alt="Сториборд: красный контровой в затылок, фон в тени" loading="lazy"><p class="mono">03 · 0:03–0:05</p><p>Луч проектора становится красным. На лице секунда неизвестности.</p></div>
+      </div>
+    </div>
+    <div class="part">
+      <div class="sbhead"><h2 class="r">Сториборд</h2><p class="mono r d1">2 / 3 · 0:05–0:10</p></div>
+      <div class="g3">
+        <div class="fr r"><img class="m" src="a/sb04.jpg" alt="Сториборд: героиня улыбается крупно, фон тёмный" loading="lazy"><p class="mono">04 · 0:05–0:06</p><p>Тревога сменяется улыбкой. Всё в порядке.</p></div>
+        <div class="fr r d1"><img class="m" src="a/sb05.jpg" alt="Сториборд: пачка Always Platinum в зале" loading="lazy"><p class="mono">05 · 0:06–0:08</p><p>Продукт: Always Platinum.</p></div>
+        <div class="fr r d2"><img class="m" src="a/sb06.jpg" alt="Сториборд: демо на шёлке" loading="lazy"><p class="mono">06 · 0:08–0:10</p><p>Демо: мгновенное впитывание и защита от протеканий. Варианты демо — на отдельном слайде.</p></div>
+      </div>
+    </div>
+    <div class="part">
+      <div class="sbhead"><h2 class="r">Сториборд</h2><p class="mono r d1">3 / 3 · 0:10–0:15</p></div>
+      <div class="g3">
+        <div class="fr r"><img class="m" src="a/sb07.jpg" alt="Сториборд: рука прячет пачку в сумку, крупно" loading="lazy"><p class="mono">07 · 0:10–0:12</p><p>Сумка: рука прячет пачку внутрь.</p></div>
+        <div class="fr r d1"><img class="m" src="a/sb08.jpg" alt="Сториборд: подруги уходят, улыбаясь" loading="lazy"><p class="mono">08 · 0:12–0:13</p><p>Хеппи-шот: подруги, улыбаясь, уходят из кадра.</p></div>
+        <div class="fr r d2"><img class="m" src="a/sb09.jpg" alt="Пэкшот Always Platinum" loading="lazy"><p class="mono">09 · 0:13–0:15</p><p>Пэкшот.</p></div>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="chapter" data-dark><div class="fab bl"></div><h2 class="r"><span class="num">04</span>Реализация</h2></section>
-
-<section class="sec" id="demo" data-title="Демо">
-  <div class="col">
-    <span class="label r">Демо</span>
-    <p class="r d1">По демо-части вариант с шёлком действительно хорош. Также можно снять классический вариант с ватным диском — он нагляднее.</p>
+<!-- style -->
+<section class="bleed" id="style" data-title="Визуальный стиль" data-dark>
+  <img class="bg" src="a/style.jpg" alt="Тёмный зал, последний ряд синих кресел" loading="lazy">
+  <div class="shade"></div>
+  <div class="inner">
+    <h2 class="r">Визуальный стиль</h2>
+    <p class="r d1">Видеоряд приглушённый, но остаётся мягким и приятным. Так сработают световые эффекты и лучи, а для кинотеатра это естественно.</p>
+    <p class="r d2">Цвета бренда в кадре работают через синие кресла зала.</p>
   </div>
 </section>
 
-<section class="sec" id="style" data-title="Визуальный стиль">
-  <div class="col">
-    <span class="label r">Визуальный стиль</span>
-    <p class="r d1">Видеоряд приглушён, но остаётся мягким и приятным. Приглушённая картинка нужна, чтобы сработали световые эффекты и лучи. К тому же для кинотеатра это естественно.</p>
-  </div>
-</section>
-
+<!-- adapt -->
 <section class="sec" id="adapt" data-title="Адаптации">
-  <div class="col">
-    <span class="label r">Адаптации</span>
-    <p class="r d1">Во второй версии будет другой каст героинь. Важно учесть и стиль их одежды, чтобы героини узнавались.</p>
-    <p class="muted r d2">15 секунд и адаптации на 10 и 6 секунд · горизонталь и вертикаль · русский и казахский.</p>
+  <div class="wrap">
+    <h2 class="r" style="margin-bottom:var(--gap)">Адаптации</h2>
+    <div class="g2">
+      <div class="r"><img class="m" src="a/adapt-kz.jpg" alt="Казахская героиня с подругой в кинозале" loading="lazy"><p class="mono cap">Ролик 1 · казахская героиня</p></div>
+      <div class="r d1"><img class="m" src="a/adapt-slavic.jpg" alt="Славянская героиня с подругой в кинозале" loading="lazy"><p class="mono cap">Ролик 2 · славянская героиня</p></div>
+    </div>
+    <p class="r" style="max-width:1033px;margin:var(--gap) auto 0;text-align:center">Во втором ролике другой каст героинь. Кроме кастинга, учтём и стиль одежды, чтобы каждая героиня узнавалась.</p>
   </div>
 </section>
 
 </main>
 
-<footer class="thanks" id="thanks" data-title="Рахмет" data-dark>
-  <div class="fab tr"></div><div class="fab bl"></div>
-  <h2 class="r">Рахмет!</h2>
+<footer class="thanks" id="thanks" data-title="Рақмет" data-dark>
+  <img class="bg" src="a/chapter-fabric.webp" alt="">
+  <h2 class="r">Рақмет!</h2>
   <p class="r d1">Буду рад обратной связи и отвечу на все вопросы в пользу ролика.</p>
-  <div class="sig r d2">Дамир Мубинов · Chilly Production</div>
+  <img class="la" src="a/logo-always.png" alt="Логотип Always">
+  <img class="lk" src="a/logo-kombinat.png" alt="Логотип Комбинат">
 </footer>
 
 <script>
 (()=>{
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.18,rootMargin:'0px 0px -6% 0px'});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15,rootMargin:'0px 0px -6% 0px'});
   document.querySelectorAll('.r').forEach(el=>io.observe(el));
+  // gifs: start when almost fully in view, reset when scrolled away
+  const gio=new IntersectionObserver(es=>es.forEach(e=>{
+    const g=e.target;
+    if(e.intersectionRatio>=.75){ if(!g.dataset.on){g.src=g.dataset.src;g.dataset.on=1} }
+    else if(e.intersectionRatio===0 && g.dataset.on){ g.removeAttribute('src');delete g.dataset.on }
+  }),{threshold:[0,.75]});
+  document.querySelectorAll('img.gif').forEach(g=>gio.observe(g));
   const nav=document.getElementById('nav'),secs=[...document.querySelectorAll('[data-title]')];
   secs.forEach(s=>{const a=document.createElement('a');a.href='#'+s.id;a.innerHTML='<span>'+s.dataset.title+'</span>';nav.appendChild(a)});
   const links=[...nav.children],darks=[...document.querySelectorAll('[data-dark]')];
