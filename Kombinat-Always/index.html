@@ -184,6 +184,14 @@ b{font-weight:700}
 .bmatic h3{color:#fff;margin-top:clamp(14px,1.5vw,24px);font-size:clamp(20px,1.7vw,32px)}
 .bmatic .ytlink{margin-top:clamp(12px,1.2vw,20px)}
 @media (max-width:760px){.bmatic .bm-grid{grid-template-columns:1fr}}
+.flow{position:relative;display:grid;grid-template-columns:340fr 228fr 392fr 350fr;column-gap:clamp(28px,5.6vw,108px);margin-top:clamp(28px,3vw,56px);padding-top:clamp(56px,5.2vw,100px)}
+.flow .b{display:flex;align-items:center;justify-content:center;text-align:center;min-height:clamp(56px,5vw,96px);padding:8px 12px;border:2px solid var(--hair);border-radius:16px;font-weight:700;font-size:var(--body);color:var(--text);position:relative}
+.flow .b+.b::before{content:"";position:absolute;right:100%;top:50%;width:clamp(28px,5.6vw,108px);border-top:2px solid #b8afc2;margin-right:2px}
+.flow .b.red{border-color:#c0233a;color:var(--ink)}
+.flow .b.smile{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:800}
+.flow .note{position:absolute;top:0;left:62%;font-weight:700;color:var(--violet);font-size:var(--body)}
+.flow svg{position:absolute;left:0;top:0;width:100%;height:clamp(56px,5.2vw,100px);overflow:visible}
+@media (max-width:760px){.flow{grid-template-columns:1fr 1fr;row-gap:16px;padding-top:44px}.flow .b+.b::before{display:none}.flow svg{display:none}.flow .note{left:0}}
 </style>
 </head>
 <body>
@@ -361,13 +369,22 @@ b{font-weight:700}
 
 <!-- smile -->
 <section class="sec" id="smile" data-title="Улыбка" style="padding-top:0">
-  <div class="wrap split">
+  <div class="wrap"><div class="split">
     <div class="stack" style="gap:24px">
       <h2 class="r">Улыбка — решающий фактор</h2>
       <p class="r d1">Чтобы наглядно передать переход от страха к уверенности и спокойствию, предлагаю показать улыбку <b>ещё до продуктшотов</b>.</p>
       <p class="r d2">Так мы не оставляем девушку «протёкшей» перед продуктом и передаём уверенность: казус не произошёл и не произойдёт. А продуктовый блок объясняет почему.</p>
     </div>
     <img class="m r d1" src="a/smile.jpg" alt="Героиня улыбается в кинозале" loading="lazy">
+  </div>
+    <div class="flow r d2">
+      <svg viewBox="0 0 1664 100" preserveAspectRatio="none" aria-hidden="true"><path d="M1020 26 C 900 14, 700 22, 574 92" fill="none" stroke="#823b95" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/><path d="M560 76 L574 94 L590 78" fill="none" stroke="#823b95" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>
+      <p class="note">Улыбку ставим сюда, до продукта</p>
+      <div class="b red">Красный момент</div>
+      <div class="b smile">Улыбка</div>
+      <div class="b">Демо и продуктовые кадры</div>
+      <div class="b">Хеппи-шот, концовка</div>
+    </div>
   </div>
 </section>
 
