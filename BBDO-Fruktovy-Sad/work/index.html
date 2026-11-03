@@ -711,6 +711,13 @@ mark.chg{background:#FFE14D;color:#1F2A21;border-radius:4px;padding:.05em .25em;
 .sbx-v.chg-v.on{outline:6px solid #FFE14D;outline-offset:4px}
 @media (min-width:901px){.mob-only{display:none!important}}
 @media (max-width:900px){.desk-only{display:none!important}}
+/* тест внимания за скроллом */
+@media (min-width:901px){
+  #att-ok[data-scrub]{height:420vh;height:420lvh}
+  #att-ok .xp-btn{display:none}
+  #att-ok .att-v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
+  #att-ok .att-v.ready{opacity:1}
+}
 #workBadge{position:fixed;left:12px;bottom:12px;z-index:9999;background:#FFE14D;color:#1F2A21;font:800 13px/1.3 system-ui,sans-serif;padding:8px 12px;border-radius:6px;box-shadow:0 6px 18px rgba(0,0,0,.25);pointer-events:none}
 </style>
 </head>
@@ -867,7 +874,8 @@ mark.chg{background:#FFE14D;color:#1F2A21;border-radius:4px;padding:.05em .25em;
   </div>
 </section>
 
-<section class="xp" id="att-ok" data-chap="Решение" data-stops="0,.6">
+<!-- РАБОЧАЯ ВЕРСИЯ: тест внимания привязан к скроллу (на компьютере) -->
+<section class="xp" id="att-ok" data-chap="Решение" data-stops="0,.6" data-scrub="../a/att-sister-scrub.mp4" data-t2="4.5" data-t3="7.2">
   <div class="stick">
     <div style="width:100%;max-width:1680px;margin:0 auto">
       <div style="margin-bottom:clamp(18px,2.28vw,36px)">
@@ -1397,7 +1405,7 @@ $$('.xp').forEach(function(sec){
   $('video',pl).remove();
   pl.addEventListener('click',function(){ openVideo(pl.dataset.video,pl.dataset.poster,pl.dataset.title,pl.dataset.disc); });
 });
-var xpSecs=$$('.xp');
+var xpSecs=$$('.xp:not([data-scrub])');
 function xpUpdate(){ xpSecs.forEach(function(sec){ var r=sec.getBoundingClientRect(); var p=-r.top/(sec.offsetHeight-vh); var sl=$('.xp-slot',sec); if(p>.3)sl.classList.add('in'); else if(r.top>vh*.6) sl.classList.remove('in'); $$('.steps p',sec).forEach(function(el,i){ el.classList.toggle('on', p>.42+i*.14); }); }); }
 /* ---------- approach swap ---------- */
 var ap=$('#approach'), swap=$('#swap'), swaptxt=$('#swaptxt');
@@ -1647,6 +1655,31 @@ measure(); frame();
     stop(v2); if(!raf)raf=requestAnimationFrame(step);
   }
   [v1,v2,v3].forEach(function(v){v.addEventListener('loadeddata',function(){m.classList.remove('loading')})});
+  addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd); upd();
+})();
+</script>
+<script>
+/* тест внимания: видео идёт за скроллом, пункты 1-2-3 появляются по ходу; клик по-прежнему открывает видео крупно */
+(function(){
+  var sec=document.getElementById('att-ok'); if(!sec||!sec.dataset.scrub)return;
+  var DESK=matchMedia('(min-width:901px)'), pl=sec.querySelector('.xp-player'), slot=sec.querySelector('.xp-slot'), steps=[].slice.call(sec.querySelectorAll('.steps p'));
+  var T2=parseFloat(sec.dataset.t2), T3=parseFloat(sec.dataset.t3), A=.08, B=.95, d=0, target=0, cur=0, raf=null;
+  sec.dataset.stops='0,.1,'+(A+(B-A)*T2/8.72).toFixed(3)+','+(A+(B-A)*T3/8.72).toFixed(3)+',1';
+  if(!DESK.matches){ steps.forEach(function(el){el.classList.add('on')}); return; }
+  var v=document.createElement('video'); v.className='att-v'; v.muted=true; v.playsInline=true; v.preload='auto'; v.src=sec.dataset.scrub; pl.appendChild(v);
+  v.addEventListener('loadedmetadata',function(){d=v.duration||0; upd();}); v.addEventListener('loadeddata',function(){v.classList.add('ready')});
+  function step(){ raf=null; if(!d)return; cur+=(target-cur)*0.35; if(Math.abs(target-cur)<0.01)cur=target;
+    try{ if(Math.abs(v.currentTime-cur)>0.02)v.currentTime=cur; }catch(e){}
+    if(cur!==target)raf=requestAnimationFrame(step); }
+  function upd(){
+    var r=sec.getBoundingClientRect(), range=sec.offsetHeight-innerHeight, p=range>0?Math.max(0,Math.min(1,-r.top/range)):0;
+    if(p>.02) slot.classList.add('in'); else if(r.top>innerHeight*.6) slot.classList.remove('in');
+    var u=Math.max(0,Math.min(1,(p-A)/(B-A))); target=u*Math.max(0,d-0.05);
+    if(steps[0])steps[0].classList.toggle('on', p>=A);
+    if(steps[1])steps[1].classList.toggle('on', d>0 && target>=T2);
+    if(steps[2])steps[2].classList.toggle('on', d>0 && target>=T3);
+    if(!raf)raf=requestAnimationFrame(step);
+  }
   addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd); upd();
 })();
 </script>
