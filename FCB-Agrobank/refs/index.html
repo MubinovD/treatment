@@ -25,6 +25,7 @@
   --accent:#3fb37a; --accent-ink:#06140c; --mark:#f0b237; --mark-soft:#3a2f14; color-scheme:dark; }
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 var(--body);
   padding-left:max(16px, env(safe-area-inset-left,0px));padding-right:max(16px, env(safe-area-inset-right,0px));}
@@ -68,6 +69,8 @@ section.blk{padding-block:36px 8px;scroll-margin-top:80px}
 .media iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .play{position:absolute;inset:auto auto 12px 12px;background:rgba(0,0,0,.72);color:#fff;border-radius:999px;padding:6px 12px 6px 10px;font-size:13px;display:flex;gap:6px;align-items:center;pointer-events:none}
 .play svg{width:14px;height:14px;fill:#fff}
+.newb{position:absolute;top:10px;left:10px;background:var(--mark);color:#1d1503;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;padding:3px 7px;pointer-events:none}
+.card.is-new{border-color:var(--mark)}
 .src{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;padding:3px 7px;pointer-events:none}
 .body{padding:14px 16px 12px;display:grid;gap:8px;flex:1;align-content:start}
 .card h3{margin:0;font-size:16px;font-weight:600;line-height:1.3}
@@ -436,7 +439,8 @@ const REFS = [
 "аренда"
 ],
 "sec": "appear",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Direct Line — Tracey on Ice",
@@ -451,7 +455,8 @@ const REFS = [
 "дэдпан"
 ],
 "sec": "appear",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Credit Karma — Heidi Hiderson",
@@ -466,7 +471,8 @@ const REFS = [
 "квартира"
 ],
 "sec": "appear",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Brandt — La colocation",
@@ -481,7 +487,8 @@ const REFS = [
 "Cannes"
 ],
 "sec": "appear",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "CeraVe — Michael CeraVe",
@@ -495,7 +502,8 @@ const REFS = [
 "подглядывание",
 "дэдпан"
 ],
-"sec": "appear"
+"sec": "appear",
+"new": 1
 },
 {
 "title": "Amazon Alexa — Alexa Loses Her Voice",
@@ -508,7 +516,8 @@ const REFS = [
 "квартира"
 ],
 "sec": "appear",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Tango — You Know When You've Been Tango'd",
@@ -522,7 +531,8 @@ const REFS = [
 "классика"
 ],
 "sec": "appear",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Kool-Aid Man — пробивает стену (подборка)",
@@ -535,7 +545,8 @@ const REFS = [
 "платформа"
 ],
 "sec": "appear",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Droopy — Northwest Hounded Police",
@@ -550,7 +561,8 @@ const REFS = [
 "дэдпан"
 ],
 "sec": "appear",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Scrubs — уборщик за спиной Джей Ди",
@@ -563,7 +575,8 @@ const REFS = [
 "ситком"
 ],
 "sec": "appear",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Duck Soup — сцена с зеркалом",
@@ -578,7 +591,8 @@ const REFS = [
 "классика"
 ],
 "sec": "appear",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Top Secret! — гэг с перспективой",
@@ -592,7 +606,8 @@ const REFS = [
 "перспектива"
 ],
 "sec": "appear",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "The Addams Family — Вещь (рука)",
@@ -605,7 +620,8 @@ const REFS = [
 "в кадр"
 ],
 "sec": "appear",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Apple — Privacy on iPhone: Tracked",
@@ -1707,7 +1723,8 @@ const REFS = [
 "пауза"
 ],
 "sec": "bank",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "sec": "bank",
@@ -2287,7 +2304,8 @@ const REFS = [
 "мастер"
 ],
 "sec": "washer",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Calgon — lave-linge en panne",
@@ -2300,7 +2318,8 @@ const REFS = [
 "семья"
 ],
 "sec": "washer",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Calgon 3 en 1 — машинка заблокирована накипью",
@@ -2313,7 +2332,8 @@ const REFS = [
 "дверца"
 ],
 "sec": "washer",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Calgon — реклама 2010",
@@ -2327,7 +2347,8 @@ const REFS = [
 "пародия"
 ],
 "sec": "washer",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Calgon — жёсткая вода",
@@ -2339,7 +2360,8 @@ const REFS = [
 "внутри барабана"
 ],
 "sec": "washer",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Calgon — Limescale",
@@ -2352,7 +2374,8 @@ const REFS = [
 "классика"
 ],
 "sec": "washer",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Maytag — одинокий мастер по ремонту",
@@ -2366,7 +2389,8 @@ const REFS = [
 "классика"
 ],
 "sec": "washer",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Maytag Repairman (Jesse White)",
@@ -2379,7 +2403,8 @@ const REFS = [
 "пауза"
 ],
 "sec": "washer",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "Samdex — Pierre",
@@ -2395,7 +2420,8 @@ const REFS = [
 "Cannes"
 ],
 "sec": "washer",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "British Gas — Home Renovations",
@@ -2411,7 +2437,8 @@ const REFS = [
 "старая техника"
 ],
 "sec": "washer",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "The Home Depot — жёсткая вода",
@@ -2427,7 +2454,8 @@ const REFS = [
 "поломка"
 ],
 "sec": "washer",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "hipages — Change The Way You Tradie",
@@ -2444,7 +2472,8 @@ const REFS = [
 "серия"
 ],
 "sec": "washer",
-"start": 0
+"start": 0,
+"new": 1
 },
 {
 "title": "WhatsApp — Maintain Your Mystery",
@@ -2915,7 +2944,7 @@ const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;
 
 const main = document.getElementById("main");
 const chipsHtml = SECTIONS.map(s => `<button class="chip" data-f="${s.key}" aria-pressed="false">${esc(s.short)} <span class="n">${REFS.filter(r=>r.sec===s.key).length}</span></button>`).join("");
-document.querySelector('[data-f="marked"]').insertAdjacentHTML("beforebegin", chipsHtml);
+document.querySelector('[data-f="marked"]').insertAdjacentHTML("beforebegin", chipsHtml + (REFS.some(r=>r.new) ? `<button class="chip marked" data-f="new" aria-pressed="false">Новые <span class="n">${REFS.filter(r=>r.new).length}</span></button>` : ""));
 document.getElementById("n-all").textContent = REFS.length;
 
 main.innerHTML = SECTIONS.map(s => `
@@ -2928,10 +2957,10 @@ function card(r){
   const id = uid(r), st = state[id] || {};
   const meta = [r.year, r.director].filter(Boolean).join(" · ");
   const playLabel = r.platform === "ft" ? "Открыть" : (isFile && r.platform==="youtube" ? "Смотреть в новой вкладке" : "Смотреть");
-  return `<article class="card${st.m ? " is-marked" : ""}" data-id="${esc(id)}">
+  return `<article class="card${st.m ? " is-marked" : ""}${r.new ? " is-new" : ""}" data-id="${esc(id)}">
     <div class="media" role="button" tabindex="0" aria-label="${esc(playLabel + ": " + r.title)}">
       <img loading="lazy" src="${esc(thumb(r))}" alt="" onerror="this.style.opacity=0">
-      <span class="src">${srcLabel[r.platform]}</span>
+      ${r.new ? '<span class="newb">Новое</span>' : ""}<span class="src">${srcLabel[r.platform]}</span>
       <span class="play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z"/></svg>${playLabel}</span>
     </div>
     <div class="body">
@@ -2989,15 +3018,15 @@ document.getElementById("bar").addEventListener("click", e => {
   filter = c.dataset.f;
   document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === c ? "true" : "false"));
   apply();
-  if (filter !== "all" && filter !== "marked") { const s = document.querySelector(`[data-sec="${filter}"]`); s && s.scrollIntoView({behavior:"smooth", block:"start"}); }
+  if (filter !== "all" && filter !== "marked" && filter !== "new") { const s = document.querySelector(`[data-sec="${filter}"]`); s && s.scrollIntoView({behavior:"smooth", block:"start"}); }
 });
 function apply(){
   let any = false;
   document.querySelectorAll("section.blk").forEach(s => {
-    const secOk = filter === "all" || filter === "marked" || s.dataset.sec === filter;
+    const secOk = filter === "all" || filter === "marked" || filter === "new" || s.dataset.sec === filter;
     let vis = 0;
     s.querySelectorAll(".card").forEach(c => {
-      const ok = secOk && (filter !== "marked" || (state[c.dataset.id]||{}).m);
+      const ok = secOk && (filter !== "marked" || (state[c.dataset.id]||{}).m) && (filter !== "new" || (byId[c.dataset.id]||{}).new);
       c.hidden = !ok; if (ok) vis++;
     });
     s.hidden = !vis; if (vis) any = true;
