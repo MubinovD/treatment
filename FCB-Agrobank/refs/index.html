@@ -1,0 +1,2030 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Рефы Agrobank Hybrid</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: sticky toolbar, then four blocks (по механикам брифа), каждый — сетка карточек 16:9 */
+:root{
+  --paper:#f5f6f2; --card:#ffffff; --ink:#15201a; --muted:#5b6a61; --line:#dce2db;
+  --accent:#0e7346; --accent-ink:#ffffff; --mark:#e3a018; --mark-soft:#fbf0d6;
+  --display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --body:"Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#101511; --card:#18201a; --ink:#e7ede7; --muted:#97a69c; --line:#2a352d;
+  --accent:#3fb37a; --accent-ink:#06140c; --mark:#f0b237; --mark-soft:#3a2f14; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --paper:#101511; --card:#18201a; --ink:#e7ede7; --muted:#97a69c; --line:#2a352d;
+  --accent:#3fb37a; --accent-ink:#06140c; --mark:#f0b237; --mark-soft:#3a2f14; color-scheme:dark; }
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 var(--body);
+  padding-left:max(16px, env(safe-area-inset-left,0px));padding-right:max(16px, env(safe-area-inset-right,0px));}
+.wrap{max-width:1360px;margin:0 auto}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header.top{padding-block:40px 20px;display:grid;gap:14px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,4.4vw,52px);line-height:1.05;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.lede{max-width:62ch;color:var(--muted);margin:0}
+.note-file{display:none;max-width:72ch;background:var(--mark-soft);border:1px solid var(--mark);border-radius:10px;padding:10px 14px;font-size:14px}
+.note-file.on{display:block}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);
+  border-bottom:1px solid var(--line);padding-block:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 14px;cursor:pointer;font-size:14px;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.chip .n{color:var(--muted);font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip[aria-pressed="true"] .n{color:inherit;opacity:.7}
+.spacer{flex:1}
+.chip.marked[aria-pressed="true"]{background:var(--mark);border-color:var(--mark);color:#1d1503}
+.act{border:0;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:600;font-size:14px}
+.act.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.act:disabled{opacity:.45;cursor:default}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
+.toast.on{opacity:1}
+
+section.blk{padding-block:36px 8px;scroll-margin-top:80px}
+.blk-head{display:grid;gap:6px;margin-bottom:18px;max-width:72ch}
+.blk-head h2{font-family:var(--display);font-weight:500;font-size:clamp(20px,2.4vw,28px);margin:0;text-wrap:balance}
+.blk-head p{margin:0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,310px),1fr));gap:18px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-width:0;transition:border-color .15s, box-shadow .15s}
+.card.is-marked{border-color:var(--mark);box-shadow:0 0 0 2px var(--mark) inset}
+.media{position:relative;aspect-ratio:16/9;max-width:100%;background:#000;cursor:pointer;overflow:hidden}
+.media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.media:hover img{transform:scale(1.03)}
+.media iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.play{position:absolute;inset:auto auto 12px 12px;background:rgba(0,0,0,.72);color:#fff;border-radius:999px;padding:6px 12px 6px 10px;font-size:13px;display:flex;gap:6px;align-items:center;pointer-events:none}
+.play svg{width:14px;height:14px;fill:#fff}
+.src{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;padding:3px 7px;pointer-events:none}
+.body{padding:14px 16px 12px;display:grid;gap:8px;flex:1;align-content:start}
+.card h3{margin:0;font-size:16px;font-weight:600;line-height:1.3}
+.meta{font-size:13px;color:var(--muted)}
+.why{margin:0;font-size:14px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
+.foot{display:flex;gap:8px;align-items:center;padding:0 16px 14px;flex-wrap:wrap}
+.mk{border:1px solid var(--line);background:transparent;border-radius:999px;padding:6px 12px;cursor:pointer;font-size:13px;display:inline-flex;gap:6px;align-items:center}
+.mk svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2}
+.card.is-marked .mk{background:var(--mark);border-color:var(--mark);color:#1d1503}
+.card.is-marked .mk svg{fill:currentColor}
+.open{font-size:13px;color:var(--muted);text-decoration:none;margin-left:auto}
+.open:hover{color:var(--ink);text-decoration:underline}
+.memo{width:100%;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:7px 10px;font:13px/1.4 var(--body);color:var(--ink);resize:vertical;min-height:34px}
+.memo-wrap{padding:0 16px 14px;display:none}
+.card.is-marked .memo-wrap, .memo-wrap.has{display:block}
+
+.empty{display:none;padding:60px 0;color:var(--muted);text-align:center}
+.empty.on{display:block}
+footer{padding-block:48px 40px;color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+@media (max-width:520px){ .bar .act{padding:7px 12px} header.top{padding-block:24px 14px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Agrobank · FCB · ипотека · рефы к тритменту</div>
+    <h1>Он опять здесь</h1>
+    <p class="lede">Подборка под два ролика: навязчивый персонаж вырастает из ниоткуда, герой оглядывается и не верит, финал повторяет начало. Жми на кадр, чтобы смотреть прямо тут. Звёздочкой отмечаешь, что берём, можно дописать заметку. Отмеченные сохраняются в этом браузере и выгружаются кнопкой «Скачать».</p>
+    <p class="note-file" id="fileNote">Страница открыта как файл, а YouTube внутри файла не играет. Ролики с YouTube откроются в новой вкладке. Чтобы всё играло прямо здесь, открой страницу по ссылке с сайта.</p>
+  </header>
+
+  <nav class="bar" id="bar" aria-label="Разделы">
+    <button class="chip" data-f="all" aria-pressed="true">Все <span class="n" id="n-all"></span></button>
+    <!--CHIPS-->
+    <button class="chip marked" data-f="marked" aria-pressed="false">★ Отмеченные <span class="n" id="n-marked">0</span></button>
+    <span class="spacer"></span>
+    <button class="act ghost" id="copyBtn" type="button">Копировать</button>
+    <button class="act" id="dlBtn" type="button">Скачать отмеченные</button>
+  </nav>
+
+  <main id="main"></main>
+  <p class="empty" id="empty">Пока ничего не отмечено. Нажми ★ на карточке, и она появится здесь.</p>
+  <footer>Источники: YouTube, Vimeo, FrameThrower. Карточки FrameThrower открываются на их сайте. Собрано для режиссёрского тритмента Дамира Мубинова.</footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const SECTIONS = [{"key": "appear", "short": "Появления", "title": "Вырастает из ниоткуда", "lede": "Двери, шкафы, стиралка, рука в кадре, зум-аут, и он уже тут."}, {"key": "react", "short": "Реакция", "title": "Он всё ещё здесь", "lede": "Герой оглядывается, не верит, страдает. Посторонний человек теперь живёт с тобой."}, {"key": "repeat", "short": "Повторы", "title": "Ещё раз", "lede": "День сурка, рифмы кадров, тот же наезд на телевизор. Второй проход уже без помехи."}, {"key": "absurd", "short": "Абсурд", "title": "Абсурд всерьёз", "lede": "Проблема в виде человека, сыграно без улыбки. Банки, ипотека, чины в костюмах."}, {"key": "bank", "short": "Хира · BANK", "title": "Хира · BANK", "lede": "Холодный «мистер Смит». Государственный чин, давит, без эмоций. Смотреть взгляд, позу, голос и то, как он стоит рядом."}, {"key": "landlord", "short": "Арендодатель", "title": "Арендодатель", "lede": "Дешёвый мелочный мозгокрут с приторной улыбкой. Маленький и жалкий: хочется втащить, но ты от него зависишь."}];
+const REFS = [
+{
+"sec": "appear",
+"title": "Camelot National Lottery — Please Not Them",
+"year": "2016",
+"platform": "vimeo",
+"id": "173633292",
+"director": "Jeff Low",
+"why": "Чужое лицо возникает в зеркале в самый неподходящий момент. Хороший ритм: человек занят своим делом, и тут появляется он.",
+"tags": [
+"появление",
+"зеркало",
+"дэдпан"
+],
+"start": 0
+},
+{
+"sec": "appear",
+"title": "TSB — Savings That Sneak Up On You",
+"year": "2022",
+"platform": "youtube",
+"id": "oNVhH_okOh4",
+"director": "Jeff Low",
+"why": "Банк. Лицо персонажа вылезает из предметов и картин, люди не сразу замечают. Ровно наша механика «вырастает из ниоткуда».",
+"tags": [
+"появление",
+"банк",
+"из предмета"
+],
+"start": 0
+},
+{
+"sec": "appear",
+"title": "LiGA — The Captain In The Cupboard",
+"year": "2025",
+"platform": "ft",
+"id": "AD-58422",
+"still": "https://frames.shotspot.pro/ads/AD-58422/3109fd4f78/stills/004-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-58422",
+"why": "У героя переливается стиралка, а в кухонном шкафу сидит человек. Почти наша сцена со стиралкой и арендодателем.",
+"tags": [
+"шкаф",
+"стиралка",
+"кухня"
+],
+"start": 0
+},
+{
+"sec": "appear",
+"title": "Rocket Mortgage — Scream",
+"year": "2023",
+"platform": "ft",
+"id": "AD-59956",
+"still": "https://frames.shotspot.pro/ads/AD-59956/9382ddfc3e/stills/024-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-59956",
+"director": "MAMA",
+"why": "Ипотека. Хозяева находят у себя дома то, чего там быть не должно, и кричат. Реакция крупно, находка в доме.",
+"tags": [
+"ипотека",
+"дом",
+"реакция"
+],
+"start": 0
+},
+{
+"sec": "appear",
+"title": "Arby's — Say It To Arby's Free Sandwich Face",
+"year": "2024",
+"platform": "ft",
+"id": "AD-38740",
+"still": "https://frames.shotspot.pro/ads/AD-38740/ed72544d48/stills/019-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-38740",
+"director": "Jake Szymanski",
+"why": "Человек выходит прямо из телевизора к паре на диване. Пригодится для футбольной сцены: персонаж и телевизор.",
+"tags": [
+"телевизор",
+"гостиная",
+"появление"
+],
+"start": 0
+},
+{
+"title": "Old Spice — Momsong",
+"year": "2014",
+"platform": "youtube",
+"id": "-Ws4UPZi0RA",
+"start": 0,
+"why": "Мамы появляются из ниоткуда в жизни сыновей: в кустах, на заднем сиденье, под машиной, за окном. Прямой реф механики «Хира всегда рядом».",
+"tags": [
+"появление",
+"заднее сиденье",
+"прятки"
+],
+"sec": "appear"
+},
+{
+"title": "State Farm — Magic Jingle (подборка)",
+"year": "2011",
+"platform": "youtube",
+"id": "dclfLLFLT04",
+"start": 0,
+"why": "Агента вызывают джинглом, и он мгновенно оказывается рядом с героем. Появление одной склейкой, без объяснений.",
+"tags": [
+"появление",
+"джамп-кат",
+"мгновенно"
+],
+"sec": "appear"
+},
+{
+"title": "Burger King — Wake Up With the King",
+"year": "2004",
+"platform": "youtube",
+"id": "BpMsWRCbppU",
+"start": 0,
+"why": "Герой просыпается, а рядом в постели невозмутимо лежит Король. Эталон спокойного появления там, где его быть не может.",
+"tags": [
+"появление",
+"кровать",
+"дэдпан"
+],
+"sec": "appear"
+},
+{
+"title": "Burger King — Wake Up With the King: Window",
+"year": "2005",
+"platform": "youtube",
+"id": "8EmEgSC9kN4",
+"start": 0,
+"why": "Король молча стоит за окном и смотрит на героя. Для финала с персонажем под дождём за стеклом.",
+"tags": [
+"окно",
+"взгляд",
+"финал"
+],
+"sec": "appear"
+},
+{
+"title": "Allstate — Mayhem: Blind Spot",
+"year": "2010",
+"platform": "youtube",
+"id": "RjGZl_zrbWU",
+"start": 0,
+"why": "Персонаж-неприятность вмешивается в вождение. Реф для сцены в машине, где рука лезет к лицу героя.",
+"tags": [
+"машина",
+"рука",
+"персонаж-проблема"
+],
+"sec": "appear"
+},
+{
+"title": "Old Spice — Terry Crews врывается в чужие ролики",
+"year": "2014",
+"platform": "youtube",
+"id": "w9ohygpExcU",
+"start": 0,
+"why": "Терри Крюс вламывается в чужой ролик и закрывает собой картинку. Механика «встал перед телевизором во время футбола».",
+"tags": [
+"вторжение",
+"закрывает кадр",
+"телевизор"
+],
+"sec": "appear"
+},
+{
+"title": "Boots — You're never too far from a Pharmacist",
+"year": "2025",
+"platform": "youtube",
+"id": "Kfk1iznqh2E",
+"start": 0,
+"why": "Фармацевты возникают в самых неожиданных бытовых местах прямо рядом с героем. Свежая серия внезапных появлений.",
+"tags": [
+"появление",
+"быт",
+"неожиданное место"
+],
+"sec": "appear"
+},
+{
+"title": "Canal+ — The Closet",
+"year": "2009",
+"platform": "youtube",
+"id": "zyHVAucpzRU",
+"start": 0,
+"why": "Финальный реверс: герой всё это время сидел в шкафу. Для выхода из шкафа и для «он был там с самого начала».",
+"tags": [
+"шкаф",
+"реверс",
+"раскрытие"
+],
+"sec": "appear"
+},
+{
+"title": "Heineken — Walk-in Fridge",
+"year": "2009",
+"platform": "youtube",
+"id": "Jlpc_1nd_04",
+"start": 0,
+"why": "Открывается дверь, а внутри люди, которых никто не ждал. Ритм «открыл дверь, а там он».",
+"tags": [
+"дверь",
+"раскрытие",
+"реакция"
+],
+"sec": "appear"
+},
+{
+"title": "National Lottery Ireland — The Dream Inspector",
+"year": "2022",
+"platform": "vimeo",
+"id": "779031684",
+"start": 0,
+"why": "Казённый инспектор в форме вламывается в самый сладкий момент с требованием. Почти готовый образ бюрократа BANK.",
+"tags": [
+"бюрократ",
+"вторжение",
+"требование"
+],
+"sec": "appear"
+},
+{
+"title": "La Primitiva — El momento más inoportuno",
+"year": "2019",
+"platform": "vimeo",
+"id": "336062748",
+"start": 0,
+"director": "Álvaro Brechner",
+"why": "Мужчина в костюме возникает рядом с героем в самый неподходящий момент и сухо гнёт свою линию. Тон сдержанного абсурда.",
+"tags": [
+"костюм",
+"неподходящий момент",
+"дэдпан"
+],
+"sec": "appear"
+},
+{
+"title": "Dairy UK — Department of Dairy Related Scrumptious Affairs",
+"year": "2019",
+"platform": "vimeo",
+"id": "258105082",
+"start": 0,
+"why": "Чиновник в костюме внезапно оказывается у людей на кухне и в комнатах. Госслужащий плюс бытовое вторжение, как у BANK.",
+"tags": [
+"чиновник",
+"кухня",
+"появление"
+],
+"sec": "appear"
+},
+{
+"title": "AXE — Shower",
+"year": "2006",
+"platform": "vimeo",
+"id": "80352953",
+"start": 0,
+"why": "Вода абсурдно преследует героя в каждой бытовой сцене. Как вести один навязчивый гэг через серию виньеток.",
+"tags": [
+"преследование",
+"виньетки"
+],
+"sec": "appear"
+},
+{
+"title": "Monty Python — The Spanish Inquisition",
+"year": "1970",
+"platform": "youtube",
+"id": "psMMKgvpGfg",
+"start": 0,
+"why": "Распахивается дверь, и врывается Инквизиция, каждый раз заново. Шаблон коронного выхода и коронной фразы.",
+"tags": [
+"дверь",
+"вторжение",
+"повтор"
+],
+"sec": "appear"
+},
+{
+"title": "Seinfeld — все выходы Крамера",
+"year": "1990",
+"platform": "youtube",
+"id": "3xde0TX7IWI",
+"start": 0,
+"why": "Крамер без стука влетает в квартиру. Подборка вариантов, как персонаж может врываться в дверь каждый раз по-новому.",
+"tags": [
+"дверь",
+"выход персонажа",
+"ситком"
+],
+"sec": "appear"
+},
+{
+"title": "The Pink Panther Strikes Again — Като и Клузо",
+"year": "1976",
+"platform": "youtube",
+"id": "IA8QrOAghZ0",
+"start": 0,
+"why": "Като выпрыгивает на Клузо из засады в бытовых местах квартиры. Эталон выходов из шкафа, холодильника, из-под мебели.",
+"tags": [
+"засада",
+"шкаф",
+"холодильник"
+],
+"sec": "appear"
+},
+{
+"title": "Apple — Privacy on iPhone: Tracked",
+"year": "2021",
+"platform": "youtube",
+"id": "fjf7c-O5GyQ",
+"why": "Главный реф: чужие люди с вежливыми вопросами ходят за героем повсюду, в кафе, в такси, домой, а он всё больше устаёт и злится. Так же должен работать BANK.",
+"tags": [
+"преследование",
+"оглядывается",
+"усталость"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "Mucinex — первый ролик с Mr. Mucus",
+"year": "2004",
+"platform": "youtube",
+"id": "xWUSq_FVQQ0",
+"why": "Классика непрошеного жильца: мерзкий персонаж обустроился как дома и уходить не собирается. Взять наглое спокойствие захватчика.",
+"tags": [
+"чужой дома",
+"персонификация",
+"наглость"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "Mucinex — подборка Mr. Mucus (2014+)",
+"year": "2014",
+"platform": "youtube",
+"id": "lhpf0D1_9R8",
+"why": "Персонаж влезает в быт героя: диван, кровать, кухня. Библиотека мизансцен «он опять здесь».",
+"tags": [
+"чужой дома",
+"быт",
+"серия"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "Verizon — Cable Guy (Jim Carrey, Super Bowl)",
+"year": "2022",
+"platform": "youtube",
+"id": "PxA510BGi3I",
+"why": "Назойливый гость хозяйничает в доме Бродерика, тот терпит с вымученной улыбкой. Дуэт «наглый гость и вежливая жертва».",
+"tags": [
+"чужой дома",
+"навязчивый гость",
+"терпение"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "The Cable Guy — Стивен слушает автоответчик",
+"year": "1996",
+"platform": "youtube",
+"id": "o9qrVvxq4nM",
+"why": "Чистая реакция: лицо от недоумения переходит в отчаяние с каждым сообщением навязчивого «друга». Та же нарастающая усталость нужна нашему герою.",
+"tags": [
+"реакция",
+"усталость",
+"эскалация"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "What About Bob? — сцена ужина",
+"year": "1991",
+"platform": "youtube",
+"id": "KvVKFCP5cCA",
+"why": "Чужак уже сидит за семейным столом и всех очаровал, а хозяин молча кипит. Тон для сцены завтрака.",
+"tags": [
+"чужой дома",
+"за столом",
+"немое страдание"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "GEICO — Wallet",
+"year": "2026",
+"platform": "youtube",
+"id": "tisFrVM26G8",
+"why": "Про деньги: отец постоянно натыкается на свой кошелёк в неудобных местах, тревога растёт. Финансовая метафора и дабл-тейки.",
+"tags": [
+"деньги",
+"дабл-тейк",
+"реакция"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "Wonderful Seedless Lemons — Too Close For Comfort",
+"year": "2025",
+"platform": "youtube",
+"id": "r9KVFHnW2aY",
+"director": "Rick LeMoine",
+"why": "Маскот подсаживается к мужчине на скамейке всё ближе. Дэдпан-реакция и игра с дистанцией в одном кадре.",
+"tags": [
+"личное пространство",
+"дэдпан",
+"реакция"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "ResMed — Say Goodbye to Your Sleep Monster",
+"year": "2025",
+"platform": "youtube",
+"id": "GXEYgFnIyYU",
+"why": "Проблема в виде монстра живёт с героем и портит каждую бытовую сцену. Та же драматургия «проблема поселилась у тебя».",
+"tags": [
+"чужой дома",
+"персонификация",
+"быт"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "Superloop — Refresh Your Internet",
+"year": "2023",
+"platform": "youtube",
+"id": "KqhUqanBdAk",
+"director": "The Bobbsey Twins from Homicide",
+"why": "Человек в жёлтом костюме то появляется, то исчезает за спинами рабочих, они переглядываются. Ритм «повернулся, а он там».",
+"tags": [
+"оглядывается",
+"появляется",
+"дабл-тейк"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "Riyadh Season — Usyk vs Fury 2 promo",
+"year": "2025",
+"platform": "youtube",
+"id": "8z_dZH2jD0s",
+"why": "Соперник мерещится герою дома, за едой, во сне, тот вздрагивает и не верит глазам. Монтаж появлений и реакция.",
+"tags": [
+"появляется везде",
+"шок",
+"оглядывается"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "Nimble — Unexpected Happens: The Vet",
+"year": "2014",
+"platform": "youtube",
+"id": "H8D0nHetilI",
+"why": "Финансовый ролик: «собака» у ветеринара оказывается двумя мужчинами в костюме. Сухая реакция хозяина на явный абсурд.",
+"tags": [
+"абсурд",
+"реакция",
+"финансы"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "GoCompare — Bathroom Monster Bill",
+"year": "2018",
+"platform": "youtube",
+"id": "PE486xJ2YC4",
+"why": "Счёт в образе жадного монстра вламывается прямо в ванную. Аналог персонажа, который требует денег в самый личный момент.",
+"tags": [
+"деньги",
+"чужой дома",
+"требует"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "Allstate — Mayhem: Raccoon",
+"year": "2011",
+"platform": "youtube",
+"id": "BEsmcjd5gPc",
+"why": "Mayhem в роли енота, который поселился на чердаке и ведёт себя как хозяин.",
+"tags": [
+"чужой дома",
+"наглость",
+"в камеру"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "DirecTV — Super Creepy Rob Lowe",
+"year": "2014",
+"platform": "youtube",
+"id": "0ATrK7FsQ8U",
+"why": "Кастинг и пластика жуткого улыбчивого типа, которого не хочется видеть рядом. Реф для мелочного улыбчивого арендодателя.",
+"tags": [
+"кастинг",
+"улыбка",
+"арендодатель"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "Ирония судьбы — «Что вы здесь делаете?»",
+"year": "1975",
+"platform": "youtube",
+"id": "6V8TGRl8mcg",
+"why": "В моей квартире спит незнакомец. Понятно любому зрителю у нас: она в шоке, он невозмутим.",
+"tags": [
+"чужой дома",
+"шок",
+"классика"
+],
+"sec": "react",
+"start": 0
+},
+{
+"title": "The Office — Джим смотрит в камеру",
+"year": "2005",
+"platform": "youtube",
+"id": "5-wlmE6W_I0",
+"why": "Учебник дэдпан-реакции: короткий взгляд в камеру «это правда происходит?». Приём для крупного плана героя.",
+"tags": [
+"взгляд в камеру",
+"дэдпан",
+"реакция"
+],
+"sec": "react",
+"start": 0
+},
+{
+"sec": "react",
+"title": "Old Spice — Constant Shower",
+"year": "2014",
+"platform": "youtube",
+"id": "aTJPbZHod00",
+"director": "Steve Rogers",
+"why": "Душ преследует героя весь день, и все делают вид, что так и надо. Нелепость, которая идёт за тобой по всем сценам.",
+"tags": [
+"преследует",
+"абсурд",
+"весь день"
+],
+"start": 0
+},
+{
+"sec": "react",
+"title": "Titanfall — Shadow",
+"year": "2014",
+"platform": "youtube",
+"id": "YMgEfUdYt34",
+"director": "Wayne McClammy",
+"why": "Обычный день героя, и в каждой бытовой сцене рядом гигантский робот. Хорошая структура «один день — разные сцены — одна помеха».",
+"tags": [
+"весь день",
+"быт",
+"помеха"
+],
+"start": 0
+},
+{
+"sec": "react",
+"title": "Airalo — Bad Hotel",
+"year": "2025",
+"platform": "youtube",
+"id": "UVIKjgiRPFY",
+"director": "Florence Poppy Deary",
+"why": "Пара заходит в номер, а в их кровати уже спит чужой мужчина. Реакция героев на постороннего, который ведёт себя как дома.",
+"tags": [
+"посторонний",
+"кровать",
+"реакция"
+],
+"start": 0
+},
+{
+"sec": "react",
+"title": "Set for Life — Housemate",
+"year": "2026",
+"platform": "ft",
+"id": "AD-45468",
+"still": "https://frames.shotspot.pro/ads/AD-45468/dd7fead668/stills/009-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-45468",
+"director": "Adam Gunser",
+"why": "Героиня сдаёт комнату странному соседу. Посторонний, который теперь живёт с тобой, и её терпение.",
+"tags": [
+"сосед",
+"дом",
+"терпение"
+],
+"start": 0
+},
+{
+"sec": "react",
+"title": "Habitat × Pinterest — The Intruder",
+"year": "2026",
+"platform": "ft",
+"id": "AD-52099",
+"still": "https://frames.shotspot.pro/ads/AD-52099/e97a0e31a7/stills/014-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-52099",
+"director": "Coral Brown",
+"why": "Чужой человек понемногу занимает дом и вещи героини, она чувствует себя лишней. Хороший ключ для ролика с арендодателем.",
+"tags": [
+"захватчик",
+"дом",
+"аренда"
+],
+"start": 0
+},
+{
+"title": "Jeep — Groundhog Day (Bill Murray, Super Bowl LIV)",
+"year": "2020",
+"platform": "youtube",
+"id": "4VLEOyX8gMk",
+"start": 0,
+"why": "Готовая модель нашей структуры: те же утра, тот же будильник, те же встречи, но с новым решением день разворачивается иначе. Смотреть, как повторы читаются без объяснений.",
+"tags": [
+"повтор",
+"день сурка",
+"рифма"
+],
+"sec": "repeat"
+},
+{
+"title": "Tide — It's a Tide Ad (David Harbour, Super Bowl LII)",
+"year": "2018",
+"platform": "youtube",
+"id": "X5GPqfx9olA",
+"start": 0,
+"why": "Один и тот же персонаж раз за разом врывается в узнаваемые ситуации. Так можно строить нашего персонажа, который есть в каждой сцене.",
+"tags": [
+"повтор",
+"running gag",
+"вторжение"
+],
+"sec": "repeat"
+},
+{
+"title": "Geico — Unskippable: Family",
+"year": "2015",
+"platform": "youtube",
+"id": "X_thEMO1nyU",
+"start": 0,
+"why": "Семья замирает, а собака продолжает действовать. Неподвижная композиция, где меняется одна деталь: рифма первого и второго прохода.",
+"tags": [
+"статичный кадр",
+"рифма",
+"одна деталь"
+],
+"sec": "repeat"
+},
+{
+"title": "Amazon Alexa — A Voice Is All You Need: Ironing",
+"year": "2021",
+"platform": "youtube",
+"id": "4s-EtzzHddE",
+"start": 0,
+"why": "Герой мешает кульминации сцены, потом момент перематывают и переигрывают. Механика «тот же момент заново, но без помехи».",
+"tags": [
+"повтор",
+"перемотка",
+"рифма"
+],
+"sec": "repeat"
+},
+{
+"title": "Tide — Super Bowl Now, #LaundryLater",
+"year": "2020",
+"platform": "youtube",
+"id": "U-RbjSmDTHQ",
+"start": 0,
+"why": "Беда с героем повторяется во время просмотра матча. Нарастание running gag в контексте «футбол дома».",
+"tags": [
+"повтор",
+"футбол",
+"running gag"
+],
+"sec": "repeat"
+},
+{
+"title": "SESC Videobrasil — Bom dia. Boa tarde. Boa noite.",
+"year": "2012",
+"platform": "youtube",
+"id": "QEtu_Yx86Wg",
+"start": 0,
+"why": "Одна и та же поездка в лифте, тот же ракурс и действие, меняется только то, что за дверью. Формула «идентичный кадр, другой результат».",
+"tags": [
+"повтор",
+"идентичный кадр",
+"рифма"
+],
+"sec": "repeat"
+},
+{
+"title": "DirecTV — Get Rid of Cable (подборка)",
+"year": "2011",
+"platform": "youtube",
+"id": "NZ80SVOHKoo",
+"start": 0,
+"why": "Кампания на одной формуле: бытовые беды по цепочке и финальное «не допускай этого». Видно, как одна формула держит серию роликов.",
+"tags": [
+"формула",
+"цепочка",
+"кампания"
+],
+"sec": "repeat"
+},
+{
+"title": "Groundhog Day — будильник «I Got You Babe»",
+"year": "1993",
+"platform": "youtube",
+"id": "dYzVdv6V5Vs",
+"start": 0,
+"why": "Канон: тот же будильник, трек, 6:00 и ракурс. Одинаковые музыка и кадр сами объясняют, что день повторяется.",
+"tags": [
+"день сурка",
+"музыка",
+"рифма"
+],
+"sec": "repeat"
+},
+{
+"title": "Groundhog Day — все сцены с Недом Райерсоном синхронно",
+"year": "1993",
+"platform": "youtube",
+"id": "YzLHqer_l_c",
+"start": 0,
+"why": "Назойливый тип выскакивает в том же месте и в той же точке кадра. Прямой референс для нашего персонажа.",
+"tags": [
+"день сурка",
+"навязчивый",
+"идентичный кадр"
+],
+"sec": "repeat"
+},
+{
+"title": "Shaun of the Dead — два похода в магазин (сравнение)",
+"year": "2004",
+"platform": "youtube",
+"id": "yTw3En6pbFg",
+"start": 0,
+"why": "Один и тот же проход одним кадром снят дважды, меняется только фон. Главный реф визуальной рифмы для двух проходов нашего дня.",
+"tags": [
+"рифма",
+"идентичный кадр",
+"Эдгар Райт"
+],
+"sec": "repeat"
+},
+{
+"title": "Every Frame a Painting — Edgar Wright: How to Do Visual Comedy",
+"year": "2014",
+"platform": "youtube",
+"id": "3FOzD4Sfgag",
+"start": 0,
+"why": "Разбор: шутку делают кадр, монтаж и повтор. Брать принцип «шутка в кадре, не в реплике» и повтор как подготовку и отыгрыш.",
+"tags": [
+"видеоэссе",
+"визуальная комедия"
+],
+"sec": "repeat"
+},
+{
+"title": "Hot Fuzz — шутки по кругу (подборка)",
+"year": "2007",
+"platform": "youtube",
+"id": "83D5JcBttyA",
+"start": 0,
+"why": "Деталь из первой половины возвращается во второй с другим смыслом. Так строить рифмы между проходами.",
+"tags": [
+"подготовка и отыгрыш",
+"рифма"
+],
+"sec": "repeat"
+},
+{
+"title": "Edgar Wright — быстрые монтажные связки",
+"year": "2013",
+"platform": "youtube",
+"id": "ezaw1msr728",
+"start": 0,
+"why": "Одинаковые сверхбыстрые связки с резкими наездами и звуковыми акцентами каждый раз в той же форме. Так собрать повторный наезд на телевизор.",
+"tags": [
+"зум",
+"монтаж",
+"повтор"
+],
+"sec": "repeat"
+},
+{
+"title": "Palm Springs — первый раз в петле",
+"year": "2020",
+"platform": "youtube",
+"id": "7FS56uRsnjo",
+"start": 0,
+"why": "Комедийная подача петли: то же пробуждение, а смешно от реакции героя на повтор.",
+"tags": [
+"петля",
+"реакция",
+"повтор"
+],
+"sec": "repeat"
+},
+{
+"title": "Free Guy — Daily Routine",
+"year": "2021",
+"platform": "youtube",
+"id": "RMw1ZttRIHU",
+"start": 0,
+"why": "Утро героя как ритуал: тот же кофе, те же приветствия, то же ограбление банка каждый день. Модель цепочки «завтрак, машина, футбол».",
+"tags": [
+"рутина",
+"повтор",
+"банк"
+],
+"sec": "repeat"
+},
+{
+"title": "Russian Doll — каждый сброс",
+"year": "2019",
+"platform": "youtube",
+"id": "HAGFEW2tQno",
+"start": 0,
+"why": "Каждый сброс возвращает в тот же кадр у зеркала под тот же трек. Повтор музыки и композиции сам становится шуткой.",
+"tags": [
+"петля",
+"музыка",
+"идентичный кадр"
+],
+"sec": "repeat"
+},
+{
+"title": "Wes Anderson // Centered (kogonada)",
+"year": "2014",
+"platform": "vimeo",
+"id": "89302848",
+"start": 0,
+"why": "Центрированные симметричные кадры. Жёсткая геометрия делает повтор кадра во втором проходе узнаваемым с первой секунды.",
+"tags": [
+"симметрия",
+"композиция"
+],
+"sec": "repeat"
+},
+{
+"title": "Jacques Tati — Mon Oncle, фонтан",
+"year": "1958",
+"platform": "youtube",
+"id": "p6peI6orNUI",
+"start": 0,
+"why": "Фонтан включают каждый раз, когда кто-то подходит к калитке, всё общим планом без слов. Повтор вместо диалога.",
+"tags": [
+"running gag",
+"общий план",
+"Тати"
+],
+"sec": "repeat"
+},
+{
+"sec": "repeat",
+"title": "GEICO — Final Countdown",
+"year": "2016",
+"platform": "youtube",
+"id": "VOtrBZogngg",
+"why": "Герой греет буррито, а группа Europe снова и снова врывается в кадр. Повтор помехи в одной и той же точке, тайминг по музыке.",
+"tags": [
+"повтор",
+"по музыке",
+"помеха"
+],
+"start": 0
+},
+{
+"sec": "repeat",
+"title": "Subway — Groundhog Day",
+"year": "2017",
+"platform": "vimeo",
+"id": "348345723",
+"director": "Max Sherman",
+"why": "Один и тот же день по кругу, одинаковые ракурсы, и в конце цикл ломается. Схема нашего финала.",
+"tags": [
+"день сурка",
+"повтор ракурса",
+"финал"
+],
+"start": 0
+},
+{
+"sec": "repeat",
+"title": "Dogs Trust — Groundhog Day",
+"year": "2023",
+"platform": "ft",
+"id": "AD-15659",
+"still": "https://frames.shotspot.pro/ads/AD-15659/c43318dc23/stills/048-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-15659",
+"director": "Nicolas Jack Davies",
+"why": "Петля дня с одной деталью, которая меняется в каждом проходе. Как держать идентичные кадры и менять одно.",
+"tags": [
+"день сурка",
+"петля",
+"рифма"
+],
+"start": 0
+},
+{
+"sec": "absurd",
+"title": "La Primitiva — Pesca (El destino es caprichoso)",
+"year": "2019",
+"platform": "youtube",
+"id": "N92UaLsM6z0",
+"director": "Álvaro Brechner",
+"why": "Сеньор Судьба в строгом костюме приходит к рыбаку, а тот его не замечает. Холодный чин в костюме, который навязывается человеку. Близко к BANK.",
+"tags": [
+"костюм",
+"чин",
+"дэдпан"
+],
+"start": 0
+},
+{
+"sec": "absurd",
+"title": "Hell or Habito V — Piñata",
+"year": "2019",
+"platform": "youtube",
+"id": "kNBBA15RGCQ",
+"director": "Andy Baker",
+"why": "Ипотека. Мучения с ипотекой показаны буквально и абсурдно, мебель лупит героя. Смелость метафоры в категории.",
+"tags": [
+"ипотека",
+"абсурд",
+"метафора"
+],
+"start": 0
+},
+{
+"sec": "absurd",
+"title": "Hell or Habito I — Hands",
+"year": "2019",
+"platform": "youtube",
+"id": "-a25hK_-ALM",
+"director": "Andy Baker",
+"why": "Та же ипотечная кампания: героя хватают чужие руки. Мнемоника «рука» в банковской категории.",
+"tags": [
+"ипотека",
+"руки",
+"мнемоника"
+],
+"start": 0
+},
+{
+"sec": "absurd",
+"title": "Lumin — Mansplained for Men",
+"year": "2022",
+"platform": "youtube",
+"id": "ydtslU2o2Uo",
+"director": "Elizabeth Orne",
+"why": "Посторонний мужик возникает рядом в неожиданных местах и поучает героя. Навязчивый персонаж с невозмутимым лицом.",
+"tags": [
+"появление",
+"навязчивый",
+"дэдпан"
+],
+"start": 0
+},
+{
+"title": "First Interstate Bank — Every Step",
+"year": "2026",
+"platform": "youtube",
+"id": "eM_YH-yGkds",
+"director": "Michael Downing",
+"why": "Сотрудник банка неловко стоит рядом в самые личные моменты: предложение, роды, вождение. Ритм «он опять тут» и каменное спокойствие. Банк, как у нас.",
+"tags": [
+"банкир рядом",
+"дэдпан",
+"повтор"
+],
+"sec": "absurd",
+"start": 0
+},
+{
+"title": "Caisse d'Epargne — La Communauté",
+"year": "2018",
+"platform": "youtube",
+"id": "MJzzreq_vQQ",
+"director": "Didier Barcelo",
+"why": "Невозмутимый банковский советник с финансовыми вопросами влезает в свадьбу, роды и похороны. Чиновник рушит момент одной сухой фразой.",
+"tags": [
+"банкир рядом",
+"дэдпан",
+"банк"
+],
+"sec": "absurd",
+"start": 0
+},
+{
+"title": "Ally Bank — Pony",
+"year": "2009",
+"platform": "youtube",
+"id": "7GUPY4ZXZME",
+"why": "Холодный мужчина в костюме с невозмутимым лицом обманывает ребёнка с пони. Эталон бесчувственного банкира, смешного своей вежливостью. Ключ к BANK.",
+"tags": [
+"холодный банкир",
+"дэдпан",
+"костюм"
+],
+"sec": "absurd",
+"start": 0
+},
+{
+"title": "Call of Duty: Black Ops II — The Replacer",
+"year": "2012",
+"platform": "youtube",
+"id": "rse3F0im6Xo",
+"why": "Вежливый безэмоциональный мужчина в костюме вклинивается в чужую жизнь: работа, семья, свидание. Кастинг и пластика для BANK.",
+"tags": [
+"костюм",
+"вторженец",
+"дэдпан"
+],
+"sec": "absurd",
+"start": 0
+},
+{
+"title": "Mucinex — Moving In (Mr. Mucus)",
+"year": "2006",
+"platform": "youtube",
+"id": "nvP5iXTmZ58",
+"why": "Проблема въезжает в дом героя со своими вещами и ведёт себя как наглый жилец. Мост к нашему арендодателю.",
+"tags": [
+"въезжает",
+"чужой дома",
+"классика"
+],
+"sec": "absurd",
+"start": 0
+},
+{
+"title": "Fifth Third Bank — Beware the Fee Shark",
+"year": "2018",
+"platform": "youtube",
+"id": "__-lCMNiwS4",
+"why": "Банковские комиссии в образе акулы, люди всерьёз рассказывают о нападениях у банкомата. Поборы как монстр, полезно для арендодателя.",
+"tags": [
+"комиссии",
+"мокьюментари",
+"банк"
+],
+"sec": "absurd",
+"start": 0
+},
+{
+"title": "ATRESplayer — Mr. Boredom",
+"year": "2018",
+"platform": "youtube",
+"id": "o7Tw4fJ5WkY",
+"director": "Miguel Campaña",
+"why": "Скука в образе зловещего человека подкрадывается к людям в быту. Жуткий персонаж-проблема смешной за счёт обыденного антуража.",
+"tags": [
+"персонаж-проблема",
+"подкрадывается"
+],
+"sec": "absurd",
+"start": 0
+},
+{
+"title": "Allstate — Mayhem: Teenage Girl in Pink Truck",
+"year": "2010",
+"platform": "youtube",
+"id": "vtP-S9OS0o0",
+"why": "Хаос сыгран абсолютно серьёзным мужчиной. Как актёр держит персонажа-понятие без кривляния.",
+"tags": [
+"персонаж-проблема",
+"дэдпан"
+],
+"sec": "absurd",
+"start": 0
+},
+{
+"title": "Canal Digital — The Silver Hand",
+"year": "2015",
+"platform": "youtube",
+"id": "2cjQs-yV9lE",
+"director": "Bart Timmer",
+"why": "Герой постепенно понимает, что с миром что-то не так. Скандинавский тон, паузы и непробиваемо серьёзная игра.",
+"tags": [
+"что-то не так",
+"паузы",
+"дэдпан"
+],
+"sec": "absurd",
+"start": 0
+},
+{
+"title": "DirecTV — Don't Attend Your Own Funeral",
+"year": "2013",
+"platform": "youtube",
+"id": "LxygoFYQu2M",
+"director": "Tom Kuntz",
+"why": "Цепочка абсурдных последствий из бытовой мелочи, рассказанная абсолютно серьёзно. Подача Кунца.",
+"tags": [
+"цепочка",
+"дэдпан"
+],
+"sec": "absurd",
+"start": 0
+},
+{
+"title": "Qwant — La Forêt",
+"year": "2017",
+"platform": "youtube",
+"id": "Evahh1PXJIg",
+"director": "Alexandre Aja",
+"why": "Незнакомец с каменным лицом выкладывает велосипедисту подробности его жизни. Холодный взгляд «он всё про тебя знает» и неловкая пауза.",
+"tags": [
+"вторженец",
+"пауза",
+"дэдпан"
+],
+"sec": "absurd",
+"start": 0
+},
+{
+"title": "Циан — «Неадекватные собственники»",
+"year": "2018",
+"platform": "youtube",
+"id": "ePw7z570BBE",
+"why": "Русскоязычный ролик про странных арендодателей. Типаж мелочного хозяина квартиры в нашей реальности.",
+"tags": [
+"арендодатель",
+"СНГ"
+],
+"sec": "absurd",
+"start": 0
+},
+{
+"title": "Krungsri First Choice — Crocodile",
+"year": "2025",
+"platform": "youtube",
+"id": "wClAcc5fkYQ",
+"director": "Wuthisak Anarnkaporn",
+"why": "У героя на плечах висит абсурдная проблема, а окружающие воспринимают её буднично. Тайский тайминг, банк.",
+"tags": [
+"тайская реклама",
+"абсурд",
+"банк"
+],
+"sec": "absurd",
+"start": 0
+},
+{
+"title": "The Matrix — допрос «Mr. Anderson»",
+"year": "1999",
+"platform": "youtube",
+"id": "cH99In5ZP0M",
+"director": "Lana & Lilly Wachowski",
+"why": "Главный эталон. Уивинг почти не моргает, говорит медленно и вежливо, у рта лёгкая брезгливость. Угроза звучит как зачитанная справка. Нашему BANK нужна эта интонация.",
+"tags": [
+"взгляд",
+"голос",
+"костюм"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "The Matrix — Смит и Сайфер за ужином",
+"year": "1999",
+"platform": "youtube",
+"id": "4YbMqcQK0k4",
+"director": "Lana & Lilly Wachowski",
+"why": "Агент сидит за столом с едой и к ней не притрагивается: прямая спина, руки неподвижны. Ключ к завтраку: BANK за столом героя, но сам не ест, а ждёт денег.",
+"tags": [
+"поза",
+"за столом"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "GE — Agent Smith (Hugo Weaving)",
+"year": "2013",
+"platform": "youtube",
+"id": "DJ7GxfpZ2Vg",
+"why": "Уивинг сам играет агента Смита в рекламе. Готовый пример, как этот холод укладывается в короткий хронометраж.",
+"tags": [
+"реклама",
+"голос",
+"взгляд"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "Inglourious Basterds — Ганс Ланда на ферме",
+"year": "2009",
+"platform": "youtube",
+"id": "VhnOjaNIuIs",
+"director": "Quentin Tarantino",
+"why": "Чиновник садится за чужой кухонный стол, просит молока и бесконечно вежлив, а хозяин цепенеет. Модель для завтрака: учтивость как способ давить.",
+"tags": [
+"за столом",
+"вежливость",
+"давление"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "The Adjustment Bureau — Томпсон и Дэвид",
+"year": "2011",
+"platform": "youtube",
+"id": "Rf0MlecmMy0",
+"director": "George Nolfi",
+"why": "Теренс Стамп не повышает голос, говорит как с ребёнком и давит одним спокойствием. Ощущение, что спорить бесполезно.",
+"tags": [
+"голос",
+"спокойствие"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "The Adjustment Bureau — Ричардсон объясняет правила",
+"year": "2011",
+"platform": "youtube",
+"id": "oxMmMvrcoFE",
+"director": "George Nolfi",
+"why": "Люди в шляпах появляются где не надо и держатся как клерки: деловито, без злости, слегка устало. BANK как сотрудник, который просто выполняет инструкцию.",
+"tags": [
+"появление",
+"клерк",
+"костюм"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "Breaking Bad — холодная угроза Гаса Фринга",
+"year": "2011",
+"platform": "youtube",
+"id": "YIOoJ_6CR9Q",
+"why": "Страшное ровным, почти заботливым тоном и неподвижный взгляд. Никаких жестов, вся угроза в паузе.",
+"tags": [
+"взгляд",
+"пауза"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "Men in Black — первая сцена с нейралайзером",
+"year": "1997",
+"platform": "youtube",
+"id": "gPIhKLmO7WU",
+"director": "Barry Sonnenfeld",
+"why": "Томми Ли Джонс с каменным лицом подаёт абсурд как рутину. Сухие реплики и умение не замечать странное вокруг.",
+"tags": [
+"костюм",
+"дэдпан"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "Brazil — визит Центральных служб",
+"year": "1985",
+"platform": "youtube",
+"id": "0B61_5sRoBI",
+"director": "Terry Gilliam",
+"why": "Двое функционеров вваливаются в квартиру с формой 27B/6 и вежливо занимают быт героя. Почти наша драматургия: бюрократия у тебя дома.",
+"tags": [
+"бюрократ",
+"вторжение",
+"квартира"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "Severance — Милчик и Марк",
+"year": "2022",
+"platform": "youtube",
+"id": "HB3JhzM4Wmc",
+"why": "Корпоративная вежливость с пустотой внутри: неискренняя улыбка, безупречный костюм, мягкий голос. Запасной вариант BANK, вежливый вместо ледяного.",
+"tags": [
+"корпорат",
+"улыбка",
+"костюм"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "Dark City — Незнакомцы",
+"year": "1998",
+"platform": "youtube",
+"id": "mrbMvBAzjwE",
+"director": "Alex Proyas",
+"why": "Бледные люди в чёрных пальто, мёртвые лица и тихие голоса. Неестественная пластика, хорошо для кадра за мокрым стеклом.",
+"tags": [
+"пластика",
+"пальто",
+"за стеклом"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "The Lobster — менеджер отеля",
+"year": "2015",
+"platform": "youtube",
+"id": "PYpycAcxEBQ",
+"director": "Yorgos Lanthimos",
+"why": "Абсурдные правила зачитываются ровно, как регламент. BANK говорит о долге так же, как о погоде.",
+"tags": [
+"монотонность",
+"регламент"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "Songs from the Second Floor — фрагмент",
+"year": "2000",
+"platform": "youtube",
+"id": "I69ziXV_mYY",
+"director": "Roy Andersson",
+"why": "Статичный общий план, бледные лица, люди в костюмах стоят столбом. Смешно, потому что все серьёзны. Умение просто стоять в кадре.",
+"tags": [
+"поза",
+"общий план"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "The Other Side of Hope — «Meatballs won't do»",
+"year": "2017",
+"platform": "youtube",
+"id": "im0dl-D2I6o",
+"director": "Aki Kaurismäki",
+"why": "Каменные лица и паузы. Темп: бросить реплику и молчать дальше, держа взгляд.",
+"tags": [
+"пауза",
+"темп"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "Кин-дза-дза! — эцилоп",
+"year": "1986",
+"platform": "youtube",
+"id": "piKCLLR_goU",
+"director": "Георгий Данелия",
+"why": "Понятный нашему зрителю тип: власть появляется ниоткуда и с невозмутимым лицом чего-то требует.",
+"tags": [
+"появление",
+"власть",
+"классика"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"title": "LendingTree — Breakup",
+"year": "2014",
+"platform": "vimeo",
+"id": "89748209",
+"director": "Nick Spooner",
+"why": "Старый банк в человеческом облике, от которого герой уходит к лучшему предложению. Прямо наш сюжет рефинансирования.",
+"tags": [
+"рефинансирование",
+"старый банк"
+],
+"sec": "bank",
+"start": 0
+},
+{
+"sec": "bank",
+"title": "Little Caesars — Serious Voice",
+"platform": "ft",
+"id": "AD-20917",
+"still": "https://frames.shotspot.pro/ads/AD-20917/226e115a9b/stills/003-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-20917",
+"director": "Harold Einstein",
+"why": "Мужчина в костюме говорит предельно серьёзным голосом и ни разу не меняется в лице. Подача голоса и неподвижное лицо для BANK.",
+"tags": [
+"голос",
+"лицо",
+"костюм"
+],
+"start": 0
+},
+{
+"sec": "bank",
+"title": "Stamps.com — Our Condolences",
+"platform": "ft",
+"id": "AD-20838",
+"still": "https://frames.shotspot.pro/ads/AD-20838/28539b231f/stills/002-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-20838",
+"director": "Joe Pytka",
+"why": "Бизнесмен приносит соболезнования и тем же ровным тоном признаёт, что виновата его компания. Вежливость без капли сочувствия.",
+"tags": [
+"вежливость",
+"бесчувственный",
+"дэдпан"
+],
+"start": 0
+},
+{
+"sec": "bank",
+"title": "Lemonade — Stuck / Hold / Jargon",
+"year": "2023",
+"platform": "vimeo",
+"id": "846416135",
+"director": "Beatrice Pegard",
+"why": "Пол под клиентом проваливается, а страховой агент спокойно потягивает напиток. Холодное равнодушие к чужой беде, финансовая категория.",
+"tags": [
+"равнодушие",
+"финансы",
+"абсурд"
+],
+"start": 0
+},
+{
+"title": "Служебный роман — Новосельцев: «Когда я пьяный, я буйный»",
+"year": "1977",
+"platform": "youtube",
+"id": "CicTmCnvCnE",
+"director": "Эльдар Рязанов",
+"why": "Мягков: маленький, зажатый, угодливый, пытается казаться значительнее. Суетливые руки, виноватая полуулыбка, голова в плечах. Вариант «жалкий человечек».",
+"tags": [
+"жалкость",
+"жесты",
+"поза"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Служебный роман — Самохвалов и Верочка",
+"year": "1977",
+"platform": "youtube",
+"id": "Pe6P4RRovGU",
+"director": "Эльдар Рязанов",
+"why": "Басилашвили: лощёный, сладкий, обаяние без содержания. Улыбка «для всех» и бархатный голос, которым говорят неприятное. Вариант «мозгокрут в костюме».",
+"tags": [
+"улыбка",
+"голос",
+"фальшь"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Служебный роман — Шура собирает деньги",
+"year": "1977",
+"platform": "youtube",
+"id": "DuLhRy1Mdv4",
+"director": "Эльдар Рязанов",
+"why": "Ахеджакова деловито суетится с деньгами и списками и не замечает своей бестактности. Ближе всего к «в счёт аренды»: невинный тон, а по сути сбор копеек.",
+"tags": [
+"мелочность",
+"деньги",
+"суета"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Иван Васильевич меняет профессию — управдом Бунша",
+"year": "1973",
+"platform": "youtube",
+"id": "41ymvsR2pLc",
+"director": "Леонид Гайдай",
+"why": "Главный местный эталон. Обиженно-назидательная интонация, «я вынужден буду доложить», привычка соваться в чужую квартиру. Появляется ровно тогда, когда что-то сломалось.",
+"tags": [
+"управдом",
+"придирки",
+"мелкая власть"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Иван Васильевич меняет профессию — Шпак, «непосильным трудом»",
+"year": "1973",
+"platform": "youtube",
+"id": "yp9Fkly8UV4",
+"director": "Леонид Гайдай",
+"why": "Этуш перечисляет каждую вещь со скорбным пафосом. Готовый ритм для блокнота: «фломастер на обоях, гвоздь в коридоре, барабан машинки».",
+"tags": [
+"перечисление",
+"подсчёт",
+"голос"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Собачье сердце — домком у Преображенского",
+"year": "1988",
+"platform": "youtube",
+"id": "WKFtAof5znQ",
+"director": "Владимир Бортко",
+"why": "Швондер с бумажкой и мелкой властью над чужой квартирой. Казённая вежливость, взгляд в документ вместо глаз и удовольствие, что от него зависят. Сцена ровно про жильё.",
+"tags": [
+"домком",
+"бумаги",
+"мелкая власть"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Бриллиантовая рука — управдом Плющ",
+"year": "1968",
+"platform": "youtube",
+"id": "yha_DH4uQfw",
+"director": "Леонид Гайдай",
+"why": "Мордюкова угрожает с милой улыбкой: «газ отключим». Угроза звучит как забота, ставят на место «по-хорошему».",
+"tags": [
+"управдом",
+"улыбка",
+"угроза"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Карлсон вернулся — Фрекен Бок",
+"year": "1970",
+"platform": "youtube",
+"id": "yHDDmLDSZJ8",
+"director": "Борис Степанцев",
+"why": "Голос Раневской, сладкая строгость и бесконечные мелкие правила. Интонация «мы же культурные люди» и хозяйское поведение в чужом доме.",
+"tags": [
+"голос",
+"правила",
+"пассивная агрессия"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Мастер и Маргарита — Коровьев и Бегемот",
+"year": "2005",
+"platform": "youtube",
+"id": "kdFORenq2Uo",
+"director": "Владимир Бортко",
+"why": "Абдулов: угодливые ужимки, полупоклоны, издевательски участливое «позвольте». Пластика для выхода из-за шторы.",
+"tags": [
+"угодливость",
+"пластика",
+"ужимки"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Office Space — Лумберг и TPS Reports",
+"year": "1999",
+"platform": "youtube",
+"id": "KHEohDnITdA",
+"director": "Mike Judge",
+"why": "Эталон пассивной агрессии: кружка, тягучее «yeah… if you could just…», улыбка, от которой хочется втащить. Наше «в счёт аренды» должно звучать с такой же ленивой вежливостью.",
+"tags": [
+"пассивная агрессия",
+"паузы",
+"улыбка"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "The Big Lebowski — Марти, арендодатель Чувака",
+"year": "1998",
+"platform": "youtube",
+"id": "B5GkVHqSLc4",
+"director": "Joel & Ethan Coen",
+"why": "Робко и вежливо напоминает про аренду и тут же зовёт на свой танцевальный вечер. Неловкая мягкость, переминание с ноги на ногу, а за этим всё равно «плати».",
+"tags": [
+"арендодатель",
+"неловкость",
+"жесты"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Friends — мистер Хеклз",
+"year": "1995",
+"platform": "youtube",
+"id": "jGI1S-G12BY",
+"why": "Сосед-кляузник появляется на пороге с абсурдной претензией и с каменным лицом выставляет счёт за ерунду.",
+"tags": [
+"претензия",
+"сосед",
+"мелочность"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Three's Company — мистер Ропер подслушивает",
+"year": "1977",
+"platform": "youtube",
+"id": "JX_ZPp7Upfc",
+"why": "Хозяин дома подслушивает жильцов. Подозрительный прищур и ощущение, что хозяин всегда где-то рядом за стенкой.",
+"tags": [
+"арендодатель",
+"прищур",
+"за стенкой"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Harry Potter — наказание у Амбридж",
+"year": "2007",
+"platform": "youtube",
+"id": "-_hUC7_SGIc",
+"director": "David Yates",
+"why": "Приторный голосок, кукольная улыбка, наказание «по правилам». И то, как аккуратно и с удовольствием она что-то записывает.",
+"tags": [
+"улыбка",
+"правила",
+"записывает"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Pride and Prejudice — предложение мистера Коллинза",
+"year": "2005",
+"platform": "youtube",
+"id": "UrRrtH30LaI",
+"director": "Joe Wright",
+"why": "Том Холландер: маленький, напыщенный, подобострастный, говорит как по бумажке. Рост и осанка маленького человека, неспособность услышать собеседника.",
+"tags": [
+"маленький",
+"подобострастие",
+"осанка"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Shelter — Hidden Barriers: The Park",
+"year": "2023",
+"platform": "youtube",
+"id": "lKRWHQ82YvU",
+"why": "Привратник не пускает семью с детьми в парк по абсурдным правилам: «I don't make the rules». Ролик про арендаторов. Вежливый тон мелкого начальника, довольного своей властью.",
+"tags": [
+"мелкая власть",
+"правила",
+"аренда"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"title": "Progressive — Dr. Rick",
+"year": "2018",
+"platform": "youtube",
+"id": "9rcgh4MjNk8",
+"why": "Снисходительный «коуч» с вечной улыбкой поправляет и поучает. Улыбчивое занудство, сыгранное всерьёз.",
+"tags": [
+"улыбка",
+"занудство",
+"реклама"
+],
+"sec": "landlord",
+"start": 0
+},
+{
+"sec": "landlord",
+"title": "Aviva — Payout",
+"year": "2019",
+"platform": "ft",
+"id": "AD-21113",
+"still": "https://frames.shotspot.pro/ads/AD-21113/8bcd9cb38e/stills/012-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-21113",
+"why": "Дотошный агент выплачивает страховку по пенни, отсчитывая каждую монетку. Мелочность и счёт до копейки: ровно наш блокнот «в счёт аренды».",
+"tags": [
+"мелочность",
+"счёт",
+"деньги"
+],
+"start": 0
+},
+{
+"sec": "landlord",
+"title": "Farrow & Ball — Contract",
+"year": "2020",
+"platform": "ft",
+"id": "AD-42029",
+"still": "https://frames.shotspot.pro/ads/AD-42029/8d33ca9598/stills/007-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-42029",
+"director": "David Kerr",
+"why": "Мама подсовывает подружке дочки «договор» с правилами, чтобы не испортили свежеокрашенные стены. Почти наша сцена с фломастером на стене.",
+"tags": [
+"стены",
+"правила",
+"договор"
+],
+"start": 0
+},
+{
+"sec": "landlord",
+"title": "Paddy Power — Two Pence",
+"year": "2025",
+"platform": "ft",
+"id": "AD-38720",
+"still": "https://frames.shotspot.pro/ads/AD-38720/90bb848056/stills/003-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-38720",
+"director": "Andrew Gaynord",
+"why": "Мужчина на свидании пересчитывает счёт и просит доплатить разницу за дорогую закуску. Мелочность, сыгранная с вежливой улыбкой.",
+"tags": [
+"мелочность",
+"счёт",
+"улыбка"
+],
+"start": 0
+},
+{
+"sec": "landlord",
+"title": "Crest — Prenup",
+"year": "2008",
+"platform": "youtube",
+"id": "Ov9p5hZOEQQ",
+"director": "Harold Einstein",
+"why": "Жених вручает невесте брачный договор и всё время сияет улыбкой. Неприятные вещи с приторной улыбкой. Золото Cannes Lions.",
+"tags": [
+"улыбка",
+"договор",
+"приторность"
+],
+"start": 0
+}
+];
+const KEY = "agrobank-hybrid-refs-v1";
+const isFile = location.protocol === "file:";
+if (isFile) document.getElementById("fileNote").classList.add("on");
+
+let state = {};
+try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e) { state = {}; }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {} }
+const uid = r => r.platform + ":" + r.id + (r.start ? "@" + r.start : "");
+
+function watchUrl(r){
+  if (r.platform === "youtube") return "https://www.youtube.com/watch?v=" + r.id + (r.start ? "&t=" + r.start + "s" : "");
+  if (r.platform === "vimeo") return "https://vimeo.com/" + r.id + (r.start ? "#t=" + r.start + "s" : "");
+  return r.url;
+}
+function thumb(r){
+  if (r.platform === "youtube") return "https://i.ytimg.com/vi/" + r.id + "/hqdefault.jpg";
+  if (r.platform === "vimeo") return "https://vumbnail.com/" + r.id + ".jpg";
+  return r.still;
+}
+function embed(r){
+  if (r.platform === "youtube") return "https://www.youtube-nocookie.com/embed/" + r.id + "?autoplay=1&rel=0&playsinline=1" + (r.start ? "&start=" + r.start : "");
+  if (r.platform === "vimeo") return "https://player.vimeo.com/video/" + r.id + "?autoplay=1&dnt=1" + (r.start ? "#t=" + r.start + "s" : "");
+  return null;
+}
+const srcLabel = {youtube:"YouTube", vimeo:"Vimeo", ft:"FrameThrower"};
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const main = document.getElementById("main");
+const chipsHtml = SECTIONS.map(s => `<button class="chip" data-f="${s.key}" aria-pressed="false">${esc(s.short)} <span class="n">${REFS.filter(r=>r.sec===s.key).length}</span></button>`).join("");
+document.querySelector('[data-f="marked"]').insertAdjacentHTML("beforebegin", chipsHtml);
+document.getElementById("n-all").textContent = REFS.length;
+
+main.innerHTML = SECTIONS.map(s => `
+  <section class="blk" data-sec="${s.key}">
+    <div class="blk-head"><h2>${esc(s.title)}</h2><p>${esc(s.lede)}</p></div>
+    <div class="grid">${REFS.filter(r=>r.sec===s.key).map(card).join("")}</div>
+  </section>`).join("");
+
+function card(r){
+  const id = uid(r), st = state[id] || {};
+  const meta = [r.year, r.director].filter(Boolean).join(" · ");
+  const playLabel = r.platform === "ft" ? "Открыть" : (isFile && r.platform==="youtube" ? "Смотреть в новой вкладке" : "Смотреть");
+  return `<article class="card${st.m ? " is-marked" : ""}" data-id="${esc(id)}">
+    <div class="media" role="button" tabindex="0" aria-label="${esc(playLabel + ": " + r.title)}">
+      <img loading="lazy" src="${esc(thumb(r))}" alt="" onerror="this.style.opacity=0">
+      <span class="src">${srcLabel[r.platform]}</span>
+      <span class="play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z"/></svg>${playLabel}</span>
+    </div>
+    <div class="body">
+      <h3>${esc(r.title)}</h3>
+      ${meta ? `<div class="meta">${esc(meta)}${r.start ? " · с " + fmt(r.start) : ""}</div>` : (r.start ? `<div class="meta">с ${fmt(r.start)}</div>` : "")}
+      <p class="why">${esc(r.why)}</p>
+      ${r.tags && r.tags.length ? `<div class="tags">${r.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>` : ""}
+    </div>
+    <div class="foot">
+      <button class="mk" type="button" aria-pressed="${st.m ? "true" : "false"}"><svg viewBox="0 0 24 24"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg><span>${st.m ? "Отмечено" : "Отметить"}</span></button>
+      <a class="open" href="${esc(watchUrl(r))}" target="_blank" rel="noopener">Открыть на ${srcLabel[r.platform]} ↗</a>
+    </div>
+    <div class="memo-wrap${st.note ? " has" : ""}"><textarea class="memo" id="memo-${esc(id.replace(/[^a-z0-9]/gi,"_"))}" rows="1" placeholder="Заметка: что берём из этого рефа">${esc(st.note || "")}</textarea></div>
+  </article>`;
+}
+function fmt(s){ return Math.floor(s/60) + ":" + String(s%60).padStart(2,"0"); }
+const byId = Object.fromEntries(REFS.map(r => [uid(r), r]));
+
+function play(el){
+  const c = el.closest(".card"), r = byId[c.dataset.id], src = embed(r);
+  if (!src || (isFile && r.platform === "youtube")) { window.open(watchUrl(r), "_blank", "noopener"); return; }
+  document.querySelectorAll(".media iframe").forEach(f => { const m = f.parentElement; f.remove(); m.querySelectorAll("img,.play,.src").forEach(x=>x.hidden=false); });
+  el.querySelectorAll("img,.play,.src").forEach(x => x.hidden = true);
+  const f = document.createElement("iframe");
+  f.src = src; f.allow = "autoplay; fullscreen; picture-in-picture; encrypted-media"; f.allowFullscreen = true; f.title = r.title;
+  el.appendChild(f);
+}
+main.addEventListener("click", e => {
+  const m = e.target.closest(".media"); if (m && !m.querySelector("iframe")) { play(m); return; }
+  const b = e.target.closest(".mk"); if (b) toggle(b.closest(".card"));
+});
+main.addEventListener("keydown", e => { const m = e.target.closest(".media"); if (m && (e.key==="Enter"||e.key===" ")) { e.preventDefault(); play(m); } });
+main.addEventListener("input", e => {
+  if (!e.target.classList.contains("memo")) return;
+  const id = e.target.closest(".card").dataset.id;
+  state[id] = Object.assign(state[id] || {}, {note: e.target.value}); save();
+});
+function toggle(c){
+  const id = c.dataset.id; const st = state[id] = state[id] || {};
+  st.m = !st.m; if (!st.m && !st.note) delete state[id]; save();
+  c.classList.toggle("is-marked", !!st.m);
+  const b = c.querySelector(".mk"); b.setAttribute("aria-pressed", st.m ? "true":"false"); b.querySelector("span").textContent = st.m ? "Отмечено" : "Отметить";
+  counts(); if (filter === "marked") apply();
+}
+function marked(){ return REFS.filter(r => (state[uid(r)]||{}).m); }
+function counts(){
+  const n = marked().length;
+  document.getElementById("n-marked").textContent = n;
+  document.getElementById("dlBtn").disabled = !n; document.getElementById("copyBtn").disabled = !n;
+}
+
+let filter = "all";
+document.getElementById("bar").addEventListener("click", e => {
+  const c = e.target.closest(".chip"); if (!c) return;
+  filter = c.dataset.f;
+  document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === c ? "true" : "false"));
+  apply();
+  if (filter !== "all" && filter !== "marked") { const s = document.querySelector(`[data-sec="${filter}"]`); s && s.scrollIntoView({behavior:"smooth", block:"start"}); }
+});
+function apply(){
+  let any = false;
+  document.querySelectorAll("section.blk").forEach(s => {
+    const secOk = filter === "all" || filter === "marked" || s.dataset.sec === filter;
+    let vis = 0;
+    s.querySelectorAll(".card").forEach(c => {
+      const ok = secOk && (filter !== "marked" || (state[c.dataset.id]||{}).m);
+      c.hidden = !ok; if (ok) vis++;
+    });
+    s.hidden = !vis; if (vis) any = true;
+  });
+  document.getElementById("empty").classList.toggle("on", !any);
+}
+
+function exportText(){
+  const list = marked(); const d = new Date();
+  let out = "Agrobank Hybrid — отмеченные референсы (" + list.length + ")\n" + d.toLocaleDateString("ru-RU") + "\n";
+  SECTIONS.forEach(s => {
+    const items = list.filter(r => r.sec === s.key); if (!items.length) return;
+    out += "\n== " + s.title + " ==\n";
+    items.forEach((r,i) => {
+      const note = (state[uid(r)]||{}).note;
+      out += "\n" + (i+1) + ". " + r.title + (r.year ? " (" + r.year + ")" : "") + (r.director ? ", реж. " + r.director : "") + "\n   " + watchUrl(r) + "\n   " + r.why + (note ? "\n   Заметка: " + note : "") + "\n";
+    });
+  });
+  return out;
+}
+function toast(t){ const el = document.getElementById("toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toast._t); toast._t = setTimeout(()=>el.classList.remove("on"), 2200); }
+document.getElementById("dlBtn").addEventListener("click", () => {
+  const blob = new Blob([exportText()], {type:"text/plain;charset=utf-8"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = "agrobank-hybrid-refs-" + new Date().toISOString().slice(0,10) + ".txt";
+  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  toast("Файл со списком скачан");
+});
+document.getElementById("copyBtn").addEventListener("click", () => {
+  const t = exportText();
+  (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(()=>toast("Список скопирован"), () => {
+    const ta = document.createElement("textarea"); ta.value = t; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); toast("Список скопирован"); } catch(e) { toast("Не получилось скопировать"); }
+    ta.remove();
+  });
+});
+counts(); apply();
+</script>
+</body>
+</html>
