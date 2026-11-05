@@ -121,7 +121,7 @@ footer{padding-block:48px 40px;color:var(--muted);font-size:13px}
 <div class="toast" id="toast" role="status"></div>
 
 <script>
-const SECTIONS = [{"key": "appear", "short": "Появления", "title": "Вырастает из ниоткуда", "lede": "Двери, шкафы, стиралка, рука в кадре, зум-аут, и он уже тут."}, {"key": "react", "short": "Реакция", "title": "Он всё ещё здесь", "lede": "Герой оглядывается, не верит, страдает. Посторонний человек теперь живёт с тобой."}, {"key": "repeat", "short": "Повторы", "title": "Ещё раз", "lede": "День сурка, рифмы кадров, тот же наезд на телевизор. Второй проход уже без помехи."}, {"key": "absurd", "short": "Абсурд", "title": "Абсурд всерьёз", "lede": "Проблема в виде человека, сыграно без улыбки. Банки, ипотека, чины в костюмах."}, {"key": "bank", "short": "Хира · BANK", "title": "Хира · BANK", "lede": "Холодный «мистер Смит». Государственный чин, давит, без эмоций. Смотреть взгляд, позу, голос и то, как он стоит рядом."}, {"key": "landlord", "short": "Арендодатель", "title": "Арендодатель", "lede": "Дешёвый мелочный мозгокрут с приторной улыбкой. Маленький и жалкий: хочется втащить, но ты от него зависишь."}, {"key": "washer", "short": "Стиралка", "title": "Стиралка ломается", "lede": "Трясётся, прыгает, ходит по полу, прёт пена, что-то внутри барабана. Для третьего, самого невозможного появления арендодателя."}, {"key": "window", "short": "За окном", "title": "За окном", "lede": "Его больше не пускают. Мокнет под дождём за стеклом, стучит, смотрит внутрь, а героям уже всё равно."}, {"key": "signs", "short": "Надписи", "title": "С надписью", "lede": "Бейдж, надпись на спине, табличка, картонка. Как персонаж читается по одному слову на нём."}];
+const SECTIONS = [{"key": "appear", "short": "Появления", "title": "Вырастает из ниоткуда", "lede": "Двери, шкафы, стиралка, рука в кадре, зум-аут, и он уже тут."}, {"key": "react", "short": "Реакция", "title": "Он всё ещё здесь", "lede": "Герой оглядывается, не верит, страдает. Посторонний человек теперь живёт с тобой."}, {"key": "repeat", "short": "Повторы", "title": "Ещё раз", "lede": "День сурка, рифмы кадров, тот же наезд на телевизор. Второй проход уже без помехи."}, {"key": "absurd", "short": "Абсурд", "title": "Абсурд всерьёз", "lede": "Проблема в виде человека, сыграно без улыбки. Банки, ипотека, чины в костюмах."}, {"key": "bank", "short": "Хира · BANK", "title": "Хира · BANK", "lede": "Холодный «мистер Смит». Государственный чин, давит, без эмоций. Смотреть взгляд, позу, голос и то, как он стоит рядом."}, {"key": "landlord", "short": "Арендодатель", "title": "Арендодатель", "lede": "Дешёвый мелочный мозгокрут с приторной улыбкой. Маленький и жалкий: хочется втащить, но ты от него зависишь."}, {"key": "washer", "short": "Стиралка", "title": "Стиралка ломается", "lede": "Трясётся, прыгает, ходит по полу, прёт пена, что-то внутри барабана. Для третьего, самого невозможного появления арендодателя."}, {"key": "window", "short": "За окном", "title": "За окном", "lede": "Его больше не пускают. Мокнет под дождём за стеклом, стучит, смотрит внутрь, а героям уже всё равно."}, {"key": "signs", "short": "Надписи", "title": "С надписью", "lede": "Бейдж, надпись на спине, табличка, картонка. Как персонаж читается по одному слову на нём."}, {"key": "word", "short": "Одно слово", "title": "Одно слово", "lede": "Гэг на одном повторяющемся слове или фразе. Как «Yana», «в счёт аренды» и «Bo'ldi» у нас."}, {"key": "money", "short": "Все требуют деньги", "title": "Все требуют деньги", "lede": "К герою со всех сторон тянут руки и требуют платить. Комиссии, доплаты, вымогатели."}];
 const REFS = [
 {
 "sec": "appear",
@@ -439,8 +439,7 @@ const REFS = [
 "аренда"
 ],
 "sec": "appear",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Direct Line — Tracey on Ice",
@@ -455,8 +454,7 @@ const REFS = [
 "дэдпан"
 ],
 "sec": "appear",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Credit Karma — Heidi Hiderson",
@@ -471,8 +469,7 @@ const REFS = [
 "квартира"
 ],
 "sec": "appear",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Brandt — La colocation",
@@ -487,8 +484,7 @@ const REFS = [
 "Cannes"
 ],
 "sec": "appear",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "CeraVe — Michael CeraVe",
@@ -502,8 +498,7 @@ const REFS = [
 "подглядывание",
 "дэдпан"
 ],
-"sec": "appear",
-"new": 1
+"sec": "appear"
 },
 {
 "title": "Amazon Alexa — Alexa Loses Her Voice",
@@ -516,8 +511,7 @@ const REFS = [
 "квартира"
 ],
 "sec": "appear",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Tango — You Know When You've Been Tango'd",
@@ -531,8 +525,7 @@ const REFS = [
 "классика"
 ],
 "sec": "appear",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Kool-Aid Man — пробивает стену (подборка)",
@@ -545,8 +538,7 @@ const REFS = [
 "платформа"
 ],
 "sec": "appear",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Droopy — Northwest Hounded Police",
@@ -561,8 +553,7 @@ const REFS = [
 "дэдпан"
 ],
 "sec": "appear",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Scrubs — уборщик за спиной Джей Ди",
@@ -575,8 +566,7 @@ const REFS = [
 "ситком"
 ],
 "sec": "appear",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Duck Soup — сцена с зеркалом",
@@ -591,8 +581,7 @@ const REFS = [
 "классика"
 ],
 "sec": "appear",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Top Secret! — гэг с перспективой",
@@ -606,8 +595,7 @@ const REFS = [
 "перспектива"
 ],
 "sec": "appear",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "The Addams Family — Вещь (рука)",
@@ -620,8 +608,7 @@ const REFS = [
 "в кадр"
 ],
 "sec": "appear",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Apple — Privacy on iPhone: Tracked",
@@ -878,8 +865,7 @@ const REFS = [
 "страдание"
 ],
 "sec": "react",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "sec": "react",
@@ -1741,8 +1727,7 @@ const REFS = [
 "пауза"
 ],
 "sec": "bank",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "sec": "bank",
@@ -2322,8 +2307,7 @@ const REFS = [
 "мастер"
 ],
 "sec": "washer",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Calgon — lave-linge en panne",
@@ -2336,8 +2320,7 @@ const REFS = [
 "семья"
 ],
 "sec": "washer",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Calgon 3 en 1 — машинка заблокирована накипью",
@@ -2350,8 +2333,7 @@ const REFS = [
 "дверца"
 ],
 "sec": "washer",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Calgon — реклама 2010",
@@ -2365,8 +2347,7 @@ const REFS = [
 "пародия"
 ],
 "sec": "washer",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Calgon — жёсткая вода",
@@ -2378,8 +2359,7 @@ const REFS = [
 "внутри барабана"
 ],
 "sec": "washer",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Calgon — Limescale",
@@ -2392,8 +2372,7 @@ const REFS = [
 "классика"
 ],
 "sec": "washer",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Maytag — одинокий мастер по ремонту",
@@ -2407,8 +2386,7 @@ const REFS = [
 "классика"
 ],
 "sec": "washer",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Maytag Repairman (Jesse White)",
@@ -2421,8 +2399,7 @@ const REFS = [
 "пауза"
 ],
 "sec": "washer",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "Samdex — Pierre",
@@ -2438,8 +2415,7 @@ const REFS = [
 "Cannes"
 ],
 "sec": "washer",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "British Gas — Home Renovations",
@@ -2455,8 +2431,7 @@ const REFS = [
 "старая техника"
 ],
 "sec": "washer",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "The Home Depot — жёсткая вода",
@@ -2472,8 +2447,7 @@ const REFS = [
 "поломка"
 ],
 "sec": "washer",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "hipages — Change The Way You Tradie",
@@ -2490,8 +2464,7 @@ const REFS = [
 "серия"
 ],
 "sec": "washer",
-"start": 0,
-"new": 1
+"start": 0
 },
 {
 "title": "WhatsApp — Maintain Your Mystery",
@@ -2931,6 +2904,417 @@ const REFS = [
 ],
 "sec": "signs",
 "start": 0
+},
+{
+"title": "Budweiser — Whassup",
+"year": "1999",
+"platform": "youtube",
+"id": "OWgXXyL3vEI",
+"director": "Charles Stone III",
+"why": "Весь ролик стоит на одном слове, его повторяют всё громче и смешнее. Эталон: одно слово стало платформой кампании, как «Yana» может стать у нас.",
+"tags": [
+"одно слово",
+"платформа",
+"классика"
+],
+"sec": "word",
+"start": 0,
+"new": 1
+},
+{
+"title": "Bud Light — Dilly Dilly (вся сага)",
+"year": "2017",
+"platform": "youtube",
+"id": "7Nt1HrgjveI",
+"director": "Jim Jenkins",
+"why": "Бессмысленное «Dilly Dilly» повторяется в каждом ролике серии и становится паролем. Как фраза держит кампанию из многих роликов.",
+"tags": [
+"фраза",
+"серия",
+"кампания"
+],
+"sec": "word",
+"start": 0,
+"new": 1
+},
+{
+"title": "Budweiser — Frogs",
+"platform": "ft",
+"id": "AD-6794",
+"still": "https://frames.shotspot.pro/ads/AD-6794/f3bbf15e86/stills/022-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-6794",
+"director": "Gore Verbinski",
+"why": "Три лягушки по слогам квакают название бренда, снова и снова. Повтор как ритм ролика.",
+"tags": [
+"повтор",
+"ритм",
+"бренд"
+],
+"sec": "word",
+"start": 0,
+"new": 1
+},
+{
+"title": "Gala Bingo — The Answer Is Bingo",
+"year": "2023",
+"platform": "ft",
+"id": "AD-47961",
+"still": "https://frames.shotspot.pro/ads/AD-47961/3d4328073a/stills/055-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-47961",
+"director": "Noah Harris",
+"why": "Ведущая спрашивает что угодно, а участники на всё отвечают одним словом. Так может работать «в счёт аренды»: на любое действие один и тот же ответ.",
+"tags": [
+"одно слово",
+"на всё один ответ"
+],
+"sec": "word",
+"start": 0,
+"new": 1
+},
+{
+"title": "Pepsi — Buddy Burger",
+"year": "1996",
+"platform": "ft",
+"id": "AD-0513",
+"still": "https://frames.shotspot.pro/ads/AD-0513/1336795e07/stills/012-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-0513",
+"director": "Joe Pytka",
+"why": "Сломанный интерком раз за разом повторяет одно и то же, а герой закипает. Повтор, который бесит, и реакция на него.",
+"tags": [
+"повтор",
+"бесит",
+"реакция"
+],
+"sec": "word",
+"start": 0,
+"new": 1
+},
+{
+"title": "The Observer — Smart Arse",
+"year": "2003",
+"platform": "ft",
+"id": "AD-9793",
+"still": "https://frames.shotspot.pro/ads/AD-9793/35ea74da3e/stills/019-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-9793",
+"director": "Owen Harris",
+"why": "Каждый новый покупатель коверкает одно и то же слово, раздражение продавца растёт. Эскалация на одном слове.",
+"tags": [
+"одно слово",
+"эскалация"
+],
+"sec": "word",
+"start": 0,
+"new": 1
+},
+{
+"title": "GEICO — Hump Day",
+"year": "2013",
+"platform": "youtube",
+"id": "8s3C1him6Lk",
+"why": "Верблюд ходит по офису и всех достаёт одним вопросом. Навязчивый персонаж с одной фразой, которую все уже ненавидят.",
+"tags": [
+"навязчивый",
+"одна фраза"
+],
+"sec": "word",
+"start": 0,
+"new": 1
+},
+{
+"title": "В поисках Немо — чайки «Мое!»",
+"year": "2003",
+"platform": "youtube",
+"id": "x6XT7FDSdn8",
+"why": "Чайки умеют говорить только одно слово, и в этом вся их жадность. Готовый образ мелочного арендодателя: одно слово вместо характера.",
+"tags": [
+"одно слово",
+"жадность",
+"арендодатель"
+],
+"sec": "word",
+"start": 0,
+"new": 1
+},
+{
+"title": "Big Bang Theory — «тук-тук-тук, Пенни»",
+"platform": "youtube",
+"id": "0osNbkyHTF8",
+"why": "Шелдон стучит по три раза и трижды зовёт по имени. Ритуал «стук плюс слово» у двери можно сделать фирменным выходом арендодателя.",
+"tags": [
+"ритуал",
+"у двери",
+"повтор"
+],
+"sec": "word",
+"start": 0,
+"new": 1
+},
+{
+"title": "Big Bang Theory — все сцены у двери (2 сезон)",
+"platform": "youtube",
+"id": "2VPgCfwpTOQ",
+"why": "Подборка всех повторов ритуала. Видно, как один и тот же гэг каждый раз немного меняется.",
+"tags": [
+"повтор",
+"вариации"
+],
+"sec": "word",
+"start": 0,
+"new": 1
+},
+{
+"title": "Monty Python — Spam",
+"year": "1970",
+"platform": "youtube",
+"id": "A2WKDhqwF44",
+"why": "В меню всё со спамом, и слово повторяют до абсурда, пока оно не превращается в песню. Как повтор доводят до предела.",
+"tags": [
+"абсурд",
+"повтор до предела",
+"классика"
+],
+"sec": "word",
+"start": 0,
+"new": 1
+},
+{
+"title": "Кин-дза-дза! — «Ку»",
+"year": "1986",
+"platform": "youtube",
+"id": "CmgiHDwvMVs",
+"director": "Георгий Данелия",
+"why": "Всё общение на одном слове «ку». Местному зрителю понятно сразу, можно цитировать.",
+"tags": [
+"одно слово",
+"классика",
+"местное"
+],
+"sec": "word",
+"start": 0,
+"new": 1
+},
+{
+"title": "Кин-дза-дза! — «Два раза ку»",
+"year": "1986",
+"platform": "youtube",
+"id": "2ZqNtkh5mAg",
+"director": "Георгий Данелия",
+"why": "Ритуал с одним словом и строгим количеством повторов. Подходит для «Yana»: сколько раз и с какой интонацией.",
+"tags": [
+"ритуал",
+"количество повторов"
+],
+"sec": "word",
+"start": 0,
+"new": 1
+},
+{
+"title": "Grubhub — The Gold Days of Grubhub",
+"year": "2026",
+"platform": "ft",
+"id": "AD-54415",
+"still": "https://frames.shotspot.pro/ads/AD-54415/951f8d5c0a/stills/014-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-54415",
+"director": "Zach Tavel",
+"why": "К герою со всех сторон лезут люди, которым нужна его доля. Ровно «все от тебя чего-то хотят», сыграно как абсурдная осада.",
+"tags": [
+"все хотят",
+"осада",
+"абсурд"
+],
+"sec": "money",
+"start": 0,
+"new": 1
+},
+{
+"title": "AmeriSave — You Can Buy",
+"year": "2022",
+"platform": "ft",
+"id": "AD-69301",
+"still": "https://frames.shotspot.pro/ads/AD-69301/a0fdd16fdb/stills/011-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-69301",
+"director": "Benji Weinstein",
+"why": "Ипотека. У героя появился бассейн, и к нему тут же набились новые «друзья». Наша категория и реакция героя.",
+"tags": [
+"ипотека",
+"все лезут",
+"реакция"
+],
+"sec": "money",
+"start": 0,
+"new": 1
+},
+{
+"title": "Axos — Bank Robbers",
+"year": "2019",
+"platform": "ft",
+"id": "AD-49825",
+"still": "https://frames.shotspot.pro/ads/AD-49825/45cbed5dad/stills/022-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-49825",
+"director": "Craig Brownrigg",
+"why": "Сотрудники обычного банка в масках грабителей забирают у клиентов деньги комиссиями. Старый банк как вымогатель, прямо наш BANK.",
+"tags": [
+"банк",
+"комиссии",
+"вымогатель"
+],
+"sec": "money",
+"start": 0,
+"new": 1
+},
+{
+"title": "Square One — New Shoes",
+"year": "2025",
+"platform": "ft",
+"id": "AD-65945",
+"still": "https://frames.shotspot.pro/ads/AD-65945/74cdc9d62a/stills/005-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-65945",
+"director": "Sam Kristofski",
+"why": "Мама требует со взрослого сына деньги за проживание. Короткая сцена «плати за жильё» в 15 секундах.",
+"tags": [
+"плата за жильё",
+"15 сек"
+],
+"sec": "money",
+"start": 0,
+"new": 1
+},
+{
+"title": "Afterpay — Where You Wouldn't Believe",
+"year": "2023",
+"platform": "ft",
+"id": "AD-40556",
+"still": "https://frames.shotspot.pro/ads/AD-40556/4452f307ff/stills/017-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-40556",
+"director": "Vedran Rupic",
+"why": "Тролль на мосту требует плату за проход с семьи в дороге. Сказочный сборщик дани в бытовом контексте.",
+"tags": [
+"плата за проход",
+"семья",
+"абсурд"
+],
+"sec": "money",
+"start": 0,
+"new": 1
+},
+{
+"title": "Ramp — Chasing Receipts",
+"year": "2025",
+"platform": "ft",
+"id": "AD-46413",
+"still": "https://frames.shotspot.pro/ads/AD-46413/78e1bacc0e/stills/016-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-46413",
+"director": "Jara Moravec",
+"why": "Сотрудников повсюду преследуют с требованием отчётов. Механика «за тобой ходят и требуют», которая исчезает после решения.",
+"tags": [
+"преследуют",
+"требуют",
+"финансы"
+],
+"sec": "money",
+"start": 0,
+"new": 1
+},
+{
+"title": "Green Flag — Common Sense",
+"year": "2018",
+"platform": "ft",
+"id": "AD-33152",
+"still": "https://frames.shotspot.pro/ads/AD-33152/d187439ff1/stills/008-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-33152",
+"why": "Высмеивают скрытые доплаты конкурентов: за каждое действие отдельная плата. Логика «в счёт аренды» на страховке.",
+"tags": [
+"доплаты",
+"за каждое действие"
+],
+"sec": "money",
+"start": 0,
+"new": 1
+},
+{
+"title": "HSBC — No Beeping Fees",
+"year": "2023",
+"platform": "ft",
+"id": "AD-49725",
+"still": "https://frames.shotspot.pro/ads/AD-49725/1e49e673b2/stills/013-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-49725",
+"why": "Ричард Айоади путешествует, а скрытые комиссии озвучены как назойливое пиканье. Как звуком показать, что с тебя снова берут деньги.",
+"tags": [
+"комиссии",
+"звук",
+"банк"
+],
+"sec": "money",
+"start": 0,
+"new": 1
+},
+{
+"title": "Radiotjänst — Public Pool",
+"year": "2009",
+"platform": "ft",
+"id": "AD-11401",
+"still": "https://frames.shotspot.pro/ads/AD-11401/023996ddb8/stills/009-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-11401",
+"why": "Наоборот: толпа в бассейне благодарит героя за то, что он заплатил. Перевёрнутый вариант «все от тебя чего-то хотят», Eurobest Gold.",
+"tags": [
+"наоборот",
+"толпа",
+"Eurobest"
+],
+"sec": "money",
+"start": 0,
+"new": 1
+},
+{
+"title": "118 118 — Money",
+"year": "2026",
+"platform": "ft",
+"id": "AD-65032",
+"still": "https://frames.shotspot.pro/ads/AD-65032/36fd10d956/stills/023-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-65032",
+"director": "Olly Williams",
+"why": "У героя одна денежная проблема за другой, абсурдные препятствия по цепочке. Ритм серии денежных неприятностей.",
+"tags": [
+"цепочка",
+"деньги"
+],
+"sec": "money",
+"start": 0,
+"new": 1
+},
+{
+"title": "Dollar Shave Club — Mafia: руки у лица",
+"year": "2022",
+"platform": "ft",
+"id": "AD-21532",
+"start": 46,
+"still": "https://frames.shotspot.pro/ads/AD-21532/5521858c6a/stills/019-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-21532&t=46",
+"why": "Много рук в золотых перстнях тянутся к лицу героя. Кадр для мнемоники «рука»: в финале все руки сразу.",
+"tags": [
+"руки",
+"у лица",
+"кадр"
+],
+"sec": "money",
+"new": 1
+},
+{
+"title": "Renault — All Lover5: руки со всех сторон",
+"year": "2026",
+"platform": "ft",
+"id": "AD-39306",
+"start": 53,
+"still": "https://frames.shotspot.pro/ads/AD-39306/64d128d84a/stills/036-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-39306&t=52.6",
+"why": "Герой окружён руками, которые тянутся к нему, он растерян. Композиция «все тянут руки» одним планом.",
+"tags": [
+"руки",
+"окружён",
+"композиция"
+],
+"sec": "money",
+"new": 1
 }
 ];
 const KEY = "agrobank-hybrid-refs-v1";
