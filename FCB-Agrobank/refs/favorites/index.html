@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Фавориты Agrobank Hybrid</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: sticky toolbar, then four blocks (по механикам брифа), каждый — сетка карточек 16:9 */
+:root{
+  --paper:#f5f6f2; --card:#ffffff; --ink:#15201a; --muted:#5b6a61; --line:#dce2db;
+  --accent:#0e7346; --accent-ink:#ffffff; --mark:#e3a018; --mark-soft:#fbf0d6;
+  --display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --body:"Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#101511; --card:#18201a; --ink:#e7ede7; --muted:#97a69c; --line:#2a352d;
+  --accent:#3fb37a; --accent-ink:#06140c; --mark:#f0b237; --mark-soft:#3a2f14; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --paper:#101511; --card:#18201a; --ink:#e7ede7; --muted:#97a69c; --line:#2a352d;
+  --accent:#3fb37a; --accent-ink:#06140c; --mark:#f0b237; --mark-soft:#3a2f14; color-scheme:dark; }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 var(--body);
+  padding-left:max(16px, env(safe-area-inset-left,0px));padding-right:max(16px, env(safe-area-inset-right,0px));}
+.wrap{max-width:1360px;margin:0 auto}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header.top{padding-block:40px 20px;display:grid;gap:14px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,4.4vw,52px);line-height:1.05;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.lede{max-width:62ch;color:var(--muted);margin:0}
+.note-file{display:none;max-width:72ch;background:var(--mark-soft);border:1px solid var(--mark);border-radius:10px;padding:10px 14px;font-size:14px}
+.note-file.on{display:block}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);
+  border-bottom:1px solid var(--line);padding-block:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 14px;cursor:pointer;font-size:14px;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.chip .n{color:var(--muted);font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip[aria-pressed="true"] .n{color:inherit;opacity:.7}
+.spacer{flex:1}
+.chip.marked[aria-pressed="true"]{background:var(--mark);border-color:var(--mark);color:#1d1503}
+.act{border:0;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:600;font-size:14px}
+.act.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.act:disabled{opacity:.45;cursor:default}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
+.toast.on{opacity:1}
+
+section.blk{padding-block:36px 8px;scroll-margin-top:80px}
+.blk-head{display:grid;gap:6px;margin-bottom:18px;max-width:72ch}
+.blk-head h2{font-family:var(--display);font-weight:500;font-size:clamp(20px,2.4vw,28px);margin:0;text-wrap:balance}
+.blk-head p{margin:0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,310px),1fr));gap:18px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-width:0;transition:border-color .15s, box-shadow .15s}
+.card.is-marked{border-color:var(--mark);box-shadow:0 0 0 2px var(--mark) inset}
+.media{position:relative;aspect-ratio:16/9;max-width:100%;background:#000;cursor:pointer;overflow:hidden}
+.media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.media:hover img{transform:scale(1.03)}
+.media iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.play{position:absolute;inset:auto auto 12px 12px;background:rgba(0,0,0,.72);color:#fff;border-radius:999px;padding:6px 12px 6px 10px;font-size:13px;display:flex;gap:6px;align-items:center;pointer-events:none}
+.play svg{width:14px;height:14px;fill:#fff}
+.newb{position:absolute;top:10px;left:10px;background:var(--mark);color:#1d1503;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;padding:3px 7px;pointer-events:none}
+.card.is-new{border-color:var(--mark)}
+.src{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;padding:3px 7px;pointer-events:none}
+.body{padding:14px 16px 12px;display:grid;gap:8px;flex:1;align-content:start}
+.card h3{margin:0;font-size:16px;font-weight:600;line-height:1.3}
+.meta{font-size:13px;color:var(--muted)}
+.why{margin:0;font-size:14px}
+.dnote{margin:0;font-size:14px;background:var(--mark-soft);border-left:3px solid var(--mark);padding:6px 10px;border-radius:0 6px 6px 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
+.foot{display:flex;gap:8px;align-items:center;padding:0 16px 14px;flex-wrap:wrap}
+.mk{border:1px solid var(--line);background:transparent;border-radius:999px;padding:6px 12px;cursor:pointer;font-size:13px;display:inline-flex;gap:6px;align-items:center}
+.mk svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2}
+.card.is-marked .mk{background:var(--mark);border-color:var(--mark);color:#1d1503}
+.card.is-marked .mk svg{fill:currentColor}
+.open{font-size:13px;color:var(--muted);text-decoration:none;margin-left:auto}
+.open:hover{color:var(--ink);text-decoration:underline}
+.memo{width:100%;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:7px 10px;font:13px/1.4 var(--body);color:var(--ink);resize:vertical;min-height:34px}
+.memo-wrap{padding:0 16px 14px;display:none}
+.card.is-marked .memo-wrap, .memo-wrap.has{display:block}
+
+.empty{display:none;padding:60px 0;color:var(--muted);text-align:center}
+.empty.on{display:block}
+footer{padding-block:48px 40px;color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+@media (max-width:520px){ .bar .act{padding:7px 12px} header.top{padding-block:24px 14px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Agrobank · FCB · ипотека · выбор режиссёра</div>
+    <h1>Фавориты</h1>
+    <p class="lede">29 рефов, которые выбрал Дамир, разложены по сценам двух роликов. Под каждым рефом написано, что из него брать, и заметка Дамира. Полная библиотека: <a href="../">treatment.mubinov.uz/FCB-Agrobank/refs</a>. Скачать всё разом: <a href="download.sh">download.sh</a>, список ссылок: <a href="links.txt">links.txt</a>.</p>
+    <p class="note-file" id="fileNote">Страница открыта как файл, а YouTube внутри файла не играет. Ролики с YouTube откроются в новой вкладке. Чтобы всё играло прямо здесь, открой страницу по ссылке с сайта.</p>
+  </header>
+
+  <nav class="bar" id="bar" aria-label="Разделы">
+    <button class="chip" data-f="all" aria-pressed="true">Все <span class="n" id="n-all"></span></button>
+    <!--CHIPS-->
+    <button class="chip marked" data-f="marked" aria-pressed="false">★ Отмеченные <span class="n" id="n-marked">0</span></button>
+    <span class="spacer"></span>
+    <button class="act ghost" id="copyBtn" type="button">Копировать</button>
+    <button class="act" id="dlBtn" type="button">Скачать отмеченные</button>
+  </nav>
+
+  <main id="main"></main>
+  <p class="empty" id="empty">Пока ничего не отмечено. Нажми ★ на карточке, и она появится здесь.</p>
+  <footer>Источники: YouTube, Vimeo, FrameThrower. Карточки FrameThrower открываются на их сайте. Собрано для режиссёрского тритмента Дамира Мубинова.</footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const SECTIONS = [{"key": "s_appear", "short": "Появления", "title": "Как он появляется", "lede": "Из предметов, из-за мебели, руки в кадре. Ролик 1 (завтрак, машина, футбол) и ролик 2 (штора, коридор, стиралка)."}, {"key": "s_bank", "short": "BANK", "title": "Характер BANK", "lede": "Холодный чин: не повышает голос, лицо не меняется, чужая беда его не трогает."}, {"key": "s_react", "short": "Реакция героя", "title": "Реакция героя", "lede": "Терпит, устаёт, раздражается. Посторонний живёт с тобой, и все от тебя чего-то хотят."}, {"key": "s_landlord", "short": "Арендодатель", "title": "Характер арендодателя", "lede": "Мелочный, с натянутой улыбкой, считает каждую копейку."}, {"key": "s_washer", "short": "Стиралка", "title": "Стиралка ломается", "lede": "Третье, самое невозможное появление арендодателя."}, {"key": "s_window", "short": "За окном", "title": "Банк и окно", "lede": "Он мокнет за стеклом, а герою уже всё равно."}, {"key": "s_repeat", "short": "Финал-повтор", "title": "Финал: всё повторяется, но без него", "lede": "Тот же кадр, тот же наезд, та же музыка."}, {"key": "s_parked", "short": "Отложено", "title": "Классно, но не в тритмент", "lede": "Отмечено с пометкой «не подходит». Держим для вдохновения."}];
+const REFS = [
+{
+"title": "Boots — You're never too far from a Pharmacist",
+"year": "2025",
+"platform": "youtube",
+"id": "Kfk1iznqh2E",
+"start": 0,
+"why": "Фармацевты возникают в самых неожиданных бытовых местах прямо рядом с героем. Свежая серия внезапных появлений.",
+"tags": [
+"появление",
+"быт",
+"неожиданное место"
+],
+"sec": "s_appear",
+"note": "шикарное появление"
+},
+{
+"sec": "s_appear",
+"title": "TSB — Savings That Sneak Up On You",
+"year": "2022",
+"platform": "youtube",
+"id": "oNVhH_okOh4",
+"director": "Jeff Low",
+"why": "Банк. Лицо персонажа вылезает из предметов и картин, люди не сразу замечают. Ровно наша механика «вырастает из ниоткуда».",
+"tags": [
+"появление",
+"банк",
+"из предмета"
+],
+"start": 0,
+"note": "прикольно, что задействована только голова"
+},
+{
+"title": "ResMed — Say Goodbye to Your Sleep Monster",
+"year": "2025",
+"platform": "youtube",
+"id": "GXEYgFnIyYU",
+"why": "Проблема в виде монстра живёт с героем и портит каждую бытовую сцену. Та же драматургия «проблема поселилась у тебя».",
+"tags": [
+"чужой дома",
+"персонификация",
+"быт"
+],
+"sec": "s_appear",
+"start": 0,
+"note": "возле штанги появление рук"
+},
+{
+"title": "Apartments.com — Out of the Woodwork",
+"year": "2025",
+"platform": "youtube",
+"id": "CURyErTqX2M",
+"why": "Арендаторы буквально вылезают из стен, мебели и из-за кухонной стойки за спиной Голдблюма, а он спокойно продолжает говорить. Аренда и квартира, как у нас.",
+"tags": [
+"из мебели",
+"из стены",
+"аренда"
+],
+"sec": "s_appear",
+"start": 0
+},
+{
+"title": "Credit Karma — Heidi Hiderson",
+"year": "2022",
+"platform": "vimeo",
+"id": "722068166",
+"director": "Fiona McGee",
+"why": "Режиссёр та же, что у Boots. Героиня прячется по всей квартире: в шкафах, за мебелью, в нишах. Готовая карта укрытий в квартире и того, как камера их раскрывает.",
+"tags": [
+"шкаф",
+"прятки",
+"квартира"
+],
+"sec": "s_appear",
+"start": 0,
+"note": "с зеркалом прикольно"
+},
+{
+"title": "The Adjustment Bureau — Томпсон и Дэвид",
+"year": "2011",
+"platform": "youtube",
+"id": "Rf0MlecmMy0",
+"director": "George Nolfi",
+"why": "Теренс Стамп не повышает голос, говорит как с ребёнком и давит одним спокойствием. Ощущение, что спорить бесполезно.",
+"tags": [
+"голос",
+"спокойствие"
+],
+"sec": "s_bank",
+"start": 0,
+"note": "реф по актерке"
+},
+{
+"sec": "s_bank",
+"title": "Little Caesars — Serious Voice",
+"platform": "ft",
+"id": "AD-20917",
+"still": "https://frames.shotspot.pro/ads/AD-20917/226e115a9b/stills/003-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-20917",
+"director": "Harold Einstein",
+"why": "Мужчина в костюме говорит предельно серьёзным голосом и ни разу не меняется в лице. Подача голоса и неподвижное лицо для BANK.",
+"tags": [
+"голос",
+"лицо",
+"костюм"
+],
+"start": 0,
+"note": "классная актера"
+},
+{
+"sec": "s_bank",
+"title": "Lemonade — Stuck / Hold / Jargon",
+"year": "2023",
+"platform": "vimeo",
+"id": "846416135",
+"director": "Beatrice Pegard",
+"why": "Пол под клиентом проваливается, а страховой агент спокойно потягивает напиток. Холодное равнодушие к чужой беде, финансовая категория.",
+"tags": [
+"равнодушие",
+"финансы",
+"абсурд"
+],
+"start": 0,
+"note": "ну класс"
+},
+{
+"title": "The Cable Guy — Стивен слушает автоответчик",
+"year": "1996",
+"platform": "youtube",
+"id": "o9qrVvxq4nM",
+"why": "Чистая реакция: лицо от недоумения переходит в отчаяние с каждым сообщением навязчивого «друга». Та же нарастающая усталость нужна нашему герою.",
+"tags": [
+"реакция",
+"усталость",
+"эскалация"
+],
+"sec": "s_react",
+"start": 0,
+"note": "по актёрке прикольно"
+},
+{
+"title": "Verizon — Cable Guy (Jim Carrey, Super Bowl)",
+"year": "2022",
+"platform": "youtube",
+"id": "PxA510BGi3I",
+"why": "Назойливый гость хозяйничает в доме Бродерика, тот терпит с вымученной улыбкой. Дуэт «наглый гость и вежливая жертва».",
+"tags": [
+"чужой дома",
+"навязчивый гость",
+"терпение"
+],
+"sec": "s_react",
+"start": 0,
+"note": "актёрка"
+},
+{
+"sec": "s_react",
+"title": "Rocket Mortgage — Scream",
+"year": "2023",
+"platform": "ft",
+"id": "AD-59956",
+"still": "https://frames.shotspot.pro/ads/AD-59956/9382ddfc3e/stills/024-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-59956",
+"director": "MAMA",
+"why": "Ипотека. Хозяева находят у себя дома то, чего там быть не должно, и кричат. Реакция крупно, находка в доме.",
+"tags": [
+"ипотека",
+"дом",
+"реакция"
+],
+"start": 0,
+"note": "топ"
+},
+{
+"sec": "s_react",
+"title": "Set for Life — Housemate",
+"year": "2026",
+"platform": "ft",
+"id": "AD-45468",
+"still": "https://frames.shotspot.pro/ads/AD-45468/dd7fead668/stills/009-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-45468",
+"director": "Adam Gunser",
+"why": "Героиня сдаёт комнату странному соседу. Посторонний, который теперь живёт с тобой, и её терпение.",
+"tags": [
+"сосед",
+"дом",
+"терпение"
+],
+"start": 0,
+"note": "реакция"
+},
+{
+"title": "Apple — Privacy on iPhone: Tracked",
+"year": "2021",
+"platform": "youtube",
+"id": "fjf7c-O5GyQ",
+"why": "Главный реф: чужие люди с вежливыми вопросами ходят за героем повсюду, в кафе, в такси, домой, а он всё больше устаёт и злится. Так же должен работать BANK.",
+"tags": [
+"преследование",
+"оглядывается",
+"усталость"
+],
+"sec": "s_react",
+"start": 0
+},
+{
+"title": "Ramp — Chasing Receipts",
+"year": "2025",
+"platform": "youtube",
+"id": "gU2uc_wZ7UU",
+"director": "Jara Moravec",
+"why": "Сотрудников повсюду преследуют с требованием отчётов. Механика «за тобой ходят и требуют», которая исчезает после решения.",
+"tags": [
+"преследуют",
+"требуют",
+"финансы"
+],
+"sec": "s_react",
+"start": 0,
+"note": "эмоции раздражения"
+},
+{
+"title": "Grubhub — The Gold Days of Grubhub",
+"year": "2026",
+"platform": "vimeo",
+"id": "1192672216",
+"director": "Zach Tavel",
+"why": "К герою со всех сторон лезут люди, которым нужна его доля. Ровно «все от тебя чего-то хотят», сыграно как абсурдная осада.",
+"tags": [
+"все хотят",
+"осада",
+"абсурд"
+],
+"sec": "s_react",
+"start": 0,
+"note": "прикольно"
+},
+{
+"title": "GEICO — Hump Day",
+"year": "2013",
+"platform": "youtube",
+"id": "8s3C1him6Lk",
+"why": "Верблюд ходит по офису и всех достаёт одним вопросом. Навязчивый персонаж с одной фразой, которую все уже ненавидят.",
+"tags": [
+"навязчивый",
+"одна фраза"
+],
+"sec": "s_react",
+"start": 0
+},
+{
+"title": "Harry Potter — наказание у Амбридж",
+"year": "2007",
+"platform": "youtube",
+"id": "-_hUC7_SGIc",
+"director": "David Yates",
+"why": "Приторный голосок, кукольная улыбка, наказание «по правилам». И то, как аккуратно и с удовольствием она что-то записывает.",
+"tags": [
+"улыбка",
+"правила",
+"записывает"
+],
+"sec": "s_landlord",
+"start": 0,
+"note": "возможно натянутая улыбка сработает лучше"
+},
+{
+"sec": "s_landlord",
+"title": "Aviva — Payout",
+"year": "2019",
+"platform": "ft",
+"id": "AD-21113",
+"still": "https://frames.shotspot.pro/ads/AD-21113/8bcd9cb38e/stills/012-m.webp",
+"url": "https://framethrower.ai/commercials?spot=AD-21113",
+"why": "Дотошный агент выплачивает страховку по пенни, отсчитывая каждую монетку. Мелочность и счёт до копейки: ровно наш блокнот «в счёт аренды».",
+"tags": [
+"мелочность",
+"счёт",
+"деньги"
+],
+"start": 0,
+"note": "может и реф"
+},
+{
+"title": "ClearScore — Washing Machine",
+"year": "2024",
+"platform": "youtube",
+"id": "Hq6k331hkus",
+"director": "The Arnells",
+"why": "Финансовый ролик: стиралка ломается с любимой игрушкой собаки внутри, и это внезапный расход. Ближе всего к нашей сцене по смыслу и категории.",
+"tags": [
+"поломка",
+"финансы",
+"быт"
+],
+"sec": "s_washer",
+"start": 0
+},
+{
+"title": "123.ie — No Drama Llama",
+"year": "2026",
+"platform": "youtube",
+"id": "g05__87WTss",
+"why": "Страховка. Стиралка на кухне выплёвывает белую пену на пол. Аккуратный кадр перелива пены без трэша.",
+"tags": [
+"пена",
+"кухня",
+"страховка"
+],
+"sec": "s_washer",
+"start": 0
+},
+{
+"title": "Washing machine eats a brick",
+"platform": "youtube",
+"id": "GY0K-f-I2vI",
+"why": "Классика: машинка с кирпичом внутри разносит себя на отжиме. Как именно трясётся и разваливается корпус. Реф для трюка и VFX.",
+"tags": [
+"разносит",
+"отжим",
+"VFX"
+],
+"sec": "s_washer",
+"start": 0
+},
+{
+"title": "WhatsApp — Maintain Your Mystery",
+"year": "2025",
+"platform": "vimeo",
+"id": "1008864390",
+"why": "Друг стучит в окно кафе, а герой спокойно его не замечает. Ровно наш гэг в банке: герой видит Хиру за стеклом и уже не реагирует.",
+"tags": [
+"за стеклом",
+"игнор",
+"спокойствие"
+],
+"sec": "s_window",
+"start": 0
+},
+{
+"title": "Tile — Lost Panda",
+"year": "2018",
+"platform": "vimeo",
+"id": "238320516",
+"why": "Кадр через мокрое стекло: человек снаружи ночью смотрит в кафе. Фактура дождя на стекле для нашего гибридного кадра.",
+"tags": [
+"мокрое стекло",
+"фактура",
+"ночь"
+],
+"sec": "s_window",
+"start": 81,
+"note": "1:21",
+"start_hint": "1:21"
+},
+{
+"title": "Cadbury — Dairy Milk &More Mum",
+"year": "2024",
+"platform": "vimeo",
+"id": "952271066",
+"director": "Tom Speers",
+"why": "Девочка заперта снаружи под дождём и зовёт маму, а та внутри спокойно ест шоколад. Комедия на контрасте «мокнет снаружи / уютно внутри».",
+"tags": [
+"под дождём",
+"не пускают",
+"контраст"
+],
+"sec": "s_window",
+"start": 0
+},
+{
+"title": "Shaun of the Dead — два похода в магазин (сравнение)",
+"year": "2004",
+"platform": "youtube",
+"id": "yTw3En6pbFg",
+"start": 0,
+"why": "Один и тот же проход одним кадром снят дважды, меняется только фон. Главный реф визуальной рифмы для двух проходов нашего дня.",
+"tags": [
+"рифма",
+"идентичный кадр",
+"Эдгар Райт"
+],
+"sec": "s_repeat"
+},
+{
+"title": "Every Frame a Painting — Edgar Wright: How to Do Visual Comedy",
+"year": "2014",
+"platform": "youtube",
+"id": "3FOzD4Sfgag",
+"start": 0,
+"why": "Разбор: шутку делают кадр, монтаж и повтор. Брать принцип «шутка в кадре, не в реплике» и повтор как подготовку и отыгрыш.",
+"tags": [
+"видеоэссе",
+"визуальная комедия"
+],
+"sec": "s_repeat"
+},
+{
+"title": "Riyadh Season — Usyk vs Fury 2 promo",
+"year": "2025",
+"platform": "youtube",
+"id": "8z_dZH2jD0s",
+"why": "Соперник мерещится герою дома, за едой, во сне, тот вздрагивает и не верит глазам. Монтаж появлений и реакция.",
+"tags": [
+"появляется везде",
+"шок",
+"оглядывается"
+],
+"sec": "s_parked",
+"start": 0,
+"note": "какой шикарный реф, но не подходит"
+},
+{
+"title": "Tide — It's a Tide Ad (David Harbour, Super Bowl LII)",
+"year": "2018",
+"platform": "youtube",
+"id": "X5GPqfx9olA",
+"start": 0,
+"why": "Один и тот же персонаж раз за разом врывается в узнаваемые ситуации. Так можно строить нашего персонажа, который есть в каждой сцене.",
+"tags": [
+"повтор",
+"running gag",
+"вторжение"
+],
+"sec": "s_parked",
+"note": "шикарно но не релевант"
+},
+{
+"title": "Rema 1000 — Smart House",
+"year": "2018",
+"platform": "vimeo",
+"id": "286892303",
+"director": "Andreas Riiser",
+"why": "Умный дом подводит хозяина и не пускает его внутрь. Скандинавский дэдпан, Epica Gold.",
+"tags": [
+"не пускают",
+"дверь",
+"дэдпан"
+],
+"sec": "s_parked",
+"start": 0,
+"note": "классика хоть и не подходит"
+}
+];
+const KEY = "agrobank-hybrid-favs-v1";
+const isFile = location.protocol === "file:";
+if (isFile) document.getElementById("fileNote").classList.add("on");
+
+let state = {};
+try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e) { state = {}; }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {} }
+const uid = r => r.platform + ":" + r.id + (r.start ? "@" + r.start : "");
+
+function watchUrl(r){
+  if (r.platform === "youtube") return "https://www.youtube.com/watch?v=" + r.id + (r.start ? "&t=" + r.start + "s" : "");
+  if (r.platform === "vimeo") return "https://vimeo.com/" + r.id + (r.start ? "#t=" + r.start + "s" : "");
+  return r.url;
+}
+function thumb(r){
+  if (r.platform === "youtube") return "https://i.ytimg.com/vi/" + r.id + "/hqdefault.jpg";
+  if (r.platform === "vimeo") return "https://vumbnail.com/" + r.id + ".jpg";
+  return r.still;
+}
+function embed(r){
+  if (r.platform === "youtube") return "https://www.youtube-nocookie.com/embed/" + r.id + "?autoplay=1&rel=0&playsinline=1" + (r.start ? "&start=" + r.start : "");
+  if (r.platform === "vimeo") return "https://player.vimeo.com/video/" + r.id + "?autoplay=1&dnt=1" + (r.start ? "#t=" + r.start + "s" : "");
+  return null;
+}
+const srcLabel = {youtube:"YouTube", vimeo:"Vimeo", ft:"FrameThrower"};
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const main = document.getElementById("main");
+const chipsHtml = SECTIONS.map(s => `<button class="chip" data-f="${s.key}" aria-pressed="false">${esc(s.short)} <span class="n">${REFS.filter(r=>r.sec===s.key).length}</span></button>`).join("");
+document.querySelector('[data-f="marked"]').insertAdjacentHTML("beforebegin", chipsHtml + (REFS.some(r=>r.new) ? `<button class="chip marked" data-f="new" aria-pressed="false">Новые <span class="n">${REFS.filter(r=>r.new).length}</span></button>` : ""));
+document.getElementById("n-all").textContent = REFS.length;
+
+main.innerHTML = SECTIONS.map(s => `
+  <section class="blk" data-sec="${s.key}">
+    <div class="blk-head"><h2>${esc(s.title)}</h2><p>${esc(s.lede)}</p></div>
+    <div class="grid">${REFS.filter(r=>r.sec===s.key).map(card).join("")}</div>
+  </section>`).join("");
+
+function card(r){
+  const id = uid(r), st = state[id] || {};
+  const meta = [r.year, r.director].filter(Boolean).join(" · ");
+  const playLabel = r.platform === "ft" ? "Открыть" : (isFile && r.platform==="youtube" ? "Смотреть в новой вкладке" : "Смотреть");
+  return `<article class="card${st.m ? " is-marked" : ""}${r.new ? " is-new" : ""}" data-id="${esc(id)}">
+    <div class="media" role="button" tabindex="0" aria-label="${esc(playLabel + ": " + r.title)}">
+      <img loading="lazy" src="${esc(thumb(r))}" alt="" onerror="this.style.opacity=0">
+      ${r.new ? '<span class="newb">Новое</span>' : ""}<span class="src">${srcLabel[r.platform]}</span>
+      <span class="play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z"/></svg>${playLabel}</span>
+    </div>
+    <div class="body">
+      <h3>${esc(r.title)}</h3>
+      ${meta ? `<div class="meta">${esc(meta)}${r.start ? " · с " + fmt(r.start) : ""}</div>` : (r.start ? `<div class="meta">с ${fmt(r.start)}</div>` : "")}
+      <p class="why">${esc(r.why)}</p>
+      ${r.note ? `<p class="dnote">Дамир: ${esc(r.note)}</p>` : ""}
+      ${r.tags && r.tags.length ? `<div class="tags">${r.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>` : ""}
+    </div>
+    <div class="foot">
+      <button class="mk" type="button" aria-pressed="${st.m ? "true" : "false"}"><svg viewBox="0 0 24 24"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg><span>${st.m ? "Отмечено" : "Отметить"}</span></button>
+      <a class="open" href="${esc(watchUrl(r))}" target="_blank" rel="noopener">Открыть на ${srcLabel[r.platform]} ↗</a>
+    </div>
+    <div class="memo-wrap${st.note ? " has" : ""}"><textarea class="memo" id="memo-${esc(id.replace(/[^a-z0-9]/gi,"_"))}" rows="1" placeholder="Заметка: что берём из этого рефа">${esc(st.note || "")}</textarea></div>
+  </article>`;
+}
+function fmt(s){ return Math.floor(s/60) + ":" + String(s%60).padStart(2,"0"); }
+const byId = Object.fromEntries(REFS.map(r => [uid(r), r]));
+
+function play(el){
+  const c = el.closest(".card"), r = byId[c.dataset.id], src = embed(r);
+  if (!src || (isFile && r.platform === "youtube")) { window.open(watchUrl(r), "_blank", "noopener"); return; }
+  document.querySelectorAll(".media iframe").forEach(f => { const m = f.parentElement; f.remove(); m.querySelectorAll("img,.play,.src").forEach(x=>x.hidden=false); });
+  el.querySelectorAll("img,.play,.src").forEach(x => x.hidden = true);
+  const f = document.createElement("iframe");
+  f.src = src; f.allow = "autoplay; fullscreen; picture-in-picture; encrypted-media"; f.allowFullscreen = true; f.title = r.title;
+  el.appendChild(f);
+}
+main.addEventListener("click", e => {
+  const m = e.target.closest(".media"); if (m && !m.querySelector("iframe")) { play(m); return; }
+  const b = e.target.closest(".mk"); if (b) toggle(b.closest(".card"));
+});
+main.addEventListener("keydown", e => { const m = e.target.closest(".media"); if (m && (e.key==="Enter"||e.key===" ")) { e.preventDefault(); play(m); } });
+main.addEventListener("input", e => {
+  if (!e.target.classList.contains("memo")) return;
+  const id = e.target.closest(".card").dataset.id;
+  state[id] = Object.assign(state[id] || {}, {note: e.target.value}); save();
+});
+function toggle(c){
+  const id = c.dataset.id; const st = state[id] = state[id] || {};
+  st.m = !st.m; if (!st.m && !st.note) delete state[id]; save();
+  c.classList.toggle("is-marked", !!st.m);
+  const b = c.querySelector(".mk"); b.setAttribute("aria-pressed", st.m ? "true":"false"); b.querySelector("span").textContent = st.m ? "Отмечено" : "Отметить";
+  counts(); if (filter === "marked") apply();
+}
+function marked(){ return REFS.filter(r => (state[uid(r)]||{}).m); }
+function counts(){
+  const n = marked().length;
+  document.getElementById("n-marked").textContent = n;
+  document.getElementById("dlBtn").disabled = !n; document.getElementById("copyBtn").disabled = !n;
+}
+
+let filter = "all";
+document.getElementById("bar").addEventListener("click", e => {
+  const c = e.target.closest(".chip"); if (!c) return;
+  filter = c.dataset.f;
+  document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === c ? "true" : "false"));
+  apply();
+  if (filter !== "all" && filter !== "marked" && filter !== "new") { const s = document.querySelector(`[data-sec="${filter}"]`); s && s.scrollIntoView({behavior:"smooth", block:"start"}); }
+});
+function apply(){
+  let any = false;
+  document.querySelectorAll("section.blk").forEach(s => {
+    const secOk = filter === "all" || filter === "marked" || filter === "new" || s.dataset.sec === filter;
+    let vis = 0;
+    s.querySelectorAll(".card").forEach(c => {
+      const ok = secOk && (filter !== "marked" || (state[c.dataset.id]||{}).m) && (filter !== "new" || (byId[c.dataset.id]||{}).new);
+      c.hidden = !ok; if (ok) vis++;
+    });
+    s.hidden = !vis; if (vis) any = true;
+  });
+  document.getElementById("empty").classList.toggle("on", !any);
+}
+
+function exportText(){
+  const list = marked(); const d = new Date();
+  let out = "Agrobank Hybrid — отмеченные референсы (" + list.length + ")\n" + d.toLocaleDateString("ru-RU") + "\n";
+  SECTIONS.forEach(s => {
+    const items = list.filter(r => r.sec === s.key); if (!items.length) return;
+    out += "\n== " + s.title + " ==\n";
+    items.forEach((r,i) => {
+      const note = (state[uid(r)]||{}).note;
+      out += "\n" + (i+1) + ". " + r.title + (r.year ? " (" + r.year + ")" : "") + (r.director ? ", реж. " + r.director : "") + "\n   " + watchUrl(r) + "\n   " + r.why + (note ? "\n   Заметка: " + note : "") + "\n";
+    });
+  });
+  return out;
+}
+function toast(t){ const el = document.getElementById("toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toast._t); toast._t = setTimeout(()=>el.classList.remove("on"), 2200); }
+document.getElementById("dlBtn").addEventListener("click", () => {
+  const blob = new Blob([exportText()], {type:"text/plain;charset=utf-8"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = "agrobank-hybrid-refs-" + new Date().toISOString().slice(0,10) + ".txt";
+  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  toast("Файл со списком скачан");
+});
+document.getElementById("copyBtn").addEventListener("click", () => {
+  const t = exportText();
+  (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(()=>toast("Список скопирован"), () => {
+    const ta = document.createElement("textarea"); ta.value = t; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); toast("Список скопирован"); } catch(e) { toast("Не получилось скопировать"); }
+    ta.remove();
+  });
+});
+counts(); apply();
+</script>
+</body>
+</html>
