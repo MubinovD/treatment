@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Mubinov Stop Motion</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{--bg:#141210;--panel:#1d1a17;--panel2:#25211d;--line:#3a332c;--tx:#efe8df;--mut:#a39789;--acc:#ffb547;--acc2:#7fd4b0;--red:#ff6b5e;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 Manrope,system-ui,sans-serif}
+header{padding:22px 24px 10px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+h1{font:700 26px Unbounded,sans-serif;margin:0;letter-spacing:-.5px}
+h1 span{color:var(--acc)}
+.sub{color:var(--mut);font-size:13px}
+nav{display:flex;gap:6px;flex-wrap:wrap;padding:6px 24px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+nav a{color:var(--mut);text-decoration:none;padding:7px 12px;border-radius:999px;font-weight:500;font-size:14px;border:1px solid transparent}
+nav a:hover{color:var(--tx);border-color:var(--line)}
+nav a.on{background:var(--acc);color:#1a1307}
+main{padding:20px 24px 60px;max-width:1280px}
+section{display:none}section.on{display:block}
+h2{font:500 20px Unbounded,sans-serif;margin:0 0 6px}
+h3{font:700 15px Manrope;margin:18px 0 8px;color:var(--acc)}
+p.lead{color:var(--mut);margin:0 0 18px;max-width:820px}
+.grid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:20px}.grid>*{min-width:0}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.f{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.f label{font-size:12px;color:var(--mut);font-weight:500}
+.row{display:flex;gap:8px}.row>*{flex:1;min-width:0}
+input,select{background:var(--panel2);color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:500 15px var(--mono);width:100%}
+input:focus,select:focus{outline:2px solid var(--acc);outline-offset:-1px}
+button{background:var(--panel2);color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font:600 13px Manrope;cursor:pointer}
+button:hover{border-color:var(--acc)}
+button.pri{background:var(--acc);color:#1a1307;border-color:var(--acc)}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;border-radius:0;flex:1;background:var(--panel2)}
+.seg button.on{background:var(--acc);color:#1a1307}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--panel2);border-radius:10px;padding:10px 12px}
+.kpi b{display:block;font:600 22px var(--mono);color:var(--tx)}
+.kpi span{font-size:12px;color:var(--mut)}
+.kpi.hl b{color:var(--acc)}
+.formula{font:13px var(--mono);color:var(--acc2);background:#132019;border:1px solid #24402f;padding:10px 12px;border-radius:8px;margin-bottom:14px;white-space:pre-wrap}
+.warn{padding:9px 12px;border-radius:8px;font-size:13px;margin-bottom:12px}
+.warn.y{background:#3a2a10;color:#ffd38a}.warn.r{background:#3d1714;color:#ffb0a8}.warn.g{background:#132019;color:#a9e8cb}
+table{border-collapse:collapse;width:100%;font:13px var(--mono)}
+th{position:sticky;top:0;background:var(--panel2);color:var(--mut);font:600 11px Manrope;text-align:right;padding:6px 8px}
+td{text-align:right;padding:4px 8px;border-bottom:1px solid #2a2520}
+tr.hold td{color:var(--mut)}
+.tbl{max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+svg text{font-family:'JetBrains Mono',monospace}
+.chip{display:inline-block;font:600 11px Manrope;padding:2px 8px;border-radius:99px;background:var(--panel2);color:var(--mut);margin-right:4px}
+.hint{font-size:12px;color:var(--mut)}
+.demos{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.demo{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.demo canvas{display:block;width:100%;aspect-ratio:16/10;background:#0f0d0b}
+.demo .meta{padding:10px 12px}
+.demo h4{margin:0 0 4px;font:700 14px Manrope}
+.demo p{margin:0 0 8px;font-size:13px;color:var(--mut)}
+.demo .ctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.demo select{width:auto;padding:4px 6px;font-size:12px}
+.demo label{font-size:12px;color:var(--mut);display:flex;gap:4px;align-items:center}
+.demo input[type=checkbox]{width:auto}
+.fpsgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:800px){.fpsgrid{grid-template-columns:repeat(2,1fr)}}
+.fpsgrid .demo .meta{display:flex;justify-content:space-between;align-items:center}
+.fpsgrid b{font:600 20px var(--mono);color:var(--acc)}
+.tl li{margin-bottom:8px}.tl a{color:var(--acc);font-family:var(--mono);text-decoration:none}
+ul.ck li{margin-bottom:6px}
+.tape{overflow-x:auto;background:#fff;border-radius:8px;padding:8px 0}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--acc2);color:#062;padding:8px 16px;border-radius:99px;font-weight:700;opacity:0;transition:.3s;pointer-events:none}
+.toast.on{opacity:1}
+#curve{touch-action:none;cursor:crosshair;width:100%;background:#0f0d0b;border-radius:10px;border:1px solid var(--line)}
+.sw{display:flex;gap:8px;align-items:center}
+.sw b{font:600 18px var(--mono);min-width:80px}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:20px}@media(max-width:900px){.cols2{grid-template-columns:1fr}}
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}.ref{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}.ref h4{margin:0 0 6px;font:700 15px Manrope}.ref p{margin:0 0 8px;font-size:13px;color:var(--mut)}.ref p.take{color:var(--tx)}.ref .lk a{color:var(--acc);text-decoration:none;font-weight:600;font-size:13px;margin-right:12px}
+.ref .vid{position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:#0f0d0b center/cover no-repeat;cursor:pointer;margin-bottom:10px}
+.ref .vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.ref .vid .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;background:var(--acc);color:#1a1307;display:flex;align-items:center;justify-content:center;font-size:24px;padding-left:4px;box-shadow:0 6px 24px #0008;transition:.2s}
+.ref .vid:hover .play{transform:translate(-50%,-50%) scale(1.08)}
+.ref .vid .vlab{position:absolute;left:10px;bottom:8px;font:600 12px Manrope;background:#000a;padding:3px 8px;border-radius:6px}
+.ref .vid[data-k=vm]:not([style]){background:linear-gradient(135deg,#25211d,#3a2a10)}
+.vtabs{display:flex;gap:6px;margin:-2px 0 10px}.vtabs button{padding:5px 10px;font-size:12px}.vtabs button.on{background:var(--acc);color:#1a1307;border-color:var(--acc)}
+.ref .lk a.ext{color:var(--mut)}
+@media(max-width:900px){.refs{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><h1>Mubinov <span>Stop Motion</span></h1><div class="sub">Шаг камеры, рампы, панорамы, FPS и теория — под Dragonframe</div></header>
+<nav id="nav">
+<a href="#move">Движение камеры</a><a href="#pan">Панорама</a><a href="#track">Объект и камера</a><a href="#crop">Цифровой наезд</a><a href="#time">Время и кадры</a><a href="#fps">FPS-лаборатория</a><a href="#theory">Теория</a><a href="#pix">Пиксиляция</a><a href="#dragon">Dragonframe и съёмка</a><a href="#video">Конспект видео</a>
+</nav>
+<main>
+
+<!-- ============ MOVE ============ -->
+<section id="s-move">
+<h2>Движение камеры: шаг на кадр</h2>
+<p class="lead">Линейный режим — твоя формула: кадры = секунды × fps, шаг = расстояние ÷ число шагов. Для рампы (где-то быстрее, где-то медленнее) включи разгон/торможение или нарисуй свою кривую скорости — калькулятор сам распределит расстояние так, чтобы сумма шагов была ровно равна пути.</p>
+<div class="grid">
+<div class="card">
+ <div class="f"><label>Расстояние по рулетке</label><div class="row"><input id="m_dist" type="number" value="60" step="any"><select id="m_unit"><option value="cm">см</option><option value="mm">мм</option><option value="in">дюймы</option></select></div></div>
+ <div class="f"><label>Длительность движения</label><div class="row"><input id="m_sec" type="number" value="4" step="any"><select id="m_by"><option value="s">секунд</option><option value="f">кадров</option></select></div>
+  <div class="sw" style="margin-top:6px"><button id="sw_btn">⏱ Секундомер</button><b id="sw_t">0.00 с</b><span class="hint">отыграй действие и останови</span></div></div>
+ <div class="row"><div class="f"><label>FPS проекта</label><select id="m_fps"><option>24</option><option>25</option><option>30</option><option>18</option><option>15</option><option selected>12</option><option>10</option><option>8</option><option>6</option><option>5</option></select></div>
+ <div class="f"><label>Снимаю на</label><select id="m_on"><option value="1">единицах (1 фото = 1 кадр)</option><option value="2">двойках (1 фото = 2 кадра)</option><option value="3">тройках</option></select></div></div>
+ <div class="row"><div class="f"><label>Стоп в начале, кадров</label><input id="m_h1" type="number" value="0" min="0"></div><div class="f"><label>Стоп в конце, кадров</label><input id="m_h2" type="number" value="0" min="0"></div></div>
+ <div class="f"><label>Профиль скорости</label><div class="seg" id="m_mode"><button data-v="lin" class="on">Линейно</button><button data-v="ease">Рампа</button><button data-v="curve">Своя кривая</button></div></div>
+ <div id="m_easebox" style="display:none">
+  <div class="row"><div class="f"><label>Разгон, % хрона</label><input id="m_ein" type="number" value="25" min="0" max="100"></div><div class="f"><label>Торможение, % хрона</label><input id="m_eout" type="number" value="35" min="0" max="100"></div></div>
+  <div class="f"><label>Самый мелкий шаг, % от максимального</label><input id="m_min" type="number" value="10" min="0" max="100"><span class="hint">0 — шаг уходит почти в ноль, как «до минимально возможного» в видео. 8–15% — реально отмерить линейкой.</span></div>
+  <div class="f"><label>Форма рампы</label><select id="m_shape"><option value="lin">Ровная (шаг меняется равномерно — как в видео)</option><option value="s" selected>Мягкая S (без рывка на стыке)</option><option value="q">Тягучая (очень медленный старт/финиш)</option></select></div>
+ </div>
+ <div class="f"><label><input type="checkbox" id="m_ends" checked style="width:auto"> Первый кадр на 0, последний ровно на финише (шагов = кадров − 1)</label><span class="hint">Без галочки — как в видео: делим на число кадров, камера доходит до финиша «за кадр» после последнего.</span></div>
+ <h3>Проверка на стробинг (необязательно)</h3>
+ <div class="row"><div class="f"><label>Фокусное, мм</label><input id="m_fl" type="number" value="35" step="any"></div><div class="f"><label>Ширина сенсора, мм</label><select id="m_sens"><option value="36">Full frame 36</option><option value="23.5">APS-C 23.5</option><option value="22.3">Canon APS-C 22.3</option><option value="17.3">MFT 17.3</option><option value="9.8">Смартфон ~9.8</option></select></div></div>
+ <div class="f"><label>Дистанция до объекта, см</label><input id="m_sd" type="number" value="80" step="any"></div>
+ <span class="hint">Боковой проезд: насколько фон/объект сдвигается в кадре за один кадр.</span>
+</div>
+<div>
+ <div class="kpis" id="m_kpis"></div>
+ <div class="formula" id="m_formula"></div>
+ <div id="m_warn"></div>
+ <div class="card" id="m_curvecard" style="display:none;margin-bottom:14px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px"><b>Кривая скорости</b>
+  <div class="row" style="flex:0 1 auto"><select id="c_pre" style="width:auto"><option value="">Пресеты…</option><option value="flat">Ровно</option><option value="io">Разгон и торможение</option><option value="lo">Короткий разгон, длинное торможение</option><option value="in">Разгон в рывок</option><option value="out">Влёт и торможение</option><option value="ffs">Быстро — медленно — быстро</option><option value="sfs">Медленно — быстро — медленно — быстро</option><option value="fs">Фруктовый сад: соки → дочь → сын</option></select></div></div>
+  <svg id="curve" viewBox="0 0 800 220"></svg>
+  <div class="hint">Тяни точки. Двойной клик по пустому месту — новая точка, по точке — удалить. По горизонтали время, по вертикали относительная скорость.</div>
+ </div>
+ <div class="card" style="margin-bottom:14px"><b>Спейсинг</b> <span class="hint">— столбики: шаг на каждый кадр; нижняя шкала: метки на рельсе/скотче</span><svg id="m_chart" viewBox="0 0 800 200" style="width:100%;margin-top:8px"></svg></div>
+ <div class="card" style="margin-bottom:14px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><b>Разметка для скотча в натуральную величину</b><div class="row" style="flex:0 1 auto"><button id="m_copysvg">Копировать SVG для печати 1:1</button></div></div>
+  <div class="hint" style="margin:6px 0">Сохрани скопированное как .svg, открой в браузере и печатай на 100% — длина ленты будет равна реальному пути. Длинную ленту склей из кусков.</div>
+  <div class="tape" id="m_tape"></div>
+ </div>
+ <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b>Покадровая таблица</b><button id="m_copy">Копировать таблицу</button></div>
+ <div class="tbl"><table id="m_tbl"></table></div>
+ <div class="hint" style="margin-top:6px">«% пути» — для разметки линии в Drawing-инструменте Dragonframe: тики ставишь на этот процент длины линии.</div></div>
+</div></div>
+</section>
+
+<!-- ============ PAN ============ -->
+<section id="s-pan">
+<h2>Панорама и поворот штатива</h2>
+<p class="lead">Метод из видео: проволока-указатель на ручке штатива и дуга на столе. Калькулятор даёт градусы на кадр и сколько миллиметров проходит кончик указателя по дуге. Совет автора — торможение длиннее разгона, ровного участка в середине может не быть.</p>
+<div class="grid"><div class="card">
+ <div class="f"><label>Угол панорамы, °</label><input id="p_ang" type="number" value="40" step="any"></div>
+ <div class="row"><div class="f"><label>Длительность, сек</label><input id="p_sec" type="number" value="3" step="any"></div><div class="f"><label>FPS</label><select id="p_fps"><option>24</option><option>25</option><option>18</option><option>15</option><option selected>12</option><option>10</option><option>8</option></select></div></div>
+ <div class="row"><div class="f"><label>Разгон, %</label><input id="p_ein" type="number" value="30"></div><div class="f"><label>Торможение, %</label><input id="p_eout" type="number" value="55"></div></div>
+ <div class="f"><label>Мин. шаг, % от макс.</label><input id="p_min" type="number" value="10"></div>
+ <div class="f"><label>Форма</label><select id="p_shape"><option value="lin">Ровная</option><option value="s" selected>Мягкая S</option><option value="q">Тягучая</option></select></div>
+ <div class="f"><label>Длина указателя от оси (радиус дуги), см</label><input id="p_r" type="number" value="30" step="any"></div>
+ <h3>Скорость пересечения кадра</h3>
+ <div class="row"><div class="f"><label>Фокусное, мм</label><input id="p_fl" type="number" value="35"></div><div class="f"><label>Сенсор, мм</label><select id="p_sens"><option value="36">36 FF</option><option value="23.5">23.5 APS-C</option><option value="22.3">22.3 Canon</option><option value="17.3">17.3 MFT</option><option value="9.8">9.8 phone</option></select></div></div>
+</div>
+<div><div class="kpis" id="p_kpis"></div><div class="formula" id="p_formula"></div><div id="p_warn"></div>
+<div class="card" style="margin-bottom:14px"><b>Дуга на столе</b> <span class="hint">— шаблон для указателя (масштаб условный, расстояния — в таблице)</span><svg id="p_arc" viewBox="0 0 800 330" style="width:100%"></svg></div>
+<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b>Покадрово</b><button id="p_copy">Копировать таблицу</button></div><div class="tbl"><table id="p_tbl"></table></div></div>
+</div></div>
+</section>
+
+<!-- ============ TRACK ============ -->
+<section id="s-track">
+<h2>Объект и камера</h2>
+<p class="lead">Камера едет за объектом — значит у каждого свой шаг. По видео: объекту полезно двигаться чуть быстрее камеры, тогда он «выезжает» вперёд в кадре и скорость ощущается сильнее. Тот же расчёт работает, если вместо камеры двигаешь фон.</p>
+<div class="grid"><div class="card">
+ <div class="row"><div class="f"><label>Путь камеры (или фона), см</label><input id="t_cam" type="number" value="40" step="any"></div><div class="f"><label>Опережение объекта, %</label><input id="t_lead" type="number" value="10" step="any"></div></div>
+ <div class="row"><div class="f"><label>Длительность, сек</label><input id="t_sec" type="number" value="3" step="any"></div><div class="f"><label>FPS</label><select id="t_fps"><option>24</option><option>18</option><option>15</option><option selected>12</option><option>8</option></select></div></div>
+ <div class="f"><label>Что двигаю</label><select id="t_what"><option value="cam">Камеру на слайдере</option><option value="bg">Фон вместо камеры (камера стоит)</option></select></div>
+ <h3>Слои параллакса</h3>
+ <span class="hint">Если двигаешь фон вместо камеры, дальние слои должны ехать медленнее ближних. Скорость слоя примерно обратно пропорциональна его расстоянию до камеры.</span>
+ <div class="row" style="margin-top:8px"><div class="f"><label>Передний план, см</label><input id="t_d1" type="number" value="30"></div><div class="f"><label>Средний, см</label><input id="t_d2" type="number" value="80"></div><div class="f"><label>Дальний, см</label><input id="t_d3" type="number" value="200"></div></div>
+ <div class="f"><label>Опорный слой (где стоит герой), см</label><input id="t_dref" type="number" value="80"></div>
+</div><div><div class="kpis" id="t_kpis"></div><div class="formula" id="t_formula"></div><div class="card"><div class="tbl"><table id="t_tbl"></table></div></div></div></div>
+</section>
+
+<!-- ============ CROP ============ -->
+<section id="s-crop">
+<h2>Цифровой наезд / панорама кропом</h2>
+<p class="lead">Фото в разрешении выше таймлайна можно двигать на монтаже без потери качества. Здесь — насколько можно влезть и какие значения Scale ставить в After Effects / Resolve.</p>
+<div class="grid"><div class="card">
+ <div class="f"><label>Исходник (фото), px</label><div class="row"><input id="c_sw" type="number" value="6000"><input id="c_sh" type="number" value="4000"></div></div>
+ <div class="f"><label>Таймлайн, px</label><div class="row"><select id="c_out"><option value="3840x2160">4K UHD 3840×2160</option><option value="1920x1080" selected>Full HD 1920×1080</option><option value="4096x2160">DCI 4K 4096×2160</option><option value="1080x1920">Вертикаль 1080×1920</option><option value="1080x1080">Квадрат 1080×1080</option></select></div></div>
+ <div class="row"><div class="f"><label>Наезд с, × от вписанного</label><input id="c_z1" type="number" value="1" step="0.05"></div><div class="f"><label>до, ×</label><input id="c_z2" type="number" value="1.6" step="0.05"></div></div>
+ <div class="row"><div class="f"><label>Длительность, сек</label><input id="c_sec" type="number" value="3" step="any"></div><div class="f"><label>FPS</label><select id="c_fps"><option>24</option><option>25</option><option selected>12</option></select></div></div>
+</div><div><div class="kpis" id="c_kpis"></div><div class="formula" id="c_formula"></div><div id="c_warn"></div><div class="card"><svg id="c_vis" viewBox="0 0 800 400" style="width:100%"></svg></div></div></div>
+</section>
+
+<!-- ============ TIME ============ -->
+<section id="s-time">
+<h2>Время, кадры, съёмочный день</h2>
+<div class="cols2">
+<div class="card"><h3 style="margin-top:0">Секунды ↔ кадры</h3>
+ <div class="row"><div class="f"><label>Секунды</label><input id="tm_s" type="number" value="10" step="any"></div><div class="f"><label>FPS</label><select id="tm_fps"><option>24</option><option>25</option><option>30</option><option>18</option><option>15</option><option selected>12</option><option>10</option><option>8</option><option>6</option><option>5</option></select></div><div class="f"><label>Снимаю на</label><select id="tm_on"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></div></div>
+ <div class="kpis" id="tm_k1"></div>
+ <div class="f"><label>Или кадры → секунды</label><input id="tm_f" type="number" value="120"></div>
+ <div class="kpis" id="tm_k2"></div>
+</div>
+<div class="card"><h3 style="margin-top:0">Сколько снимать</h3>
+ <div class="row"><div class="f"><label>Хрон ролика, сек</label><input id="sd_s" type="number" value="10" step="any"></div><div class="f"><label>FPS</label><select id="sd_fps"><option>24</option><option>25</option><option selected>12</option><option>15</option><option>8</option></select></div><div class="f"><label>Снимаю на</label><select id="sd_on"><option value="1">1</option><option value="2" selected>2</option></select></div></div>
+ <div class="row"><div class="f"><label>Минут на одно фото</label><input id="sd_m" type="number" value="2" step="any"></div><div class="f"><label>Дублей / запас, ×</label><input id="sd_x" type="number" value="1.5" step="any"></div><div class="f"><label>Часов в смене</label><input id="sd_h" type="number" value="10" step="any"></div></div>
+ <div class="kpis" id="sd_k"></div>
+ <span class="hint">Минуты на фото — анимация + проверка онионом + свет. У простого продукта 1–3 мин, у персонажа с мимикой 5–15.</span>
+</div>
+<div class="card"><h3 style="margin-top:0">Перевод анимации между FPS</h3>
+ <div class="row"><div class="f"><label>Снято фото</label><input id="cv_n" type="number" value="48"></div><div class="f"><label>Планировал FPS</label><input id="cv_a" type="number" value="12"></div><div class="f"><label>Ставлю на FPS</label><input id="cv_b" type="number" value="24"></div></div>
+ <div class="kpis" id="cv_k"></div>
+</div>
+<div class="card"><h3 style="margin-top:0">Шпаргалка формул</h3>
+<div class="formula">кадры N = секунды × fps
+фото = N ÷ (1 | 2 | 3)
+шаг линейный = путь ÷ (фото − 1)
+градусы/кадр = угол ÷ (фото − 1)
+дуга на столе = 2πR × (угол/360)
+ширина кадра на дистанции = дистанция × сенсор ÷ фокусное
+FOV° = 2·atan(сенсор ÷ (2 × фокусное))
+макс. цифровой наезд = min(Wфото/Wвых, Hфото/Hвых)</div></div>
+</div>
+</section>
+
+<!-- ============ FPS LAB ============ -->
+<section id="s-fps">
+<h2>FPS-лаборатория</h2>
+<p class="lead">Одна и та же анимация, снятая с разной частотой: 24, 18, 15, 12, 8 и 5 кадров в секунду. Все клипы идут синхронно по одному времени — видно, как с падением fps растёт «ступенька» между фазами.</p>
+<div class="card" style="margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+ <div class="seg" id="fl_scene"><button data-v="ball" class="on">Мяч</button><button data-v="dolly">Проезд с параллаксом</button><button data-v="pan">Панорама</button><button data-v="spin">Вращение</button><button data-v="walk">Шаг персонажа</button></div>
+ <label class="hint"><input type="checkbox" id="fl_onion" style="width:auto"> Onion skin</label>
+ <label class="hint">Скорость <select id="fl_speed" style="width:auto"><option value="1">1×</option><option value="0.5">0.5×</option><option value="0.25">0.25×</option></select></label>
+ <button id="fl_pause">Пауза</button>
+</div>
+<div class="fpsgrid" id="fl_grid"></div>
+<div class="card" style="margin-top:14px"><h3 style="margin-top:0">Как читать</h3>
+<ul class="ck"><li><b>24</b> — плавно, как кино; так Майкл Паркс советует снимать все движения камеры. Для персонажей часто снимают «на двойках» (12 уникальных фаз).</li>
+<li><b>18 и 15</b> — компромисс: заметно меньше работы, движение ещё читается как плавное.</li>
+<li><b>12</b> — классика рукотворного стоп-моушена, «тёплая» дискретность. Проезд камеры здесь уже начинает дробиться.</li>
+<li><b>8 и 5</b> — стилизация: рывки становятся приёмом (пиксиляция, коллаж, ретро, юмор). Движения камеры почти всегда выглядят дёргано.</li>
+<li>Совет: можно анимировать героя на двойках, а камеру двигать на единицах 24 — так движение кадра останется плавным.</li></ul></div>
+</section>
+
+<!-- ============ THEORY ============ -->
+<section id="s-theory">
+<h2>Теория в движении</h2>
+<p class="lead">База на одном экране. У каждой карточки свой fps и onion skin — включай, чтобы видеть спейсинг (как фазы расставлены по пути).</p>
+<div class="demos" id="th_grid"></div>
+</section>
+
+<!-- ============ PIX ============ -->
+<section id="s-pix">
+<h2>Пиксиляция: люди как стоп-моушен</h2>
+<p class="lead">Метод работы с актёрами и референсы. Видео запускаются прямо в карточке.</p>
+<div class="cols2">
+<div class="card"><h3 style="margin-top:0">Единицы и двойки</h3><ul class="ck">
+<li><b>Проект 24 fps:</b> камера двигается каждое фото (24 шага/с), актёры и пачка меняют позу через фото (12 фаз/с). Камера плавная, люди «рукотворные».</li>
+<li><b>Проект 12 fps:</b> камера 12, люди 6 — камера дробится, люди почти слайд-шоу. Это стилизация.</li>
+<li>Фото всё равно 24 на секунду движения камеры; актёры держат позу два фото подряд.</li>
+<li>Порядок кадра: камера на метку по скотчу → пачка и герои по экранным меткам в Live view.</li></ul></div>
+<div class="card"><h3 style="margin-top:0">Чтобы улыбки остались живыми</h3><ul class="ck">
+<li><b>Живой дубль-референс:</b> сначала сцену играют вживую на той же точке. Лучший дубль — в Dragonframe как референс-слой; каждое фото актёры встают в позу из своего же дубля. Все копируют один дубль — синхронность сама.</li>
+<li><b>Эмоция на щелчок:</b> тело на метках, лицо расслаблено → «три, два, один» → улыбка → снимок в первую секунду → отпустить.</li>
+<li>За камерой поддерживают настроение: шутки, музыка. Нужна улыбка с глазами.</li>
+<li>На эмоциональных позах 2–3 дубля, оставить лучший (без моргания).</li></ul></div>
+<div class="card"><h3 style="margin-top:0">Репетиция как хореография</h3><ul class="ck">
+<li>Действие делится на номерные позы на счёт: «поза 14 — рука над баурсаком, взгляд на текст».</li>
+<li>Один человек ведёт счёт и командует всеми.</li>
+<li>Кастинг: танцоры, мимы, театральные актёры держат позу точнее.</li>
+<li>Сложная эмоция в каждый момент только у одного героя, остальные держат простые позы.</li></ul></div>
+<div class="card"><h3 style="margin-top:0">Что будет «кипеть»</h3><ul class="ck">
+<li><b>Кудрявые волосы:</b> лак или гель, иначе голова шевелится каждый кадр.</li>
+<li><b>Одежда:</b> плотная ткань, без свободных рукавов.</li>
+<li><b>Сок в стакане:</b> стаканы-замены с разным уровнем «сока» из смолы или геля, или налив отдельно.</li>
+<li><b>Опоры:</b> локти на столе, спрятанные упоры; рука в воздухе дрожит через несколько секунд.</li>
+<li><b>Запасной вариант:</b> живая съёмка на выдержке ~1/500, на монтаже каждый второй кадр — люди на двойках, эмоции живые.</li></ul></div>
+</div>
+<h2 style="margin-top:26px">Референсы</h2>
+<h3>Люди и еда за столом</h3><div class="refs"><div class="ref"><div class="vid" data-k="yt" data-id="3B3j7UrFH_8" style="background-image:url(https://i.ytimg.com/vi/3B3j7UrFH_8/hqdefault.jpg)"><span class="play">▶</span><span class="vlab">Фильм (4K-реставрация)</span></div><h4>Jan Švankmajer — «Food» (Jídlo), 1992</h4><p>Пластилин + пиксиляция, три трапезы: завтрак, обед, ужин. Самое близкое к нашей мизансцене.</p><p class="take"><b>Что взять:</b> Тело почти неподвижно, а лицо и рот работают крупно и утрированно — ориентир для укуса дочки. Тон гротескный, брать технику, не настроение.</p><div class="lk"><a href="https://en.wikipedia.org/wiki/Food_(film)" target="_blank" rel="noopener">Wikipedia ↗</a> <a class="ext" href="https://www.youtube.com/watch?v=3B3j7UrFH_8" target="_blank" rel="noopener">Открыть на YouTube ↗</a></div></div><div class="ref"><div class="vid" data-k="yt" data-id="dNJdJIwCF_Y" style="background-image:url(https://i.ytimg.com/vi/dNJdJIwCF_Y/hqdefault.jpg)"><span class="play">▶</span><span class="vlab">Fresh Guacamole</span></div><div class="vtabs"><button class="on" data-k="yt" data-id="dNJdJIwCF_Y">Fresh Guacamole</button><button class="" data-k="yt" data-id="qBjLW5_dGAM">Western Spaghetti</button></div><h4>PES — «Fresh Guacamole» (2012), «Western Spaghetti» (2008)</h4><p>В кадре только руки самого PES; продукты при нарезке превращаются в другие предметы. «Fresh Guacamole» номинировался на «Оскар».</p><p class="take"><b>Что взять:</b> Ритм «рука → предмет → превращение» и чистота кадра над столом. Ориентир для руки дочки с баурсаком и для «живой» пачки.</p><div class="lk"><a href="https://en.wikipedia.org/wiki/Fresh_Guacamole" target="_blank" rel="noopener">Wikipedia ↗</a> <a class="ext" href="https://www.youtube.com/watch?v=dNJdJIwCF_Y" target="_blank" rel="noopener">Открыть на YouTube ↗</a></div></div><div class="ref"><div class="vid" data-k="yt" data-id="_5IqwECL6bo" style="background-image:url(https://i.ytimg.com/vi/_5IqwECL6bo/hqdefault.jpg)"><span class="play">▶</span><span class="vlab">Ролик</span></div><h4>PES — Sneaux «Human Skateboard» (2007)</h4><p>Рекламный ролик: люди становятся скейтбордом. Стал вирусным хитом.</p><p class="take"><b>Что взять:</b> Пиксиляция в рекламе: короткая идея, понятная за секунды.</p><div class="lk"><a href="https://en.wikipedia.org/wiki/PES_(director)" target="_blank" rel="noopener">PES ↗</a> <a class="ext" href="https://www.youtube.com/watch?v=_5IqwECL6bo" target="_blank" rel="noopener">Открыть на YouTube ↗</a></div></div></div><h3>Работа по аниматику</h3><div class="refs"><div class="ref"><div class="vid" data-k="yt" data-id="2_HXUhShhmY" style="background-image:url(https://i.ytimg.com/vi/2_HXUhShhmY/hqdefault.jpg)"><span class="play">▶</span><span class="vlab">Клип</span></div><div class="vtabs"><button class="on" data-k="yt" data-id="2_HXUhShhmY">Клип</button><button class="" data-k="yt" data-id="Goi2a1JrH-8">Making-of</button></div><h4>Oren Lavie — «Her Morning Elegance» (2009)</h4><p>2096 фото, снятых по анимированному превизу режиссёров Юваля и Мерав Натан. Снимали 48 часов без перерыва, камера над кроватью.</p><p class="take"><b>Что взять:</b> Ровно наш процесс: бордоматик первым, люди попадают в него. Героиня лежит, камера сверху — держать позу лёжа гораздо легче, чем стоя.</p><div class="lk"><a href="https://filmnosis.com/shortfilms/her-morning-elegance" target="_blank" rel="noopener">Про съёмку ↗</a> <a class="ext" href="https://www.youtube.com/watch?v=2_HXUhShhmY" target="_blank" rel="noopener">Открыть на YouTube ↗</a></div></div></div><h3>Актёры, свет, плавное движение</h3><div class="refs"><div class="ref"><div class="vid" data-k="vm" data-id="24051768" ><span class="play">▶</span><span class="vlab">Фильм</span></div><div class="vtabs"><button class="on" data-k="vm" data-id="24051768">Фильм</button><button class="" data-k="vm" data-id="40776884">Making-of</button></div><h4>Juan Pablo Zaramella — «Luminaris» (2011)</h4><p>Лучший современный пример с актёрами, был в шорт-листе «Оскара». На первый кадр ушёл месяц. Скольжение героев: на каждом фото их ставили чуть дальше, вслед за солнцем.</p><p class="take"><b>Что взять:</b> Режиссёр говорит, что актёры часто предлагали выражения лучше задуманных — доверяй актёрам на репетиции. Обязательно смотреть making-of.</p><div class="lk"><a href="https://skwigly.co.uk/interview-juan-pablo-luminaris" target="_blank" rel="noopener">Интервью ↗</a> <a class="ext" href="https://vimeo.com/24051768" target="_blank" rel="noopener">Открыть на Vimeo ↗</a></div></div></div><h3>Синхронность и выносливость</h3><div class="refs"><div class="ref"><div class="vid" data-k="yt" data-id="K4dx42YzQCE" style="background-image:url(https://i.ytimg.com/vi/K4dx42YzQCE/hqdefault.jpg)"><span class="play">▶</span><span class="vlab">Клип</span></div><h4>The White Stripes — «The Hardest Button to Button» (Michel Gondry, 2003)</h4><p>Каждая фаза — удар в барабан: удар, стоп, установку убирают, Мег пересаживается к следующей. 32 одинаковые барабанные установки, 32 усилителя.</p><p class="take"><b>Что взять:</b> Привязка фаз к доле такта: актёры живут по счёту, а не по ощущению. Так решается синхронность троих.</p><div class="lk"><a href="https://signalvnoise.com/archives2/michel_gondrys_happy_accidents" target="_blank" rel="noopener">Как снимали ↗</a> <a class="ext" href="https://www.youtube.com/watch?v=K4dx42YzQCE" target="_blank" rel="noopener">Открыть на YouTube ↗</a></div></div><div class="ref"><div class="vid" data-k="yt" data-id="OJWJE0x7T4Q" style="background-image:url(https://i.ytimg.com/vi/OJWJE0x7T4Q/hqdefault.jpg)"><span class="play">▶</span><span class="vlab">Клип (HD)</span></div><h4>Peter Gabriel — «Sledgehammer» (Aardman, Brothers Quay, 1986)</h4><p>Пиксиляция + пластилин + стоп-моушен. Габриэль 16 часов пролежал под стеклом; клип снимали около 100 часов, 25 уникальных поз на секунду.</p><p class="take"><b>Что взять:</b> Цена долгих поз. От детей-актёров такого не ждать: позы короткие и с опорой.</p><div class="lk"><a href="https://britishcinematographer.co.uk/dave-alex-riddett-bsc-and-david-sproxton-cbe-sledgehammer/" target="_blank" rel="noopener">Разбор съёмки ↗</a> <a class="ext" href="https://www.youtube.com/watch?v=OJWJE0x7T4Q" target="_blank" rel="noopener">Открыть на YouTube ↗</a></div></div></div><h3>Классика</h3><div class="refs"><div class="ref"><div class="vid" data-k="yt" data-id="e_aSowDUUaY" style="background-image:url(https://i.ytimg.com/vi/e_aSowDUUaY/hqdefault.jpg)"><span class="play">▶</span><span class="vlab">Фильм (NFB)</span></div><h4>Norman McLaren — «Neighbours» (1952)</h4><p>Фильм, с которого пошёл термин «пиксиляция» (его придумал Грант Манро). «Оскар». Левитация: актёров снимали в верхней точке прыжка.</p><p class="take"><b>Что взять:</b> Принцип «ловить нужную фазу из живого движения» — так же можно ловить пик эмоции.</p><div class="lk"><a href="https://en.wikipedia.org/wiki/Neighbours_(1952_film)" target="_blank" rel="noopener">Wikipedia ↗</a> <a class="ext" href="https://www.youtube.com/watch?v=e_aSowDUUaY" target="_blank" rel="noopener">Открыть на YouTube ↗</a></div></div></div><h3>Запасной вариант и реклама</h3><div class="refs"><div class="ref"><div class="vid" data-k="yt" data-id="V2fpgpanZAw" style="background-image:url(https://i.ytimg.com/vi/V2fpgpanZAw/hqdefault.jpg)"><span class="play">▶</span><span class="vlab">Клип</span></div><h4>OK Go — «End Love» (2010)</h4><p>Не чистая пиксиляция: непрерывный 18-часовой дубль плюс почти 200 часов материала, ускоренные и замедленные во времени.</p><p class="take"><b>Что взять:</b> Ориентир для варианта «живая съёмка → выброс кадров». Эмоции живее, но пропадает «дыхание» настоящей покадровой съёмки.</p><div class="lk"><a href="https://en.wikipedia.org/wiki/End_Love" target="_blank" rel="noopener">Wikipedia ↗</a> <a class="ext" href="https://www.youtube.com/watch?v=V2fpgpanZAw" target="_blank" rel="noopener">Открыть на YouTube ↗</a></div></div><div class="ref"><div class="vid" data-k="yt" data-id="GnNJrerTNAA" style="background-image:url(https://i.ytimg.com/vi/GnNJrerTNAA/hqdefault.jpg)"><span class="play">▶</span><span class="vlab">Ролик</span></div><h4>Inspira Stop Motion — «Just Sleep» (Max Colchón)</h4><p>Реклама матрасов: героиня просыпается, и её мир внутри матраса собран из простыней, одежды, подушек.</p><p class="take"><b>Что взять:</b> Пиксиляция в коммерции с одним героем и простым бытовым миром.</p><div class="lk"><a href="https://www.behance.net/gallery/118903503/Just-Sleep-Pixilation-commercial" target="_blank" rel="noopener">Behance ↗</a> <a class="ext" href="https://www.youtube.com/watch?v=GnNJrerTNAA" target="_blank" rel="noopener">Открыть на YouTube ↗</a></div></div><div class="ref"><div class="vid" data-k="yt" data-id="E_1K6JMIe90" style="background-image:url(https://i.ytimg.com/vi/E_1K6JMIe90/hqdefault.jpg)"><span class="play">▶</span><span class="vlab">Фильм</span></div><div class="vtabs"><button class="on" data-k="yt" data-id="E_1K6JMIe90">Фильм</button><button class="" data-k="vm" data-id="220425944">Making-of</button></div><h4>Frame Order — «Golden Oldies» (2017)</h4><p>Пиксиляция с живыми людьми; в making-of — хромакей, манекен, бутафорские руки и ноги.</p><p class="take"><b>Что взять:</b> Где можно подменить человека манекеном или протезом, чтобы актёр не держал невозможную позу.</p><div class="lk"><a href="https://petapixel.com/2017/06/07/see-clever-stop-motion-film-made-real-people" target="_blank" rel="noopener">Статья ↗</a> <a class="ext" href="https://www.youtube.com/watch?v=E_1K6JMIe90" target="_blank" rel="noopener">Открыть на YouTube ↗</a></div></div></div>
+</section>
+
+<!-- ============ DRAGON ============ -->
+<section id="s-dragon">
+<h2>Dragonframe и съёмка: чек-лист</h2>
+<div class="cols2">
+<div class="card"><h3 style="margin-top:0">Против мерцания (flicker)</h3><ul class="ck">
+<li>Всё в ручном: экспозиция, ISO, баланс белого, фокус. Автоматика каждый кадр «думает» по-новому.</li>
+<li>Диафрагма электронных объективов закрывается каждый раз чуть по-разному. Лечится мануальной оптикой или приёмом «lens twist»: зажать DOF preview и чуть провернуть объектив, чтобы контакты разомкнулись и диафрагма осталась зафиксированной.</li>
+<li>Только искусственный свет, окна закрыть. Дневной свет меняется за минуты.</li>
+<li>Не ходить вокруг сета в светлой одежде: отражённый свет от людей тоже даёт мерцание. Анимировать в тёмном.</li>
+<li>Отключить стабилизацию в объективе (IS/VR) на штативе.</li>
+<li>Питание камеры от сетевого адаптера (dummy battery), автоотключение выключить.</li>
+<li>Остаточное мерцание снимается на посте: в Dragonframe есть сглаживание экспозиции при конформе, в Resolve — Deflicker.</li></ul></div>
+<div class="card"><h3 style="margin-top:0">Против дрожания и «уползания»</h3><ul class="ck">
+<li>Штатив/риг утяжелить, ножки и сет закрепить к столу или полу, сет — на струбцинах.</li>
+<li>Спуск только из Dragonframe по кабелю, к камере во время дубля не прикасаться.</li>
+<li>Тележку/слайдер — с проволочным указателем и линейкой или скотчем с метками: двигать на глаз даёт «chatter».</li>
+<li>Перед стартом проверь весь путь: камера доходит до финиша, ничего не цепляет, объект остаётся в кадре.</li>
+<li>Лего-тележка гуляет из стороны в сторону — для длинных проездов лучше рельс (молдинг, кабель-канал, модельные пути).</li>
+<li>Пластилин и тяжёлые куклы оседают под светом от жары — проверяй их онионом на длинных паузах.</li></ul></div>
+<div class="card"><h3 style="margin-top:0">Чем пользоваться в Dragonframe</h3><ul class="ck">
+<li><b>Onion skin</b> — полупрозрачная наложенная предыдущая фаза: сверяешь шаг.</li>
+<li><b>Переключение Live / последний кадр</b> — мигаешь между живым видом и снятым, ловишь сдвиг.</li>
+<li><b>Drawing / guides</b> — рисуешь траекторию прямо по экрану, ставишь тики по кадрам (колонка «% пути» в калькуляторе), ручками делаешь ease. Так в видео планируется панорама.</li>
+<li><b>X-sheet</b> — покадровый план: тайминг, фазы липсинка, заметки.</li>
+<li><b>Short play / loop</b> — проиграть последние кадры и проверить ритм, не пересматривая всё.</li>
+<li><b>Motion control (Arc)</b> — если появится риг: Dragonframe сам считает кривые с ease для осей. Пока рига нет, этот сайт его заменяет.</li></ul></div>
+<div class="card"><h3 style="margin-top:0">Перед камерным движением</h3><ul class="ck">
+<li>Отыграй действие с секундомером, получи хрон, выбери fps.</li>
+<li>Посчитай шаги здесь, распечатай ленту 1:1 или наклей малярный скотч с метками.</li>
+<li>Добавь передний план близко к камере и детали сзади — проезд читается за счёт параллакса.</li>
+<li>Для персонажа и камеры одинаковый шаг = он стоит в кадре. Чуть больше у героя (+5–15%) — он вырывается вперёд.</li>
+<li>Если строб получается сильным — уменьши путь, увеличь хрон, переходи на 24 или добавь motion blur на посте.</li>
+<li>Поворотный круг (Lazy Susan) крутит сет, а свет стоит — тени поедут «странно». Иногда это красиво, иногда выдаёт приём.</li></ul></div>
+</div>
+</section>
+
+<!-- ============ VIDEO ============ -->
+<section id="s-video">
+<h2>Конспект: Michael Parks — Stop Motion Tutorial: Camera Moves</h2>
+<p class="lead"><a style="color:var(--acc)" href="https://www.youtube.com/watch?v=k9aF9kEq6vw" target="_blank" rel="noopener">Видео на YouTube ↗</a> · таймкоды открывают видео на нужном моменте.</p>
+<div class="card"><ul class="tl" id="v_tl"></ul></div>
+</section>
+
+</main>
+<div class="toast" id="toast">Скопировано</div>
+<script>
+// ---------- utils ----------
+const $=id=>document.getElementById(id);
+const fmt=(x,d=2)=>isFinite(x)?(+x).toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+const UNIT={mm:1,cm:10,in:25.4};
+function toast(t){const e=$('toast');e.textContent=t||'Скопировано';e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1400)}
+async function copy(txt){try{await navigator.clipboard.writeText(txt);toast()}catch(e){const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast()}catch(_){toast('Не удалось')}ta.remove()}}
+const store={get(k,d){try{const v=localStorage.getItem('msm_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('msm_'+k,JSON.stringify(v))}catch(e){}}};
+
+// ---------- routing ----------
+const pages=['move','pan','track','crop','time','fps','theory','pix','dragon','video'];
+function route(){let h=location.hash.slice(1);if(!pages.includes(h))h='move';pages.forEach(p=>$('s-'+p).classList.toggle('on',p===h));document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+h));activePage=h}
+let activePage='move';window.addEventListener('hashchange',route);
+
+// ---------- speed profile engine ----------
+function rampShape(x,sh){x=Math.max(0,Math.min(1,x));if(sh==='lin')return x;if(sh==='q')return x*x;return (1-Math.cos(Math.PI*x))/2}
+// returns M weights (velocity per move)
+function profileEase(M,inP,outP,sh,minP){const mn=(minP||0)/100;let a=M*inP/100,b=M*outP/100;if(a+b>M){const k=M/(a+b);a*=k;b*=k}
+ const w=[];for(let k=0;k<M;k++){const t=k+0.5;let v=1;if(a>0&&t<a)v=Math.min(v,rampShape(t/a,sh));if(b>0&&t>M-b)v=Math.min(v,rampShape((M-t)/b,sh));w.push(Math.max(mn+(1-mn)*v,1e-6))}return w}
+// monotone cubic interpolation
+function mono(pts){const n=pts.length,xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);const d=[],m=[];for(let i=0;i<n-1;i++)d.push((ys[i+1]-ys[i])/((xs[i+1]-xs[i])||1e-9));m[0]=d[0];m[n-1]=d[n-2];for(let i=1;i<n-1;i++)m[i]=d[i-1]*d[i]<=0?0:(d[i-1]+d[i])/2;
+ for(let i=0;i<n-1;i++){if(d[i]===0){m[i]=m[i+1]=0;continue}const a=m[i]/d[i],b=m[i+1]/d[i],s=a*a+b*b;if(s>9){const t=3/Math.sqrt(s);m[i]=t*a*d[i];m[i+1]=t*b*d[i]}}
+ return x=>{if(x<=xs[0])return ys[0];if(x>=xs[n-1])return ys[n-1];let i=0;while(x>xs[i+1])i++;const h=xs[i+1]-xs[i],t=(x-xs[i])/h,t2=t*t,t3=t2*t;return (2*t3-3*t2+1)*ys[i]+(t3-2*t2+t)*h*m[i]+(-2*t3+3*t2)*ys[i+1]+(t3-t2)*h*m[i+1]}}
+function profileCurve(M,pts){const f=mono(pts);const w=[];for(let k=0;k<M;k++)w.push(Math.max(f((k+0.5)/M),1e-4));return w}
+function distribute(w,D){const s=w.reduce((a,b)=>a+b,0);return w.map(v=>v/s*D)}
+
+// ---------- MOVE ----------
+const PRESETS={flat:[[0,1],[1,1]],io:[[0,.05],[.3,1],[.7,1],[1,.05]],lo:[[0,.05],[.15,1],[.45,1],[1,.03]],in:[[0,.03],[.6,.6],[1,1]],out:[[0,1],[.4,.6],[1,.03]],ffs:[[0,1],[.5,.15],[1,1]],sfs:[[0,.1],[.3,1],[.55,.2],[.85,1],[1,.6]],fs:[[0,.6],[.1,.5],[.3,.3],[.5,.35],[.68,.8],[.82,1],[.93,.4],[1,.03]]};
+let curvePts=store.get('curve',PRESETS.io.map(p=>p.slice()));
+let mMode=store.get('mmode','lin');
+const mIds=['m_dist','m_unit','m_sec','m_by','m_fps','m_on','m_h1','m_h2','m_ein','m_eout','m_min','m_shape','m_fl','m_sens','m_sd'];
+mIds.forEach(id=>{const v=store.get(id,null);if(v!=null)$(id).value=v;$(id).addEventListener('input',()=>{store.set(id,$(id).value);calcMove()})});
+$('m_ends').checked=store.get('m_ends',true);$('m_ends').addEventListener('change',()=>{store.set('m_ends',$('m_ends').checked);calcMove()});
+function setMode(v){mMode=v;store.set('mmode',v);document.querySelectorAll('#m_mode button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));$('m_easebox').style.display=v==='ease'?'':'none';$('m_curvecard').style.display=v==='curve'?'':'none';calcMove()}
+document.querySelectorAll('#m_mode button').forEach(b=>b.onclick=()=>setMode(b.dataset.v));
+$('c_pre').onchange=e=>{if(PRESETS[e.target.value]){curvePts=PRESETS[e.target.value].map(p=>p.slice());store.set('curve',curvePts);drawCurve();calcMove()}e.target.value=''};
+// stopwatch
+let swT0=0,swRaf=0;$('sw_btn').onclick=()=>{if(!swT0){swT0=performance.now();$('sw_btn').textContent='■ Стоп';const tick=()=>{$('sw_t').textContent=fmt((performance.now()-swT0)/1000)+' с';swRaf=requestAnimationFrame(tick)};tick()}else{cancelAnimationFrame(swRaf);const s=(performance.now()-swT0)/1000;swT0=0;$('sw_btn').textContent='⏱ Секундомер';$('m_by').value='s';$('m_sec').value=s.toFixed(2);store.set('m_sec',$('m_sec').value);store.set('m_by','s');calcMove()}};
+
+let lastMove=null;
+function calcMove(){
+ const u=$('m_unit').value,D=+$('m_dist').value*UNIT[u],fps=+$('m_fps').value,on=+$('m_on').value;
+ const N=$('m_by').value==='s'?Math.round(+$('m_sec').value*fps):Math.round(+$('m_sec').value);
+ const secs=N/fps;const P=Math.max(1,Math.ceil(N/on)); // unique photos
+ const ends=$('m_ends').checked;const M=Math.max(1,ends?P-1:P);
+ let w;if(mMode==='lin')w=new Array(M).fill(1);else if(mMode==='ease')w=profileEase(M,+$('m_ein').value,+$('m_eout').value,$('m_shape').value,+$('m_min').value);else w=profileCurve(M,curvePts);
+ const steps=distribute(w,D);
+ const h1=Math.max(0,Math.round(+$('m_h1').value)),h2=Math.max(0,Math.round(+$('m_h2').value));
+ // rows
+ const rows=[];let pos=0,fr=1;
+ const pushPhoto=(step,hold)=>{rows.push({photo:rows.length+1,frame:fr,step,pos,pct:D?pos/D*100:0,hold});fr+=on};
+ for(let i=0;i<h1;i++)pushPhoto(0,true);
+ pushPhoto(0,false);
+ for(let i=0;i<(ends?M:M-1);i++){pos+=steps[i];pushPhoto(steps[i],false)}
+ for(let i=0;i<h2;i++)pushPhoto(0,true);
+ const mx=Math.max(...steps),mn=Math.min(...steps),avg=D/M;
+ const cv=x=>x/UNIT[u];const ul={mm:'мм',cm:'см',in:'″'}[u];
+ const big=x=>x<10?fmt(x,2)+' мм':fmt(x/10,2)+' см';
+ $('m_kpis').innerHTML=[['Кадров в движении',N,''],['Фото движения',P,on>1?'на '+(on===2?'двойках':'тройках'):''],['Шагов',ends?M:M,''],['Средний шаг',big(avg),'hl'],[mMode==='lin'?'Шаг':'Макс. шаг',big(mx),mMode==='lin'?'':'hl'],[mMode==='lin'?'Хрон':'Мин. шаг',mMode==='lin'?fmt(secs,2)+' с':big(mn),'']].map(k=>`<div class="kpi ${k[2]==='hl'?'hl':''}"><span>${k[0]}</span><b>${k[1]}</b>${k[2]&&k[2]!=='hl'?`<span>${k[2]}</span>`:''}</div>`).join('');
+ const den=ends?`(${P} − 1)`:`${P}`;
+ let ftxt=`N = ${fmt(secs,2)} с × ${fps} fps = ${N} кадров`+(on>1?`  →  ${N} ÷ ${on} = ${P} фото`:'')+`\nшаг = ${fmt(cv(D),2)} ${ul} ÷ ${den} = ${fmt(cv(avg),3)} ${ul}`;
+ if(mMode!=='lin')ftxt+=`  (средний; на рампе шаг меняется от ${fmt(cv(mn),3)} до ${fmt(cv(mx),3)} ${ul}, сумма = ${fmt(cv(D),2)} ${ul})`;
+ $('m_formula').textContent=ftxt;
+ // warnings
+ let wh='';const fl=+$('m_fl').value,sw=+$('m_sens').value,sd=+$('m_sd').value*10;
+ if(fl>0&&sw>0&&sd>0){const fw=sd*sw/fl;const pctF=mx/fw*100;const cross=fw/(mx*fps/on);
+  const cls=cross<3?'r':cross<5?'y':'g';
+  wh+=`<div class="warn ${cls}">Ширина кадра на ${fmt(sd/10,0)} см ≈ ${fmt(fw/10,1)} см. На самом быстром участке объект на этой дистанции сдвигается на <b>${fmt(pctF,1)}%</b> кадра за фото и пересёк бы кадр за <b>${fmt(cross,1)} с</b>. ${cls==='r'?'Будет заметный строб: увеличь хрон, уменьши путь, снимай на 24 или добавь блюр на посте.':cls==='y'?'На грани: ближние предметы могут дёргаться. Проверь онионом.':'Комфортно для глаза.'}</div>`}
+ if(mMode!=='lin'&&mn<0.3)wh+=`<div class="warn y">Самый мелкий шаг ${fmt(mn,2)} мм — руками его точно не повторить. Удлини рампу меньше или поставь «Стоп» в начале/конце вместо микрошагов.</div>`;
+ $('m_warn').innerHTML=wh;
+ lastMove={rows,D,u,ul,steps,N,fps,on};
+ // table
+ $('m_tbl').innerHTML=`<tr><th>Фото</th><th>Кадр тайм.</th><th>Шаг, ${ul}</th><th>Шаг, мм</th><th>Метка от старта, ${ul}</th><th>% пути</th></tr>`+rows.map(r=>`<tr class="${r.hold?'hold':''}"><td>${r.photo}</td><td>${r.frame}${on>1?'–'+(r.frame+on-1):''}</td><td>${r.hold?'стоп':fmt(cv(r.step),3)}</td><td>${r.hold?'':fmt(r.step,2)}</td><td>${fmt(cv(r.pos),2)}</td><td>${fmt(r.pct,1)}</td></tr>`).join('');
+ drawSpacing();drawTape();
+}
+function drawSpacing(){const {steps,D}=lastMove;const W=800,H=200,n=steps.length,mx=Math.max(...steps);let s='';const bw=W/n;
+ steps.forEach((v,i)=>{const h=v/mx*120;s+=`<rect x="${i*bw+bw*.12}" y="${130-h}" width="${Math.max(bw*.76,.5)}" height="${h}" fill="#ffb547" opacity=".85"/>`});
+ s+=`<line x1="0" y1="165" x2="${W}" y2="165" stroke="#5a5046"/>`;let p=0;s+=`<line x1="0" y1="155" x2="0" y2="175" stroke="#7fd4b0" stroke-width="2"/>`;
+ steps.forEach((v,i)=>{p+=v;const x=p/D*(W-2)+1;s+=`<line x1="${x}" y1="157" x2="${x}" y2="173" stroke="#7fd4b0" stroke-width="1"/>`});
+ s+=`<text x="0" y="195" fill="#a39789" font-size="11">старт</text><text x="${W}" y="195" fill="#a39789" font-size="11" text-anchor="end">финиш</text><text x="${W}" y="12" fill="#a39789" font-size="11" text-anchor="end">макс ${fmt(mx,2)} мм</text>`;
+ $('m_chart').innerHTML=s}
+function tapeSVG(scalePx){const {rows,D,u,ul}=lastMove;const mm=scalePx; // px per mm (for screen) or null for print(mm units)
+ const L=D,pad=10,W=L+pad*2,H=38;const cv=x=>x/UNIT[u];
+ let s=`<svg xmlns="http://www.w3.org/2000/svg" width="${scalePx?W*mm:W+'mm'}" height="${scalePx?H*mm:H+'mm'}" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" fill="#fff"/><line x1="${pad}" y1="20" x2="${pad+L}" y2="20" stroke="#000" stroke-width=".3"/>`;
+ // cm ruler
+ for(let x=0;x<=L+0.001;x+=10){s+=`<line x1="${pad+x}" y1="34" x2="${pad+x}" y2="38" stroke="#999" stroke-width=".2"/>`}
+ const mv=rows.filter((r,i)=>i===0||!r.hold||r.pos!==rows[i-1].pos);const seen=new Set();
+ rows.forEach(r=>{const key=r.pos.toFixed(4);if(seen.has(key))return;seen.add(key);const x=pad+r.pos;const big=r.photo%5===0||r.photo===1;s+=`<line x1="${x}" y1="${big?8:12}" x2="${x}" y2="28" stroke="#d00" stroke-width="${big?.35:.2}"/>`;if(big)s+=`<text x="${x}" y="6" font-size="3" text-anchor="middle" fill="#000" font-family="monospace">${r.photo}</text>`});
+ s+=`<text x="${pad}" y="33" font-size="2.4" fill="#555" font-family="monospace">Mubinov Stop Motion · путь ${fmt(cv(D),1)} ${ul} · ${rows.length} фото · номер = фото</text></svg>`;return s}
+function drawTape(){const px=Math.max(1.2,Math.min(4,1100/(lastMove.D+20)));$('m_tape').innerHTML=tapeSVG(px)}
+$('m_copysvg').onclick=()=>copy(tapeSVG(null));
+$('m_copy').onclick=()=>{const {rows,u}=lastMove;const cv=x=>x/UNIT[u];copy('Фото\tКадр\tШаг\tМетка\t%\n'+rows.map(r=>[r.photo,r.frame,r.hold?'стоп':cv(r.step).toFixed(3),cv(r.pos).toFixed(2),r.pct.toFixed(1)].join('\t')).join('\n'))};
+// curve editor
+const CW=800,CH=220,CP=16;const cx=x=>CP+x*(CW-2*CP),cy=y=>CH-CP-y*(CH-2*CP)*0.92;
+function drawCurve(){const f=mono(curvePts);let d='';for(let i=0;i<=200;i++){const x=i/200;d+=(i?'L':'M')+cx(x)+' '+cy(Math.max(0,f(x)))}
+ let g='';for(let i=0;i<=10;i++)g+=`<line x1="${cx(i/10)}" y1="${CP}" x2="${cx(i/10)}" y2="${CH-CP}" stroke="#2a2520"/>`;
+ $('curve').innerHTML=g+`<path d="${d} L${cx(1)} ${cy(0)} L${cx(0)} ${cy(0)} Z" fill="#ffb54722"/><path d="${d}" stroke="#ffb547" stroke-width="2.5" fill="none"/>`+curvePts.map((p,i)=>`<circle data-i="${i}" cx="${cx(p[0])}" cy="${cy(p[1])}" r="9" fill="#1d1a17" stroke="#7fd4b0" stroke-width="3" style="cursor:grab"/>`).join('')+`<text x="${CP}" y="${CH-2}" fill="#a39789" font-size="11">старт</text><text x="${CW-CP}" y="${CH-2}" fill="#a39789" font-size="11" text-anchor="end">финиш</text><text x="${CP+4}" y="${CP+10}" fill="#a39789" font-size="11">быстро</text>`}
+function svgPt(e){const r=$('curve').getBoundingClientRect();return[(e.clientX-r.left)/r.width*CW,(e.clientY-r.top)/r.height*CH]}
+let drag=-1;
+$('curve').addEventListener('pointerdown',e=>{const t=e.target;if(t.dataset.i!=null){drag=+t.dataset.i;$('curve').setPointerCapture(e.pointerId)}});
+$('curve').addEventListener('pointermove',e=>{if(drag<0)return;const[x,y]=svgPt(e);let nx=(x-CP)/(CW-2*CP),ny=(CH-CP-y)/((CH-2*CP)*.92);ny=Math.max(0,Math.min(1,ny));const n=curvePts.length;
+ if(drag===0)nx=0;else if(drag===n-1)nx=1;else nx=Math.max(curvePts[drag-1][0]+.01,Math.min(curvePts[drag+1][0]-.01,nx));curvePts[drag]=[nx,ny];drawCurve();calcMove()});
+$('curve').addEventListener('pointerup',()=>{if(drag>=0)store.set('curve',curvePts);drag=-1});
+$('curve').addEventListener('dblclick',e=>{const t=e.target;if(t.dataset.i!=null){const i=+t.dataset.i;if(i>0&&i<curvePts.length-1)curvePts.splice(i,1)}else{const[x,y]=svgPt(e);const nx=(x-CP)/(CW-2*CP),ny=Math.max(0,Math.min(1,(CH-CP-y)/((CH-2*CP)*.92)));if(nx>0&&nx<1){curvePts.push([nx,ny]);curvePts.sort((a,b)=>a[0]-b[0])}}store.set('curve',curvePts);drawCurve();calcMove()});
+
+// ---------- PAN ----------
+const pIds=['p_ang','p_sec','p_fps','p_ein','p_eout','p_min','p_shape','p_r','p_fl','p_sens'];pIds.forEach(id=>{const v=store.get(id,null);if(v!=null)$(id).value=v;$(id).addEventListener('input',()=>{store.set(id,$(id).value);calcPan()})});
+let lastPan=[];
+function calcPan(){const A=+$('p_ang').value,fps=+$('p_fps').value,N=Math.round(+$('p_sec').value*fps),M=Math.max(1,N-1),R=+$('p_r').value*10;
+ const steps=distribute(profileEase(M,+$('p_ein').value,+$('p_eout').value,$('p_shape').value,+$('p_min').value),A);const mx=Math.max(...steps);
+ const arc=x=>2*Math.PI*R*x/360;const fov=2*Math.atan(+$('p_sens').value/(2*+$('p_fl').value))*180/Math.PI;const cross=fov/(mx*fps);
+ $('p_kpis').innerHTML=[['Кадров',N],['Средний шаг',fmt(A/M,2)+'°'],['Макс. шаг',fmt(mx,2)+'°'],['Дуга всего',fmt(arc(A)/10,1)+' см'],['Макс. по дуге',fmt(arc(mx),1)+' мм'],['Гориз. FOV',fmt(fov,1)+'°']].map((k,i)=>`<div class="kpi ${i==2||i==4?'hl':''}"><span>${k[0]}</span><b>${k[1]}</b></div>`).join('');
+ $('p_formula').textContent=`N = ${$('p_sec').value} с × ${fps} = ${N} кадров, шагов ${M}\nсредний = ${A}° ÷ ${M} = ${fmt(A/M,3)}°;  дуга = 2π × ${fmt(R/10,1)} см × ${A}/360 = ${fmt(arc(A)/10,2)} см`;
+ const cls=cross<3?'r':cross<5?'y':'g';$('p_warn').innerHTML=`<div class="warn ${cls}">На пике объект пересекает кадр за <b>${fmt(cross,1)} с</b>. ${cls==='r'?'Быстро для стоп-моушена без блюра — будет строб. Ориентир: не быстрее 5–7 с на ширину кадра.':cls==='y'?'На грани, особенно на 12 fps и ниже.':'Комфортная скорость панорамы.'}</div>`;
+ let pos=0;const rows=[{i:1,step:0,pos:0}];steps.forEach((s,i)=>{pos+=s;rows.push({i:i+2,step:s,pos})});lastPan=rows.map(r=>({...r,arc:arc(r.step),arcPos:arc(r.pos)}));
+ $('p_tbl').innerHTML='<tr><th>Кадр</th><th>Шаг, °</th><th>Угол от старта, °</th><th>Шаг по дуге, мм</th><th>Метка по дуге, мм</th></tr>'+lastPan.map(r=>`<tr><td>${r.i}</td><td>${fmt(r.step,3)}</td><td>${fmt(r.pos,2)}</td><td>${fmt(r.arc,2)}</td><td>${fmt(r.arcPos,1)}</td></tr>`).join('');
+ // arc drawing
+ const ox=400,oy=310,rr=280,a0=-90-A/2;this._lx=null;let s=`<circle cx="${ox}" cy="${oy}" r="5" fill="#a39789"/>`;const P=a=>[ox+rr*Math.cos(a*Math.PI/180),oy+rr*Math.sin(a*Math.PI/180)];
+ const [sx,sy]=P(a0),[ex,ey]=P(a0+A);s+=`<path d="M${sx} ${sy} A${rr} ${rr} 0 ${A>180?1:0} 1 ${ex} ${ey}" stroke="#5a5046" fill="none" stroke-width="2"/>`;
+ lastPan.forEach((r,i)=>{const [x1,y1]=P(a0+r.pos);const [x0,y0]=[ox+(rr-14)*Math.cos((a0+r.pos)*Math.PI/180),oy+(rr-14)*Math.sin((a0+r.pos)*Math.PI/180)];s+=`<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="${i%5==0?'#ffb547':'#7fd4b0'}" stroke-width="${i%5==0?2:1}"/>`;if(i%5==0&&(!this._lx||Math.hypot(x1-this._lx[0],y1-this._lx[1])>22)){this._lx=[x1,y1];const[tx,ty]=[ox+(rr+14)*Math.cos((a0+r.pos)*Math.PI/180),oy+(rr+14)*Math.sin((a0+r.pos)*Math.PI/180)];s+=`<text x="${tx}" y="${ty}" fill="#a39789" font-size="11" text-anchor="middle">${r.i}</text>`}});
+ s+=`<line x1="${ox}" y1="${oy}" x2="${sx}" y2="${sy}" stroke="#ffb54766" stroke-dasharray="4 4"/><line x1="${ox}" y1="${oy}" x2="${ex}" y2="${ey}" stroke="#ffb54766" stroke-dasharray="4 4"/><text x="${ox}" y="${oy+18}" fill="#a39789" font-size="11" text-anchor="middle">ось штатива</text>`;$('p_arc').innerHTML=s}
+$('p_copy').onclick=()=>copy('Кадр\tШаг°\tУгол°\tШаг дуга мм\tМетка дуга мм\n'+lastPan.map(r=>[r.i,r.step.toFixed(3),r.pos.toFixed(2),r.arc.toFixed(2),r.arcPos.toFixed(1)].join('\t')).join('\n'));
+
+// ---------- TRACK ----------
+const tIds=['t_cam','t_lead','t_sec','t_fps','t_what','t_d1','t_d2','t_d3','t_dref'];tIds.forEach(id=>{const v=store.get(id,null);if(v!=null)$(id).value=v;$(id).addEventListener('input',()=>{store.set(id,$(id).value);calcTrack()})});
+function calcTrack(){const C=+$('t_cam').value*10,L=+$('t_lead').value,fps=+$('t_fps').value,N=Math.round(+$('t_sec').value*fps),M=Math.max(1,N-1);const cs=C/M,ss=cs*(1+L/100);const bg=$('t_what').value==='bg';
+ $('t_kpis').innerHTML=[[bg?'Шаг фона':'Шаг камеры',fmt(cs,2)+' мм'],['Шаг объекта',fmt(ss,2)+' мм'],['Объект уйдёт вперёд в кадре на',fmt((ss-cs)*M/10,1)+' см'],['Кадров',N]].map((k,i)=>`<div class="kpi ${i<2?'hl':''}"><span>${k[0]}</span><b>${k[1]}</b></div>`).join('');
+ $('t_formula').textContent=bg?`Камера стоит. Объект на месте «бежит» в кадре, фон едет назад на ${fmt(cs,2)} мм за кадр.\nЧтобы герой продвигался вперёд, двигай его на ${fmt(ss-cs,2)} мм за кадр в сторону движения (опережение ${L}%).`:`камера ${fmt(C/10,1)} см ÷ ${M} = ${fmt(cs,2)} мм/кадр;  объект × ${(1+L/100).toFixed(2)} = ${fmt(ss,2)} мм/кадр`;
+ const dref=+$('t_dref').value;const layers=[['Передний план',+$('t_d1').value],['Средний',+$('t_d2').value],['Дальний',+$('t_d3').value]];
+ $('t_tbl').innerHTML=`<tr><th style="text-align:left">Слой</th><th>Дистанция, см</th><th>Относит. скорость</th><th>${bg?'Сдвиг слоя за кадр, мм':'Видимый сдвиг (экв.), мм'}</th></tr>`+layers.map(l=>{const k=dref/l[1];return `<tr><td style="text-align:left">${l[0]}</td><td>${l[1]}</td><td>${fmt(k,2)}×</td><td>${fmt(cs*k,2)}</td></tr>`}).join('')+`<tr class="hold"><td style="text-align:left" colspan="4">Скорость слоя ≈ (опорная дистанция ÷ дистанция слоя). Ближе к камере — быстрее, дальний фон почти стоит.</td></tr>`}
+
+// ---------- CROP ----------
+const cIds=['c_sw','c_sh','c_out','c_z1','c_z2','c_sec','c_fps'];cIds.forEach(id=>{const v=store.get(id,null);if(v!=null)$(id).value=v;$(id).addEventListener('input',()=>{store.set(id,$(id).value);calcCrop()})});
+function calcCrop(){const sw=+$('c_sw').value,sh=+$('c_sh').value,[ow,oh]=$('c_out').value.split('x').map(Number);const fit=Math.max(ow/sw,oh/sh);// fill
+ const maxZ=1/fit;const z1=+$('c_z1').value,z2=+$('c_z2').value;const N=Math.round(+$('c_sec').value*+$('c_fps').value);
+ $('c_kpis').innerHTML=[['Scale «заполнить кадр»',fmt(fit*100,1)+'%'],['Макс. наезд без апскейла',fmt(maxZ,2)+'×'],['Scale старт',fmt(fit*z1*100,1)+'%'],['Scale финиш',fmt(fit*z2*100,1)+'%'],['Кадров',N]].map((k,i)=>`<div class="kpi ${i==1?'hl':''}"><span>${k[0]}</span><b>${k[1]}</b></div>`).join('');
+ $('c_formula').textContent=`заполнить = max(${ow}/${sw}, ${oh}/${sh}) = ${fmt(fit*100,1)}%;  предел 100% = ${fmt(maxZ,2)}× наезда\nДля ровного по ощущению наезда интерполируй scale экспоненциально (в AE — Exponential Scale), плюс ease in/out.`;
+ $('c_warn').innerHTML=Math.max(z1,z2)>maxZ+1e-9?`<div class="warn r">${fmt(Math.max(z1,z2),2)}× больше предела ${fmt(maxZ,2)}× — будет апскейл и мыло.</div>`:`<div class="warn g">Запас по резкости: ${fmt(maxZ/Math.max(z1,z2),2)}×.</div>`;
+ const W=760,sc=W/sw,H=sh*sc;const rw=ow/fit,rh=oh/fit;const r=(z,c)=>{const w=rw/z*sc,h=rh/z*sc;return `<rect x="${20+(W-w)/2}" y="${(380-H)/2+(H-h)/2}" width="${w}" height="${h}" fill="none" stroke="${c}" stroke-width="2"/>`};
+ $('c_vis').innerHTML=`<rect x="20" y="${(380-H)/2}" width="${W}" height="${H}" fill="#25211d" stroke="#5a5046"/><text x="26" y="${(380-H)/2+16}" fill="#a39789" font-size="12">фото ${sw}×${sh}</text>`+r(z1,'#7fd4b0')+r(z2,'#ffb547')+r(maxZ,'#ff6b5e')+`<text x="20" y="396" fill="#7fd4b0" font-size="12">старт</text><text x="70" y="396" fill="#ffb547" font-size="12">финиш</text><text x="130" y="396" fill="#ff6b5e" font-size="12">предел 1:1</text>`}
+
+// ---------- TIME ----------
+function kp(arr){return arr.map((k,i)=>`<div class="kpi ${k[2]?'hl':''}"><span>${k[0]}</span><b>${k[1]}</b></div>`).join('')}
+function calcTime(){const s=+$('tm_s').value,fps=+$('tm_fps').value,on=+$('tm_on').value,N=Math.round(s*fps);
+ $('tm_k1').innerHTML=kp([['Кадров',N,1],['Фото',Math.ceil(N/on)],['Один кадр',fmt(1000/fps,1)+' мс']]);
+ const f=+$('tm_f').value;$('tm_k2').innerHTML=kp([['Секунд',fmt(f/fps,2),1],['Сек+кадр',Math.floor(f/fps)+'+'+(f%fps)]]);
+ const ss=+$('sd_s').value,sf=+$('sd_fps').value,so=+$('sd_on').value,ph=Math.ceil(ss*sf/so),min=ph*+$('sd_m').value*+$('sd_x').value,hrs=min/60;
+ $('sd_k').innerHTML=kp([['Фото',ph],['Чистое время',fmt(hrs,1)+' ч',1],['Смен',fmt(hrs/+$('sd_h').value,1),1]]);
+ const n=+$('cv_n').value,a=+$('cv_a').value,b=+$('cv_b').value;$('cv_k').innerHTML=kp([['Было',fmt(n/a,2)+' с'],['На '+b+' fps каждое фото держать',fmt(b/a,2)+' кадра',1],['Если по 1 кадру',fmt(n/b,2)+' с']])}
+['tm_s','tm_fps','tm_on','tm_f','sd_s','sd_fps','sd_on','sd_m','sd_x','sd_h','cv_n','cv_a','cv_b'].forEach(id=>$(id).addEventListener('input',calcTime));
+
+// ---------- ANIMATION SCENES (pure functions of t in seconds) ----------
+const ease=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
+const loopT=(t,L)=>((t%L)+L)%L;
+function bg(c,w,h){c.fillStyle='#0f0d0b';c.fillRect(0,0,w,h)}
+function ground(c,w,h,y){c.strokeStyle='#3a332c';c.lineWidth=2;c.beginPath();c.moveTo(0,y);c.lineTo(w,y);c.stroke()}
+const SC={
+ ball(c,w,h,t){const L=2;const p=loopT(t,L)/L;const x=w*.12+w*.76*(p<.5?p*2:2-p*2);const b=Math.abs(Math.sin(p*Math.PI*4));const gy=h*.82;const y=gy-18-b*h*.5;const sq=b<.12?1-(.12-b)*2.5:1+(b>.3&&b<.8?0.08:0);
+  ground(c,w,h,gy);c.fillStyle='#ffb547';c.beginPath();c.ellipse(x,y+18*(1-sq)*0,18/Math.sqrt(sq),18*sq,0,0,7);c.fill()},
+ dolly(c,w,h,t){const L=4;const p=ease(loopT(t,L)/L<.5?loopT(t,L)/L*2:2-loopT(t,L)/L*2);const off=p*w*.8;
+  c.fillStyle='#2b2620';for(let i=0;i<9;i++){const x=((i*140-off*.25)%1260+1260)%1260-100;c.fillRect(x,h*.25,60,h*.5)}
+  c.fillStyle='#4a3f34';for(let i=0;i<7;i++){const x=((i*170-off*.6)%1190+1190)%1190-120;c.fillRect(x,h*.45,40,h*.4)}
+  ground(c,w,h,h*.85);c.fillStyle='#7fd4b0';c.beginPath();c.arc(w*.5,h*.72,h*.12,0,7);c.fill();
+  c.fillStyle='#ffb547';for(let i=0;i<5;i++){const x=((i*260-off*1.6)%1300+1300)%1300-140;c.fillRect(x,0,26,h)}},
+ pan(c,w,h,t){const L=4;const q=loopT(t,L)/L;const p=q<.5?ease(q*2):1-ease((q-.5)*2);const off=p*w*1.2;
+  for(let i=0;i<14;i++){const x=i*120-off;c.fillStyle=i%2?'#2b2620':'#3a3128';c.fillRect(x,h*.2,80,h*.6);c.fillStyle='#ffb547';c.fillRect(x+30,h*.3,20,20)}
+  c.strokeStyle='#7fd4b066';c.lineWidth=1;c.strokeRect(4,4,w-8,h-8)},
+ spin(c,w,h,t){const a=t*Math.PI*.8;const cx=w/2,cy=h/2;c.save();c.translate(cx,cy);c.rotate(a);c.fillStyle='#ffb547';c.fillRect(-h*.28,-h*.06,h*.56,h*.12);c.fillStyle='#7fd4b0';c.fillRect(-h*.06,-h*.28,h*.12,h*.56);c.restore();
+  c.fillStyle='#efe8df';c.beginPath();c.arc(cx+Math.cos(a)*h*.36,cy+Math.sin(a)*h*.36,6,0,7);c.fill()},
+ walk(c,w,h,t){const L=1;const ph=loopT(t,L)/L*Math.PI*2;const gy=h*.85;ground(c,w,h,gy);const x=w*.5,hip=gy-h*.3+Math.abs(Math.cos(ph))*-6;
+  c.strokeStyle='#efe8df';c.lineWidth=5;c.lineCap='round';const leg=(s)=>{const a=Math.sin(ph+s)*.5;const kx=x+Math.sin(a)*h*.15,ky=hip+Math.cos(a)*h*.15;const a2=a-Math.max(0,Math.sin(ph+s+1))*.6;c.beginPath();c.moveTo(x,hip);c.lineTo(kx,ky);c.lineTo(kx+Math.sin(a2)*h*.15,ky+Math.cos(a2)*h*.15);c.stroke()};
+  c.strokeStyle='#8a7f73';leg(Math.PI);c.strokeStyle='#efe8df';leg(0);
+  c.beginPath();c.moveTo(x,hip);c.lineTo(x,hip-h*.28);c.stroke();c.fillStyle='#ffb547';c.beginPath();c.arc(x,hip-h*.36,h*.07,0,7);c.fill();
+  c.strokeStyle='#efe8df';c.beginPath();c.moveTo(x,hip-h*.24);c.lineTo(x-Math.sin(ph)*h*.12,hip-h*.1);c.stroke()}
+};
+// theory scenes
+const TH=[
+ {n:'Линейное движение',d:'Равные шаги — постоянная скорость. Старт и стоп резкие, как будто объект «включили». Хорошо для механики, плохо для камеры.',fps:12,L:2.6,f(c,w,h,t){const L=2.6,q=Math.min(1,loopT(t,L)/2);ticks(c,w,h,x=>x,10);c.fillStyle='#ffb547';c.beginPath();c.arc(w*.1+w*.8*q,h*.45,16,0,7);c.fill()}},
+ {n:'Разгон и торможение (ease)',d:'Шаги мелкие у старта и финиша, крупные в середине. Именно так считается рампа в калькуляторе.',fps:12,L:2.6,f(c,w,h,t){const L=2.6,q=Math.min(1,loopT(t,L)/2);ticks(c,w,h,ease,10);c.fillStyle='#ffb547';c.beginPath();c.arc(w*.1+w*.8*ease(q),h*.45,16,0,7);c.fill()}},
+ {n:'Длинное торможение камеры',d:'Совет из видео: камере нужно больше времени, чтобы остановиться, чем чтобы разогнаться. Короткий разгон, долгий доезд.',fps:12,L:3.4,f(c,w,h,t){const L=3.4,q=Math.min(1,loopT(t,L)/2.8);const e=x=>1-Math.pow(1-x,3)*(x<.2?1:1);const g=x=>x<.15?(x/.15)**2*.08:.08+(1-Math.pow(1-(x-.15)/.85,2.6))*.92;const off=g(q)*w*.9;
+  for(let i=0;i<12;i++){c.fillStyle=i%2?'#2b2620':'#3a3128';c.fillRect(i*90-off,h*.15,60,h*.55)}ticks(c,w,h,g,10)}},
+ {n:'Дуги (arcs)',d:'Живое движение идёт по дуге. Серый шар — прямая интерполяция между крайними позициями, оранжевый — по дуге.',fps:12,L:2.4,f(c,w,h,t){const L=2.4,q=loopT(t,L)/L;const p=ease(q<.5?q*2:2-q*2);const x=w*.15+w*.7*p;c.strokeStyle='#3a332c';c.setLineDash([4,5]);c.beginPath();c.moveTo(w*.15,h*.75);c.quadraticCurveTo(w*.5,-h*.15,w*.85,h*.75);c.stroke();c.beginPath();c.moveTo(w*.15,h*.75);c.lineTo(w*.85,h*.75);c.stroke();c.setLineDash([]);
+  c.fillStyle='#5a5046';c.beginPath();c.arc(x,h*.75,12,0,7);c.fill();const y=h*.75-4*p*(1-p)*h*.45*1.0;c.fillStyle='#ffb547';c.beginPath();c.arc(x,y,14,0,7);c.fill()}},
+ {n:'Сжатие и растяжение',d:'Мяч сплющивается в касании и вытягивается на скорости. Объём сохраняется: шире — значит ниже.',fps:12,L:1.2,f(c,w,h,t){const L=1.2,q=loopT(t,L)/L;const gy=h*.85;ground(c,w,h,gy);const hgt=Math.pow(Math.sin(q*Math.PI),.9);const speed=Math.abs(Math.cos(q*Math.PI));let sy=1+speed*.25,sx=1/sy;if(hgt<.06){sy=.6;sx=1/.6*.9}const r=20;c.fillStyle='#ffb547';c.beginPath();c.ellipse(w/2,gy-r*sy-hgt*h*.55,r*sx,r*sy,0,0,7);c.fill()}},
+ {n:'Превращение (replacement / морфинг)',d:'Форма меняется от фото к фото: пластилин, замещаемые детали, вырезки. Чем больше промежуточных фаз — тем мягче метаморфоза.',fps:8,L:4,f(c,w,h,t){const L=4,q=loopT(t,L)/L;const sh=[a=>1,a=>1/Math.max(Math.abs(Math.cos(a)),Math.abs(Math.sin(a))),a=>.62+.38*Math.cos(5*a),a=>1+.18*Math.sin(3*a)];const k=q*4,i=Math.floor(k)%4,j=(i+1)%4,m=ease(k-Math.floor(k));
+  c.fillStyle=['#ffb547','#7fd4b0','#ff6b5e','#efe8df'][i];c.beginPath();for(let s=0;s<=120;s++){const a=s/120*Math.PI*2;const r=h*.3*((1-m)*Math.min(sh[i](a),1.42)+m*Math.min(sh[j](a),1.42));const x=w/2+Math.cos(a)*r,y=h/2+Math.sin(a)*r;s?c.lineTo(x,y):c.moveTo(x,y)}c.fill()}},
+ {n:'Проезд и параллакс',d:'Камера едет вбок: передний план летит, средний идёт, дальний почти стоит. Без переднего плана проезд почти не читается.',fps:12,L:4,f(c,w,h,t){SC.dolly(c,w,h,t)}},
+ {n:'Фон вместо камеры',d:'Камера стоит, едет фон. Герой «бежит» на месте и чуть продвигается вперёд — так ощущение скорости сильнее.',fps:12,L:3,f(c,w,h,t){const off=t*w*.35;c.fillStyle='#2b2620';for(let i=0;i<10;i++){const x=((i*110-off*.4)%1100+1100)%1100-100;c.fillRect(x,h*.2,50,h*.55)}ground(c,w,h,h*.8);c.fillStyle='#4a3f34';for(let i=0;i<8;i++){const x=((i*90-off)%720+720)%720-60;c.fillRect(x,h*.8,4,h*.2)}
+  const L=3,q=loopT(t,L)/L;const x=w*.35+q*w*.15;c.fillStyle='#ffb547';c.fillRect(x-30,h*.6,60,h*.16);c.fillStyle='#efe8df';c.beginPath();c.arc(x-16,h*.77,9,0,7);c.arc(x+16,h*.77,9,0,7);c.fill()}},
+ {n:'Поворотный круг (Lazy Susan)',d:'Крутится сет, а свет стоит: тени и блики «едут» по предметам не так, как при движении камеры.',fps:12,L:6,f(c,w,h,t){const a=t*.9;const cx=w/2,cy=h*.6,R=w*.34;c.fillStyle='#25211d';c.beginPath();c.ellipse(cx,cy,R,R*.35,0,0,7);c.fill();c.fillStyle='#ffb547';c.beginPath();c.arc(w*.12,h*.12,10,0,7);c.fill();
+  const objs=[0,2.1,4.2].map(o=>{const x=cx+Math.cos(a+o)*R*.6,y=cy+Math.sin(a+o)*R*.6*.35;return{x,y}}).sort((p,q)=>p.y-q.y);
+  objs.forEach(o=>{c.fillStyle='#00000088';c.beginPath();c.ellipse(o.x+18,o.y+4,18,6,0,0,7);c.fill()});objs.forEach((o,i)=>{c.fillStyle='#7fd4b0';c.fillRect(o.x-10,o.y-40,20,40);c.fillStyle='#efe8df';c.fillRect(o.x-10,o.y-40,7,40)})}},
+ {n:'Единицы и двойки',d:'Сверху — 24 уникальных фазы в секунду (на единицах), снизу — 12 фаз, каждая держится 2 кадра (на двойках). Видео остаётся 24 fps.',fps:24,L:2,f(c,w,h,t,fps){const L=2;const p1=loopT(t,L)/L;const t2=Math.floor(t*12)/12;const p2=loopT(t2,L)/L;const X=p=>w*.1+w*.8*(p<.5?ease(p*2):1-ease((p-.5)*2));c.fillStyle='#ffb547';c.beginPath();c.arc(X(p1),h*.32,15,0,7);c.fill();c.fillStyle='#7fd4b0';c.beginPath();c.arc(X(p2),h*.7,15,0,7);c.fill();c.fillStyle='#a39789';c.font='12px JetBrains Mono';c.fillText('на 1',8,h*.32-20);c.fillText('на 2',8,h*.7-20)}},
+ {n:'Слежка за объектом',d:'Камера и герой с одинаковым шагом — герой стоит в кадре. Герой на 10–15% быстрее — медленно выезжает вперёд, скорость читается.',fps:12,L:4,f(c,w,h,t){const L=4,q=loopT(t,L)/L;const off=q*w*1.5;c.fillStyle='#2b2620';for(let i=0;i<16;i++)c.fillRect(i*80-off,h*.25,40,h*.5);ground(c,w,h,h*.82);c.fillStyle='#ffb547';const x=w*.3+q*w*.3;c.beginPath();c.arc(x,h*.68,18,0,7);c.fill()}},
+ {n:'Предвосхищение (anticipation)',d:'Перед рывком — движение в обратную сторону. Зритель успевает прочитать намерение. Работает и для камеры: лёгкий откат перед проездом.',fps:12,L:2.4,f(c,w,h,t){const L=2.4,q=loopT(t,L)/L;let p;if(q<.35)p=-.12*ease(q/.35);else if(q<.65)p=-.12+1.12*ease((q-.35)/.3);else p=1;ground(c,w,h,h*.8);c.fillStyle='#ffb547';const x=w*.25+w*.5*p;const sq=q>.25&&q<.38?.8:1;c.beginPath();c.ellipse(x,h*.8-22*sq,22/sq,22*sq,0,0,7);c.fill()}}
+];
+function ticks(c,w,h,fn,n){c.strokeStyle='#7fd4b0';c.lineWidth=1.5;c.beginPath();c.moveTo(w*.1,h*.85);c.lineTo(w*.9,h*.85);c.stroke();for(let i=0;i<=n;i++){const x=w*.1+w*.8*fn(i/n);c.beginPath();c.moveTo(x,h*.8);c.lineTo(x,h*.9);c.stroke()}}
+
+// ---------- canvas runner ----------
+const players=[];let paused=false,speed=1,clock=0,lastNow=performance.now();
+function mkCanvas(){const cv=document.createElement('canvas');return cv}
+function sizeCanvas(cv){const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;const W=Math.round(r.width*d),H=Math.round(r.width*.625*d);if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}return[r.width,r.width*.625,d]}
+function render(pl){if(!pl.cv.offsetParent)return;const[w,h,d]=sizeCanvas(pl.cv);const c=pl.cv.getContext('2d');c.setTransform(d,0,0,d,0,0);const fps=pl.fps();const ft=Math.floor(clock*fps)/fps;bg(c,w,h);
+ if(pl.onion()){for(let k=3;k>=1;k--){c.globalAlpha=.12*(4-k)/1.2;pl.draw(c,w,h,ft-k/fps,fps)}c.globalAlpha=1}pl.draw(c,w,h,ft,fps)}
+function loop(now){const dt=(now-lastNow)/1000;lastNow=now;if(!paused)clock+=dt*speed;players.forEach(p=>{if((activePage==='fps'&&p.g==='fps')||(activePage==='theory'&&p.g==='th'))render(p)});requestAnimationFrame(loop)}
+// FPS lab
+let flScene='ball';const FPSL=[24,18,15,12,8,5];
+FPSL.forEach(f=>{const d=document.createElement('div');d.className='demo';const cv=mkCanvas();d.appendChild(cv);const m=document.createElement('div');m.className='meta';m.innerHTML=`<b>${f} fps</b><span class="hint">${f} фаз/сек · фаза ${fmt(1000/f,0)} мс</span>`;d.appendChild(m);$('fl_grid').appendChild(d);players.push({g:'fps',cv,fps:()=>f,onion:()=>$('fl_onion').checked,draw:(c,w,h,t)=>SC[flScene](c,w,h,t)})});
+document.querySelectorAll('#fl_scene button').forEach(b=>b.onclick=()=>{flScene=b.dataset.v;document.querySelectorAll('#fl_scene button').forEach(x=>x.classList.toggle('on',x===b))});
+$('fl_speed').onchange=e=>speed=+e.target.value;$('fl_pause').onclick=()=>{paused=!paused;$('fl_pause').textContent=paused?'Играть':'Пауза'};
+// theory
+TH.forEach((s,i)=>{const d=document.createElement('div');d.className='demo';const cv=mkCanvas();d.appendChild(cv);const m=document.createElement('div');m.className='meta';
+ m.innerHTML=`<h4>${s.n}</h4><p>${s.d}</p><div class="ctl"><select>${[24,18,15,12,8,5].map(f=>`<option ${f===s.fps?'selected':''}>${f}</option>`).join('')}</select><span class="hint">fps</span><label><input type="checkbox"> onion</label></div>`;d.appendChild(m);$('th_grid').appendChild(d);
+ const sel=m.querySelector('select'),ch=m.querySelector('input');players.push({g:'th',cv,fps:()=>+sel.value,onion:()=>ch.checked,draw:(c,w,h,t,f)=>s.f(c,w,h,t,f)})});
+
+// ---------- video notes ----------
+const VT=[['0:14','Зачем двигать камеру: сдвиг переднего, среднего и заднего планов даёт сцене динамику.'],['0:35','Тележка из LEGO — едет вперёд за действием, рельсы не попадают в кадр.'],['0:46','Камеру закрепить намертво (двусторонний скотч), конструкцию укрепить и утяжелить.'],['0:58','На глаз — дрожание («chatter»). Решение: проволочный указатель на базе + линейка вдоль пути, одинаковый шаг каждый кадр, примерно равный шагу объекта.'],['1:22','Проводить мимо камеры детали по бокам — ощущение движения сильнее.'],['1:27','Сравнение 12 и 24 fps: по мнению автора, все движения камеры лучше на 24.'],['1:39','Минус LEGO — люфт вбок, тележка уходит с траектории.'],['2:00','Слайдер из винилового решётчатого профиля и молдинга из строймагазина; держит телефон и DSLR. Наклон — подкладками спереди/сзади.'],['2:32','Сначала спланировать: путь всех объектов, как держать героя в кадре; потом закрепить рельс к столу. Передний план близко к камере + детали сзади = глубина.'],['2:49','Формула: секундомером засечь действие, × 24 (при 24 fps), путь ÷ это число = шаг.'],['3:03','Указатель + линейка или малярный скотч с метками каждого кадра. На скотче удобно рассчитать ease in/out: к началу и концу шаг плавно и равномерно уменьшается до минимального.'],['3:27','Объект двигать тоже по замерам. Камера держит объект — одинаковый шаг; красиво, если объект чуть быстрее камеры.'],['3:50','Кабель-канал из ПВХ: кусок крышки туго скользит по основанию — мини-слайдер для телефона.'],['3:59','Модельная железная дорога: две параллельные колеи и две платформы — держит тяжёлую камеру.'],['4:17','Панорама в Dragonframe: точка на сете в начале, провернуть в конец, провести линию до новой позиции точки, нарисовать тики по кадрам, ручками сделать ease.'],['4:41','Торможение длиннее разгона — камере нужно больше времени, чтобы остановиться.'],['4:49','Без Dragonframe: проволока на ручке штатива и кривая-разметка. Постоянная скорость в середине не обязательна: разгон до полной и торможение.'],['5:06','Цифровое движение: снимать в высоком разрешении, наезд/панораму анимировать на монтаже, с ease.'],['5:23','Двигать фон вместо камеры, по линейке. Объект тоже ровно и чуть быстрее «камеры».'],['5:41','Двигать сет: Звезда Смерти из LEGO на поворотном круге. Тени ведут себя странно — сет движется, свет стоит.'],['5:55','Все риги — из того, что нашлось дома, без затрат. Придумать движение камеры — такая же творческая задача, как действие в кадре.']];
+$('v_tl').innerHTML=VT.map(v=>{const[m,s]=v[0].split(':').map(Number);return `<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=k9aF9kEq6vw&t=${m*60+s}s">${v[0]}</a> — ${v[1]}</li>`}).join('');
+
+
+// ---------- video embeds ----------
+function embedSrc(k,id){return k==='yt'?'https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1&playsinline=1':'https://player.vimeo.com/video/'+id+'?autoplay=1&title=0&byline=0&portrait=0'}
+function stopAllVideos(except){document.querySelectorAll('.ref .vid').forEach(v=>{if(v!==except&&v.querySelector('iframe')){v.querySelector('iframe').remove();v.classList.remove('live')}})}
+function playVid(v){if(v.querySelector('iframe'))return;stopAllVideos(v);const f=document.createElement('iframe');f.src=embedSrc(v.dataset.k,v.dataset.id);f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;v.appendChild(f);v.classList.add('live')}
+document.querySelectorAll('.ref .vid').forEach(v=>v.addEventListener('click',()=>playVid(v)));
+document.querySelectorAll('.vtabs button').forEach(b=>b.addEventListener('click',()=>{const card=b.closest('.ref'),v=card.querySelector('.vid');card.querySelectorAll('.vtabs button').forEach(x=>x.classList.toggle('on',x===b));const fr=v.querySelector('iframe');if(fr)fr.remove();v.dataset.k=b.dataset.k;v.dataset.id=b.dataset.id;v.style.backgroundImage=b.dataset.k==='yt'?'url(https://i.ytimg.com/vi/'+b.dataset.id+'/hqdefault.jpg)':'';if(b.dataset.k!=='yt')v.removeAttribute('style');v.querySelector('.vlab').textContent=b.textContent;const ext=card.querySelector('a.ext');ext.href=b.dataset.k==='yt'?'https://www.youtube.com/watch?v='+b.dataset.id:'https://vimeo.com/'+b.dataset.id;ext.textContent='Открыть на '+(b.dataset.k==='yt'?'YouTube':'Vimeo')+' ↗';playVid(v)}));
+window.addEventListener('hashchange',()=>stopAllVideos(null));
+// init
+setMode(mMode);drawCurve();calcPan();calcTrack();calcCrop();calcTime();route();requestAnimationFrame(loop);
+window.addEventListener('resize',()=>{});
+</script>
+</body>
+</html>
