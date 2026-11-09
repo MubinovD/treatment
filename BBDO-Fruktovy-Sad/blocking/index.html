@@ -424,9 +424,12 @@ function makeActor(o){
 function poseActor(g,sit,carry,act){const u=g.userData;act=act||{raise:0,prop:null,yaw:0,pitch:0,sip:0};const e=sit<.5?2*sit*sit:1-Math.pow(-2*sit+2,2)/2;
   u.hip.position.y=92-45*e;u.hip.position.z=8*e;
   for(const l of u.legs){l.th.rotation.x=Math.PI/2*e;l.kn.rotation.x=-Math.PI/2*e}
-  for(const a of u.arms){a.sh.rotation.x=carry?0.6*(1-e)+0.82*e:0.12+0.7*e;a.el.rotation.x=carry?0.97*(1-e)+0.8*e:0.25+0.55*e}
-  if(act.raise>0){const a=u.arms[1],k=act.raise;a.sh.rotation.x=a.sh.rotation.x*(1-k)+1.45*k;a.sh.rotation.z=-0.7*k;a.el.rotation.x=a.el.rotation.x*(1-k)+2.25*k}else u.arms[1].sh.rotation.z=0;
-  u.bs.visible=act.prop==='baursak';u.gl.visible=act.prop==='glass';if(u.gl.visible){u.gl.rotation.x=-(1.45+2.25-Math.PI*0.5)*act.raise*0.75;u.juice.scale.y=Math.max(0.15,1-act.sip*0.85)}
+  u.arms.forEach((a,i)=>{const sx=i?1:-1;a.sh.rotation.order='XYZ';a.sh.rotation.z=0;
+    if(carry){a.sh.rotation.x=0.6*(1-e)+0.55*e;a.el.rotation.x=0.97*(1-e)+1.0*e;a.sh.rotation.y=0.25*sx}
+    else{a.sh.rotation.x=0.12+0.38*e;a.el.rotation.x=0.25+0.75*e;a.sh.rotation.y=0.35*sx*e}});
+  if(act.raise>0){const a=u.arms[1],k=act.raise;a.sh.rotation.x=a.sh.rotation.x*(1-k)+1.4*k;a.sh.rotation.y=a.sh.rotation.y*(1-k)+0.7*k;a.el.rotation.x=a.el.rotation.x*(1-k)+2.1*k}
+  u.bs.visible=act.prop==='baursak';u.gl.visible=act.prop==='glass';
+  if(u.gl.visible){const q=new THREE.Quaternion().copy(u.arms[1].sh.quaternion).multiply(u.arms[1].el.quaternion).invert();const tl=0.25+0.9*act.sip*act.raise;const d=new THREE.Vector3(0,Math.cos(tl),Math.sin(tl)).applyQuaternion(q);u.gl.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());u.juice.scale.y=Math.max(0.15,1-act.sip*0.85)}
   u.headG.rotation.set(act.pitch,act.yaw,0,'YXZ');
   u.hip.rotation.x=0}
 function buildV3(){
@@ -460,7 +463,7 @@ function actValAt(o,time){return actAt(o,time).cur}
 function setAct(o,a,target){o.actKeys=o.actKeys||[];const anim=o.keys.length||o.actKeys.length||(o.sitKeys||[]).length;if(!anim&&t<0.03){o.act=a;if(target)o.lookTarget=target;return}const i=o.actKeys.findIndex(k=>Math.abs(k.t-t)<0.03);const k={t:+t.toFixed(2),a};if(a==='look')k.target=target||o.lookTarget||null;if(i>=0)o.actKeys[i]=k;else{o.actKeys.push(k);o.actKeys.sort((x,y)=>x.t-y.t)}}
 function lookAngles(st,targetId,s){const tg=s.find(x=>x.id===targetId);if(!tg)return[0,0];const sz=st.sz||1,hh=(sitAt(byId(st.id),t)>0.5?118:163)*sz;let th=tg.type==='board'?((tg.z!=null?tg.z:130)+25*(tg.sz||1)):tg.type==='person'?150*(tg.sz||1):(tg.z!=null?tg.z:80);
   const dx=tg.x-st.x,dz=tg.y-st.y,dy=th-hh,r=(st.r||0)*Math.PI/180;const lx=dx*Math.cos(r)+dz*Math.sin(r),lz=-dx*Math.sin(r)+dz*Math.cos(r);
-  let yaw=Math.atan2(-lx,-lz),pitch=Math.atan2(dy,Math.hypot(lx,lz));yaw=Math.max(-1.45,Math.min(1.45,yaw));pitch=Math.max(-0.7,Math.min(0.7,pitch));return[yaw,pitch]}
+  let yaw=Math.atan2(-lx,-lz),pitch=Math.atan2(dy,Math.hypot(lx,lz));yaw=Math.max(-1.05,Math.min(1.05,yaw));pitch=Math.max(-0.6,Math.min(0.45,pitch));return[yaw,pitch]}
 function actPose(st,s){const o=byId(st.id),A=actAt(o,t),f=x=>x.a==='eat'||x.a==='drink'?1:0;const e=A.u<.5?2*A.u*A.u:1-Math.pow(-2*A.u+2,2)/2;
   const raise=f(A.prev)*(1-e)+f(A.cur)*e;const prop=(e>0.5?A.cur.a:A.prev.a);const propN=prop==='eat'?'baursak':prop==='drink'?'glass':null;
   const L=lookAt_(o,t),le=L.u<.5?2*L.u*L.u:1-Math.pow(-2*L.u+2,2)/2;const lg=id=>id?lookAngles(st,id,s):[0,0];const g0=lg(L.prev),g1=lg(L.cur);const gz=[g0[0]*(1-le)+g1[0]*le,g0[1]*(1-le)+g1[1]*le];const tip=x=>x.a==='drink'?0.25:(x.a==='eat'?0.08:0);const p0=[0,tip(A.prev)],p1=[0,tip(A.cur)];
