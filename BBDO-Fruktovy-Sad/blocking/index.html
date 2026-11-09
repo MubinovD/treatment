@@ -159,6 +159,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <h2>Versions</h2>
       <input type="text" id="name" value="Фруктовый сад, вариант 1" aria-label="Version name">
       <div class="btns" style="margin-top:8px"><button id="save" class="primary">Save</button><button id="copy">Copy JSON</button><button id="reset">Reset scene</button><button id="clearKeys">Clear all keys</button><button id="resetAll">Reset project</button></div>
+      <div class="btns" style="margin-top:6px"><button id="delVer">Delete version</button><button id="setStart">Use as start</button><button id="factory">Factory reset</button></div>
       <h2 style="margin-top:12px">Files</h2>
       <div class="btns"><button id="expJson">Save scene file</button><button id="impJson">Open scene file</button><input type="file" id="impFile" accept=".json,application/json" style="display:none"></div>
       <div class="row" style="margin-top:6px"><button id="expMp4">Export MP4</button><select id="expFmt" style="width:auto"><option value="16:9">16:9</option><option value="ov">Current overlay crop</option></select><button id="expPdf">Export PDF</button></div>
@@ -430,8 +431,8 @@ function buildV3(){
     else if(T==='plate'){const p=new THREE.Mesh(new THREE.CylinderGeometry(15,11,2.5,28),mat('#fbfaf6',0.3));p.position.y=77.5;p.castShadow=true;inner.add(p);const bm=mat('#d6923a',0.7);for(const [x,z,y] of [[-6,-4,80.5],[5,-5,80.5],[0,5,80.5],[-2,0,84],[7,3,80.5]])box(7,4,6,bm,x,y,z,inner)}
     else if(T==='board'){g.userData.isBoard=true}
     else if(T==='person'){const a=makeActor(o);inner.add(a);g.userData.actor=a}
-    else if(T==='juice'){const fr=mat('#efe9db',0.7),pl=mat('#b9a57e',0.6);box(100,200,2,fr,0,100,-19,inner);box(2,200,40,fr,-49,100,0,inner);box(2,200,40,fr,49,100,0,inner);box(100,2,40,fr,0,199,0,inner);
-      for(let z=0;z<=190;z+=38){box(100,3,40,pl,0,z+1.5,-1,inner);if(z<190)for(let row=0;row<2;row++)for(let i=0;i<9;i++){const pk=new THREE.Group();pk.position.set(-42+i*10.5,z+3,-12+row*8);inner.add(pk);packMesh(Math.floor(i/2)+Math.floor(z/38),pk)}}}
+    else if(T==='juice'){const fr=mat('#efe9db',0.7),pl=mat('#b9a57e',0.6);box(100,200,2,fr,0,100,-19,inner);box(2,200,40,fr,-49,100,0,inner);box(100,2,40,fr,0,199,0,inner);
+      for(let z=0;z<=190;z+=38){box(100,3,40,pl,0,z+1.5,-1,inner);if(z<190)for(let row=0;row<2;row++)for(let i=0;i<9;i++){const pk=new THREE.Group();pk.position.set(-42+i*10.5,z+3,14.5-row*8);inner.add(pk);packMesh(Math.floor(i/2)+Math.floor(z/38),pk)}}}
     else if(T==='pack'){const pm=packMesh(o.flavor||0,inner);pm.rotation.y=Math.PI;g.userData.pack=true}
     else if(T==='door'){const d=mat('#c98f3e',0.6);box(4,210,90,d,0,105,0,inner);const kn=sph(2.5,mat('#e8d9a8',0.3),inner);kn.position.set(-4,100,35)}
     else if(T==='foamax'){const sh=new THREE.Shape();sh.moveTo(-170,0);sh.lineTo(170,0);sh.lineTo(170,230);sh.lineTo(-170,230);sh.lineTo(-170,0);const h=new THREE.Path();h.absellipse(0,115,60,42.5,0,Math.PI*2,true);sh.holes.push(h);const geo=new THREE.ExtrudeGeometry(sh,{depth:2,bevelEnabled:false});const me=new THREE.Mesh(geo,mat('#7fb24a',0.8));me.castShadow=true;inner.add(me)}
@@ -756,9 +757,15 @@ function draftBody(){const p=payload();delete p.savedAt;return p}
 function scheduleDraft(){if(!ready)return;clearTimeout(draftTimer);draftTimer=setTimeout(saveDraft,900)}
 async function saveDraft(){if(draftBusy){scheduleDraft();return}const p=draftBody(),js=JSON.stringify(p);if(js===lastDraft)return;lastDraft=js;try{localStorage.setItem('fs-blocking-draft',js)}catch(e){}
   if(db){draftBusy=true;try{await db.doc('drafts/current').set(Object.assign(p,{savedAt:new Date().toISOString()}))}catch(e){}draftBusy=false}}
-document.getElementById('resetAll').onclick=()=>{scenes=[{id:'sc-kitchen',name:'Кухня',duration:10,objects:null,marks:[],sceneNote:''}];document.getElementById('name').value='Фруктовый сад, вариант 1';loadScene(0);status('Project reset to defaults')};
-async function refreshList(){if(!db)return;try{const snap=await db.collection('scenes').get();const s_=document.getElementById('load');s_.innerHTML='<option value="">Saved versions…</option>';const docs=snap.docs.map(d=>({id:d.id,data:d.data()})).filter(d=>d.data).sort((a,b)=>(b.data.savedAt||'').localeCompare(a.data.savedAt||''));for(const d of docs){const o=document.createElement('option');o.value=d.id;o.textContent=d.data.name+' · '+(d.data.savedAt||'').slice(0,16).replace('T',' ');s_.appendChild(o)}window._docs=docs}catch(e){status('Could not load versions')}}
-document.getElementById('save').onclick=async()=>{const p=payload();if(!db){try{localStorage.setItem('fs-blocking',JSON.stringify(p));status('Saved in this browser only')}catch(e){status('Save failed')}return}
+function factoryReset(){scenes=[{id:'sc-kitchen',name:'Кухня',duration:10,objects:null,marks:[],sceneNote:''}];document.getElementById('name').value='Фруктовый сад, вариант 1';loadScene(0)}
+document.getElementById('resetAll').onclick=()=>{let st=null;try{st=JSON.parse(localStorage.getItem('fs-blocking-start')||'null')}catch(e){}if(st&&st.v>=2){apply(st);status('Reset to your start setup')}else{factoryReset();status('Project reset to defaults')}};
+document.getElementById('factory').onclick=()=>{factoryReset();status('Factory defaults')};
+document.getElementById('setStart').onclick=()=>{try{localStorage.setItem('fs-blocking-start',JSON.stringify(payload()));status('This setup is now the start for Reset project')}catch(e){status('Browser storage is blocked')}};
+document.getElementById('delVer').onclick=async()=>{const id=document.getElementById('load').value;if(!id){status('Pick a version in Open first');return}const d=window._docs.find(x=>x.id===id);if(!d)return;if(d.local){setLocalVers(localVers().filter(x=>x.id!==id))}else if(db){try{await db.doc('scenes/'+id).delete()}catch(e){status('Delete failed');return}}status('Deleted: '+d.data.name);refreshList()};
+function localVers(){try{return JSON.parse(localStorage.getItem('fs-blocking-versions')||'[]')}catch(e){return[]}}
+function setLocalVers(v){try{localStorage.setItem('fs-blocking-versions',JSON.stringify(v));return true}catch(e){status('Browser storage is full or blocked');return false}}
+async function refreshList(){if(!db){const s_=document.getElementById('load');s_.innerHTML='<option value="">Saved in this browser…</option>';const docs=localVers().map(d=>({id:d.id,data:d.data,local:true})).sort((a,b)=>(b.data.savedAt||'').localeCompare(a.data.savedAt||''));for(const d of docs){const o=document.createElement('option');o.value=d.id;o.textContent=d.data.name+' · '+(d.data.savedAt||'').slice(0,16).replace('T',' ');s_.appendChild(o)}window._docs=docs;return}try{const snap=await db.collection('scenes').get();const s_=document.getElementById('load');s_.innerHTML='<option value="">Saved versions…</option>';const docs=snap.docs.map(d=>({id:d.id,data:d.data()})).filter(d=>d.data).sort((a,b)=>(b.data.savedAt||'').localeCompare(a.data.savedAt||''));for(const d of docs){const o=document.createElement('option');o.value=d.id;o.textContent=d.data.name+' · '+(d.data.savedAt||'').slice(0,16).replace('T',' ');s_.appendChild(o)}window._docs=docs}catch(e){status('Could not load versions')}}
+document.getElementById('save').onclick=async()=>{const p=payload();if(!db){const v=localVers();const i=v.findIndex(x=>x.data.name===p.name);if(i>=0)v[i].data=p;else v.push({id:'l-'+Date.now(),data:p});if(setLocalVers(v)){status('Saved in this browser: '+p.name);refreshList()}return}
   try{const prev=window._docs.find(x=>x.data.name===p.name);const id=prev?prev.id:('s-'+Date.now());await db.doc('scenes/'+id).set(p);status('Saved: '+p.name);refreshList()}catch(e){status('Save failed: '+(e&&e.message||'error'))}};
 document.getElementById('load').onchange=e=>{const d=window._docs.find(x=>x.id===e.target.value);if(d){apply(d.data);status('Opened: '+d.data.name)}};
 (function(){const tl_=document.getElementById('tl'),row=document.getElementById('play').parentElement,d=document.createElement('div');d.id='dock';const grip=document.createElement('div');grip.id='dockGrip';grip.title='Drag to resize';d.appendChild(grip);d.appendChild(row);d.appendChild(tl_);document.body.appendChild(d);
@@ -771,7 +778,7 @@ initV3();renderTabs();build();go(0);
      try{const d=await db.doc('drafts/current').get();if(d.exists&&d.data()&&d.data().v>=2){apply(d.data());restored=true;status('Session restored')}}catch(e){}
      if(!restored){const v2=window._docs.find(d=>d.data.v===3||d.data.v===2);if(v2){apply(v2.data);restored=true;status('Opened latest: '+v2.data.name)}}}}}catch(e){status('Storage unavailable')}
  if(!restored){try{const l=localStorage.getItem('fs-blocking-draft')||localStorage.getItem('fs-blocking');if(l){const d=JSON.parse(l);if(d.v>=2){apply(d);status('Session restored from this browser')}}}catch(e){}}
- lastDraft=JSON.stringify(draftBody());ready=true;pushHist();})();
+ lastDraft=JSON.stringify(draftBody());ready=true;pushHist();if(!db)refreshList();})();
 </script>
 </body>
 </html>
