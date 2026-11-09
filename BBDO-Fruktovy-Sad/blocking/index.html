@@ -446,9 +446,9 @@ function buildV3(){
   V3.built=true;
 }
 const ACTS={idle:'Idle',eat:'Eat baursak',drink:'Drink juice'};
-function lookAt_(o,time){let cur=o.look||null,prev=cur,kt=-1e9;for(const k of (o.lookKeys||[])){if(k.t<=time+1e-6){prev=cur;cur=k.target||null;kt=k.t}}const u=kt<-1e8?1:Math.min(1,Math.max(0,(time-kt)/SIT_T));return{cur,prev,u}}
+function lookAt_(o,time){let cur=o.look||null,prev=cur,u=1;for(const k of (o.lookKeys||[])){if(k.t<=time+1e-6){prev=cur;cur=k.target||null;u=1}else{if(time>k.t-SIT_T){prev=cur;cur=k.target||null;u=(time-(k.t-SIT_T))/SIT_T}break}}return{cur,prev,u:Math.min(1,Math.max(0,u))}}
 function setLook(o,target){o.lookKeys=o.lookKeys||[];const anim=o.keys.length||o.lookKeys.length||(o.actKeys||[]).length||(o.sitKeys||[]).length;if(!anim&&t<0.03){o.look=target;return}const i=o.lookKeys.findIndex(k=>Math.abs(k.t-t)<0.03);const k={t:+t.toFixed(2),target};if(i>=0)o.lookKeys[i]=k;else{o.lookKeys.push(k);o.lookKeys.sort((a,b)=>a.t-b.t)}}
-function actAt(o,time){let cur={a:o.act||'idle',target:o.lookTarget||null},prev=cur,kt=-1e9;for(const k of (o.actKeys||[])){if(k.t<=time+1e-6){prev=cur;cur={a:k.a,target:k.target||o.lookTarget||null};kt=k.t}}const u=kt<-1e8?1:Math.min(1,Math.max(0,(time-kt)/SIT_T));return{cur,prev,u,kt}}
+function actAt(o,time){let cur={a:o.act||'idle',target:o.lookTarget||null},prev=cur,u=1,kt=-1e9;for(const k of (o.actKeys||[])){const nk={a:k.a,target:k.target||o.lookTarget||null};if(k.t<=time+1e-6){prev=cur;cur=nk;u=1;kt=k.t}else{if(time>k.t-SIT_T){prev=cur;cur=nk;u=(time-(k.t-SIT_T))/SIT_T;kt=k.t}break}}return{cur,prev,u:Math.min(1,Math.max(0,u)),kt}}
 function actValAt(o,time){return actAt(o,time).cur}
 function setAct(o,a,target){o.actKeys=o.actKeys||[];const anim=o.keys.length||o.actKeys.length||(o.sitKeys||[]).length;if(!anim&&t<0.03){o.act=a;if(target)o.lookTarget=target;return}const i=o.actKeys.findIndex(k=>Math.abs(k.t-t)<0.03);const k={t:+t.toFixed(2),a};if(a==='look')k.target=target||o.lookTarget||null;if(i>=0)o.actKeys[i]=k;else{o.actKeys.push(k);o.actKeys.sort((x,y)=>x.t-y.t)}}
 function lookAngles(st,targetId,s){const tg=s.find(x=>x.id===targetId);if(!tg)return[0,0];const sz=st.sz||1,hh=(sitAt(byId(st.id),t)>0.5?118:163)*sz;let th=tg.type==='board'?((tg.z!=null?tg.z:130)+25*(tg.sz||1)):tg.type==='person'?150*(tg.sz||1):(tg.z!=null?tg.z:80);
@@ -459,7 +459,7 @@ function actPose(st,s){const o=byId(st.id),A=actAt(o,t),f=x=>x.a==='eat'||x.a===
   const L=lookAt_(o,t),le=L.u<.5?2*L.u*L.u:1-Math.pow(-2*L.u+2,2)/2;const lg=id=>id?lookAngles(st,id,s):[0,0];const g0=lg(L.prev),g1=lg(L.cur);const gz=[g0[0]*(1-le)+g1[0]*le,g0[1]*(1-le)+g1[1]*le];const tip=x=>x.a==='drink'?0.25:(x.a==='eat'?0.08:0);const p0=[0,tip(A.prev)],p1=[0,tip(A.cur)];
   const sip=A.cur.a==='drink'?Math.min(1,Math.max(0,(t-A.kt)/2)):0;
   return{raise,prop:raise>0.15?propN:null,yaw:gz[0],pitch:gz[1]+(p0[1]*(1-e)+p1[1]*e),sip}}
-function sitAt(o,time){let v=o.sit?1:0,p=v,kt=-1e9;for(const k of (o.sitKeys||[])){if(k.t<=time+1e-6){p=v;v=k.v;kt=k.t}}if(kt<-1e8)return v;const u=Math.min(1,Math.max(0,(time-kt)/SIT_T));return p+(v-p)*u}
+function sitAt(o,time){let v=o.sit?1:0;for(const k of (o.sitKeys||[])){if(k.t<=time+1e-6)v=k.v;else{if(time>k.t-SIT_T){const u=(time-(k.t-SIT_T))/SIT_T;return v+(k.v-v)*Math.min(1,Math.max(0,u))}break}}return v}
 function sitValAt(o,time){let v=o.sit?1:0;for(const k of (o.sitKeys||[]))if(k.t<=time+1e-6)v=k.v;return v}
 function setSit(o,v){o.sitKeys=o.sitKeys||[];const anim=o.keys.length||o.sitKeys.length;if(!anim&&t<0.03){o.sit=v;return}const i=o.sitKeys.findIndex(k=>Math.abs(k.t-t)<0.03);if(i>=0)o.sitKeys[i].v=v;else{o.sitKeys.push({t:+t.toFixed(2),v});o.sitKeys.sort((a,b)=>a.t-b.t)}}
 function chairNear(p){let best=null,bd=1e9;for(const c of objs){if(c.type!=='chair'||!c.on)continue;const q=poseAt(c,t),d=Math.hypot(q.x-p.x,q.y-p.y);if(d<bd){bd=d;best={c,q}}}return bd<SITR+10?best:null}
