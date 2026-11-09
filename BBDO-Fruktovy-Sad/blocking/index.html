@@ -93,6 +93,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <label for="sz">Height <input type="range" id="sz" min="0.3" max="2.5" step="0.01" value="1"><span id="szV" class="tnum">100%</span></label>
       <div id="carryCtl"><label for="carrier">Carried by <select id="carrier" style="width:auto"></select></label></div>
       <div id="sitCtl"><label><input type="checkbox" id="sitChk"> Sitting at playhead <span style="color:var(--muted)">(S)</span></label></div>
+      <div id="actCtl"><label for="actSel">Action at playhead <select id="actSel" style="width:auto"><option value="idle">Idle</option><option value="eat">Eat baursak</option><option value="drink">Drink juice</option><option value="look">Look at</option></select></label>
+      <label for="lookSel">Look target <select id="lookSel" style="width:auto"></select></label></div>
       <div id="hairCtl"><label for="hair">Hair <select id="hair" style="width:auto"><option value="short">Short</option><option value="bun">Bun</option><option value="long">Long</option><option value="ponytail">Ponytail</option><option value="none">None</option></select></label></div>
       <div id="textCtl"><label for="btext" style="margin-top:6px">Text at playhead</label><textarea id="btext" rows="2" style="min-height:48px"></textarea>
       <div class="btns" style="margin-top:4px"><button id="addTextKey">Change text here</button><button id="delTextKey">Remove change</button></div></div>
@@ -109,7 +111,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <b>K</b><span>Key selected</span><b>Shift+K</b><span>Key all</span><b>Alt+K</b><span>Delete key</span><b>M</b><span>Marker</span>
       <b>Tab</b><span>Next object (Shift: previous)</span><b>Esc</b><span>Deselect</span><b>Enter / F2</b><span>Rename</span>
       <b>Arrows</b><span>Nudge 2 cm (Shift 10, Alt 0.5)</span><b>Q / E</b><span>Rotate 5° (Shift 15°)</span><b>− / =</b><span>Camera lens</span>
-      <b>S</b><span>Sit / stand at playhead</span><b>L</b><span>Lock</span><b>H</b><span>Hide / show</span><b>Delete</b><span>Delete object</span><b>⌘/Ctrl+D</b><span>Duplicate</span>
+      <b>S</b><span>Sit / stand at playhead</span><b>1–4</b><span>Action: idle, eat, drink, look</span><b>L</b><span>Lock</span><b>H</b><span>Hide / show</span><b>Delete</b><span>Delete object</span><b>⌘/Ctrl+D</b><span>Duplicate</span>
       <b>⌘/Ctrl+Z</b><span>Undo (Shift: redo)</span><b>⌘/Ctrl+S</b><span>Save version</span><b>?</b><span>This panel</span>
       </div>
       <h2 style="margin-top:10px">Mouse</h2>
@@ -153,7 +155,7 @@ function defaults(){return[
   O('chairM','chair','Стул мамы',330,180,180),O('chairD','chair','Стул дочери',520,180,180),O('chairS','chair','Стул сына',700,180,180),
   O('plate','plate','Баурсаки',340,300,0,{carrier:'mom'}),
   O('board1','board','Доска 1',425,205,0,{text:'3 салата в работе\n30 баурсаков',textKeys:[]}),O('board2','board','Доска 2',610,205,0,{text:'Украшено: ½ комнаты\nВыпито: ½ стакана',textKeys:[]}),
-  O('mom','person','Мама',330,210,180,{c:0,short:'М',hair:'bun',sit:0,sitKeys:[]}),O('daughter','person','Дочь',520,180,180,{c:1,short:'Д',hair:'long',sz:0.96,sit:1,sitKeys:[]}),O('son','person','Сын',840,300,-90,{c:2,short:'С',hair:'short',sz:0.98}),
+  O('mom','person','Мама',330,210,180,{c:0,short:'М',hair:'bun',sit:0,sitKeys:[],act:'idle',actKeys:[],lookTarget:'board1'}),O('daughter','person','Дочь',520,180,180,{c:1,short:'Д',hair:'long',sz:0.96,sit:1,sitKeys:[],act:'idle',actKeys:[],lookTarget:'board1'}),O('son','person','Сын',840,300,-90,{c:2,short:'С',hair:'short',sz:0.98,act:'idle',actKeys:[],lookTarget:'board2'}),
   O('juice','juice','Шкаф с соками',300,440,0),O('foamax','foamax','Виньетка',470,430,0,{on:false}),
   O('pack','pack','Пачка (кочует)',330,400,0,{z:76}),O('rails','rails','Рельсы',470,480,0,{sx:0.44}),O('cam','cam','Камера',300,480,-90,{lens:35,ch:120,mount:'rails'})
 ]}
@@ -163,7 +165,7 @@ let objs=defaults(),marks=[],t=0,dur=10,sel=null,playing=false;
 let scenes=[{id:'sc-kitchen',name:'Кухня',duration:10,objects:null,marks:[],sceneNote:''}],active=0;
 function blankScene(){return[O('tripod','tripod','Штатив',450,520,0),O('cam','cam','Камера',450,520,-90,{lens:35,ch:120})]}
 function stash(){const sc=scenes[active];sc.objects=clone(objs);sc.marks=clone(marks);sc.duration=dur;sc.sceneNote=document.getElementById('sceneNote').value}
-function loadScene(i){active=i;const sc=scenes[i];objs=clone(sc.objects||defaults());for(const o of objs){if(o.type==='board'){if(o.text==null)o.text=o.id==='board1'?'3 салата в работе\n30 баурсаков':(o.id==='board2'?'Украшено: ½ комнаты\nВыпито: ½ стакана':o.label);if(!o.textKeys)o.textKeys=[]}if(o.id==='plate'&&o.carrier===undefined)o.carrier='mom';if(o.type==='person'&&o.sit==null){o.sitKeys=o.sitKeys||[];if(o.id==='daughter'&&!o.keys.length){const ch=objs.find(x=>x.id==='chairD');if(ch){o.x=ch.x;o.y=ch.y}o.sit=1}else o.sit=0}if(o.type==='person'&&!o.hair)o.hair=o.id==='mom'?'bun':(o.id==='daughter'?'long':'short');if(o.type==='pack'&&o.z===110&&!o.keys.length)o.z=76;if(o.id==='rails'&&(o.sx||1)===1&&!o.keys.length){const tb=objs.find(x=>x.id==='table');if(tb){o.sx=+(300*(tb.sx||1)/820).toFixed(3);o.x=tb.x}}}marks=clone(sc.marks||[]);dur=sc.duration||10;document.getElementById('dur').value=String(dur);document.getElementById('sceneNote').value=sc.sceneNote||'';sel=null;t=0;build();renderTabs();go(0)}
+function loadScene(i){active=i;const sc=scenes[i];objs=clone(sc.objects||defaults());for(const o of objs){if(o.type==='board'){if(o.text==null)o.text=o.id==='board1'?'3 салата в работе\n30 баурсаков':(o.id==='board2'?'Украшено: ½ комнаты\nВыпито: ½ стакана':o.label);if(!o.textKeys)o.textKeys=[]}if(o.id==='plate'&&o.carrier===undefined)o.carrier='mom';if(o.type==='person'){if(!o.actKeys)o.actKeys=[];if(!o.act)o.act='idle';if(o.lookTarget===undefined)o.lookTarget=o.id==='son'?'board2':(o.id==='daughter'||o.id==='mom'?'board1':null)}if(o.type==='person'&&o.sit==null){o.sitKeys=o.sitKeys||[];if(o.id==='daughter'&&!o.keys.length){const ch=objs.find(x=>x.id==='chairD');if(ch){o.x=ch.x;o.y=ch.y}o.sit=1}else o.sit=0}if(o.type==='person'&&!o.hair)o.hair=o.id==='mom'?'bun':(o.id==='daughter'?'long':'short');if(o.type==='pack'&&o.z===110&&!o.keys.length)o.z=76;if(o.id==='rails'&&(o.sx||1)===1&&!o.keys.length){const tb=objs.find(x=>x.id==='table');if(tb){o.sx=+(300*(tb.sx||1)/820).toFixed(3);o.x=tb.x}}}marks=clone(sc.marks||[]);dur=sc.duration||10;document.getElementById('dur').value=String(dur);document.getElementById('sceneNote').value=sc.sceneNote||'';sel=null;t=0;build();renderTabs();go(0)}
 function renderTabs(){const bar=document.getElementById('scTabs');bar.innerHTML='';scenes.forEach((sc,i)=>{const b=document.createElement('button');b.className='tab'+(i===active?' on':'');b.textContent=sc.name;b.onclick=()=>{if(i===active)return;stash();loadScene(i)};bar.appendChild(b)});
   const mk=(t_,f)=>{const b=document.createElement('button');b.textContent=t_;b.onclick=f;bar.appendChild(b)};
   const nm=document.createElement('input');nm.type='text';nm.value=scenes[active].name;nm.style.width='150px';nm.setAttribute('aria-label','Scene name');nm.onchange=()=>{scenes[active].name=nm.value||'Scene';renderTabs();build();render()};
@@ -269,7 +271,8 @@ function render(){
   const so=sel&&s.find(o=>o.id===sel);
   if(so){const rr={kitchen:40,table:60,rails:30}[so.type]||36;document.querySelector('label[for=sx]').firstChild.textContent=so.type==='rails'?'Length ':'Width ';nodes.selRing.setAttribute('cx',so.x);nodes.selRing.setAttribute('cy',so.y);nodes.selRing.setAttribute('r',rr);const fa=(so.r+(so.type==='cam'?0:-90))*Math.PI/180,hx=so.x+Math.cos(fa)*(rr+22),hy=so.y+Math.sin(fa)*(rr+22);nodes.rotH.setAttribute('cx',hx);nodes.rotH.setAttribute('cy',hy);nodes.rotH.setAttribute('r',8);nodes.rotLine.setAttribute('x1',so.x);nodes.rotLine.setAttribute('y1',so.y);nodes.rotLine.setAttribute('x2',hx);nodes.rotLine.setAttribute('y2',hy);nodes.rotLine.style.display='';
     const dr=Math.round(norm(so.r+rOff(so)));document.getElementById('rot').value=dr;if(document.activeElement.id!=='rotV')document.getElementById('rotV').value=dr+'°';document.getElementById('sx').value=so.sx||1;document.getElementById('sy').value=so.sy||1;document.getElementById('sz').value=so.sz||1;document.getElementById('szV').textContent=so.type==='person'?Math.round(165*(so.sz||1))+' cm':(so.type==='board'?Math.round(50*(so.sz||1))+' cm':Math.round((so.sz||1)*100)+'%');
-    document.getElementById('hairCtl').style.display=so.type==='person'?'':'none';document.getElementById('sitCtl').style.display=so.type==='person'?'':'none';const cc=['plate','pack','note'].includes(so.type);document.getElementById('carryCtl').style.display=cc?'':'none';if(cc){const cs=document.getElementById('carrier');cs.innerHTML='<option value="">Nobody</option>'+objs.filter(x=>x.type==='person').map(x=>`<option value="${x.id}">${x.label.replace(/</g,'&lt;')}</option>`).join('');cs.value=so.carrier||''}if(so.type==='person')document.getElementById('sitChk').checked=sitValAt(byId(so.id),t)>0.5;if(so.type==='person')document.getElementById('hair').value=so.hair||'short';
+    document.getElementById('hairCtl').style.display=so.type==='person'?'':'none';document.getElementById('actCtl').style.display=so.type==='person'?'':'none';
+    if(so.type==='person'){const po=byId(so.id),cv=actValAt(po,t);document.getElementById('actSel').value=cv.a;const ls=document.getElementById('lookSel');ls.innerHTML='<option value="">—</option>'+objs.filter(x=>x.id!==so.id&&['board','person','pack','plate','cam'].includes(x.type)).map(x=>`<option value="${x.id}">${x.label.replace(/</g,'&lt;')}</option>`).join('');ls.value=(cv.a==='look'?cv.target:po.lookTarget)||''}document.getElementById('sitCtl').style.display=so.type==='person'?'':'none';const cc=['plate','pack','note'].includes(so.type);document.getElementById('carryCtl').style.display=cc?'':'none';if(cc){const cs=document.getElementById('carrier');cs.innerHTML='<option value="">Nobody</option>'+objs.filter(x=>x.type==='person').map(x=>`<option value="${x.id}">${x.label.replace(/</g,'&lt;')}</option>`).join('');cs.value=so.carrier||''}if(so.type==='person')document.getElementById('sitChk').checked=sitValAt(byId(so.id),t)>0.5;if(so.type==='person')document.getElementById('hair').value=so.hair||'short';
     document.getElementById('textCtl').style.display=so.type==='board'?'':'none';if(so.type==='board'&&document.activeElement.id!=='btext')document.getElementById('btext').value=textAt(byId(so.id),t);document.getElementById('selOn').checked=so.on;document.getElementById('selLock').checked=!!so.locked;for(const id of ['sx','sy','rot','rotV','vin','vout','zz','lens','ch'])document.getElementById(id).disabled=!!so.locked;nodes.rotH.style.display=so.locked?'none':'';nodes.rotLine.style.display=so.locked?'none':'';
     if(document.activeElement.id!=='vin')document.getElementById('vin').value=String(so.vin||0).replace('.',',');
     if(document.activeElement.id!=='vout')document.getElementById('vout').value=so.vout==null?'':String(so.vout).replace('.',',');
@@ -344,12 +347,22 @@ function makeActor(o){
   const nose=box(3,4,4,skin,0,74,-10.5,hip);
   const arms=[];for(const sx of [-1,1]){const sh=new THREE.Group();sh.position.set(sx*20,54,0);hip.add(sh);const up=cyl(4.5,4,28,shirt,sh);up.position.y=-14;const el=new THREE.Group();el.position.y=-28;sh.add(el);const fo=cyl(4,3.5,26,skin,el);fo.position.y=-13;arms.push({sh,el})}
   const legs=[];for(const sx of [-1,1]){const th=new THREE.Group();th.position.set(sx*9,-4,0);hip.add(th);const thm=cyl(7,6,45,pants,th);thm.position.y=-22.5;const kn=new THREE.Group();kn.position.y=-45;th.add(kn);const sh=cyl(5.5,4.5,43,pants,kn);sh.position.y=-21.5;const ft=box(10,6,22,shoe,0,-44,-5,kn);legs.push({th,kn})}
-  g.userData={hip,arms,legs};return g;
+  const headG=new THREE.Group();headG.position.y=62;hip.add(headG);
+  for(const ch of [...hip.children]){if(ch===headG)continue;if(ch.isMesh&&ch.position.y>=58&&ch!==torso&&ch!==neck){hip.remove(ch);ch.position.y-=62;headG.add(ch)}}
+  const hand=new THREE.Group();hand.position.y=-27;arms[1].el.add(hand);
+  const bs=box(6,3.5,5,mat('#d6923a',0.7),0,-2,-3,hand);bs.visible=false;
+  const gl=new THREE.Group();gl.position.set(0,-3,-4);hand.add(gl);
+  const glass=new THREE.Mesh(new THREE.CylinderGeometry(3,2.6,10,16,1,true),new THREE.MeshStandardMaterial({color:new THREE.Color('#dfe9ee').convertSRGBToLinear(),roughness:0.1,transparent:true,opacity:0.45,side:THREE.DoubleSide}));gl.add(glass);
+  const juice=new THREE.Mesh(new THREE.CylinderGeometry(2.8,2.5,6,16),mat('#e7a43a',0.4));juice.position.y=-1.8;gl.add(juice);gl.visible=false;
+  g.userData={hip,arms,legs,headG,bs,gl,juice};return g;
 }
-function poseActor(g,sit,carry){const u=g.userData;const e=sit<.5?2*sit*sit:1-Math.pow(-2*sit+2,2)/2;
+function poseActor(g,sit,carry,act){const u=g.userData;act=act||{raise:0,prop:null,yaw:0,pitch:0,sip:0};const e=sit<.5?2*sit*sit:1-Math.pow(-2*sit+2,2)/2;
   u.hip.position.y=92-45*e;u.hip.position.z=8*e;
   for(const l of u.legs){l.th.rotation.x=Math.PI/2*e;l.kn.rotation.x=-Math.PI/2*e}
   for(const a of u.arms){a.sh.rotation.x=carry?0.55*(1-e)+0.82*e:0.12+0.7*e;a.el.rotation.x=carry?1.15*(1-e)+0.8*e:0.25+0.55*e}
+  if(act.raise>0){const a=u.arms[1],k=act.raise;a.sh.rotation.x=a.sh.rotation.x*(1-k)+1.45*k;a.sh.rotation.z=-0.7*k;a.el.rotation.x=a.el.rotation.x*(1-k)+2.25*k}else u.arms[1].sh.rotation.z=0;
+  u.bs.visible=act.prop==='baursak';u.gl.visible=act.prop==='glass';if(u.gl.visible){u.gl.rotation.x=-(1.45+2.25-Math.PI*0.5)*act.raise*0.75;u.juice.scale.y=Math.max(0.15,1-act.sip*0.85)}
+  u.headG.rotation.set(act.pitch,act.yaw,0,'YXZ');
   u.hip.rotation.x=0}
 function buildV3(){
   if(!V3.ok||!V3.scene)return;for(const id in V3.map){V3.scene.remove(V3.map[id])}V3.map={};
@@ -374,6 +387,18 @@ function buildV3(){
     V3.scene.add(g);V3.map[o.id]=g}
   V3.built=true;
 }
+const ACTS={idle:'Idle',eat:'Eat baursak',drink:'Drink juice',look:'Look at'};
+function actAt(o,time){let cur={a:o.act||'idle',target:o.lookTarget||null},prev=cur,kt=-1e9;for(const k of (o.actKeys||[])){if(k.t<=time+1e-6){prev=cur;cur={a:k.a,target:k.target||o.lookTarget||null};kt=k.t}}const u=kt<-1e8?1:Math.min(1,Math.max(0,(time-kt)/SIT_T));return{cur,prev,u,kt}}
+function actValAt(o,time){return actAt(o,time).cur}
+function setAct(o,a,target){o.actKeys=o.actKeys||[];const anim=o.keys.length||o.actKeys.length||(o.sitKeys||[]).length;if(!anim&&t<0.03){o.act=a;if(target)o.lookTarget=target;return}const i=o.actKeys.findIndex(k=>Math.abs(k.t-t)<0.03);const k={t:+t.toFixed(2),a};if(a==='look')k.target=target||o.lookTarget||null;if(i>=0)o.actKeys[i]=k;else{o.actKeys.push(k);o.actKeys.sort((x,y)=>x.t-y.t)}}
+function lookAngles(st,targetId,s){const tg=s.find(x=>x.id===targetId);if(!tg)return[0,0];const sz=st.sz||1,hh=(sitAt(byId(st.id),t)>0.5?118:163)*sz;let th=tg.type==='board'?((tg.z!=null?tg.z:130)+25*(tg.sz||1)):tg.type==='person'?150*(tg.sz||1):(tg.z!=null?tg.z:80);
+  const dx=tg.x-st.x,dz=tg.y-st.y,dy=th-hh,r=(st.r||0)*Math.PI/180;const lx=dx*Math.cos(r)+dz*Math.sin(r),lz=-dx*Math.sin(r)+dz*Math.cos(r);
+  let yaw=Math.atan2(-lx,-lz),pitch=Math.atan2(dy,Math.hypot(lx,lz));yaw=Math.max(-1.45,Math.min(1.45,yaw));pitch=Math.max(-0.7,Math.min(0.7,pitch));return[yaw,pitch]}
+function actPose(st,s){const o=byId(st.id),A=actAt(o,t),f=x=>x.a==='eat'||x.a==='drink'?1:0;const e=A.u<.5?2*A.u*A.u:1-Math.pow(-2*A.u+2,2)/2;
+  const raise=f(A.prev)*(1-e)+f(A.cur)*e;const prop=(e>0.5?A.cur.a:A.prev.a);const propN=prop==='eat'?'baursak':prop==='drink'?'glass':null;
+  const la=x=>x.a==='look'&&x.target?lookAngles(st,x.target,s):[0,x.a==='drink'?0.3:(x.a==='eat'?0.1:0)];const p0=la(A.prev),p1=la(A.cur);
+  const sip=A.cur.a==='drink'?Math.min(1,Math.max(0,(t-A.kt)/2)):0;
+  return{raise,prop:raise>0.15?propN:null,yaw:p0[0]*(1-e)+p1[0]*e,pitch:p0[1]*(1-e)+p1[1]*e,sip}}
 function sitAt(o,time){let v=o.sit?1:0,p=v,kt=-1e9;for(const k of (o.sitKeys||[])){if(k.t<=time+1e-6){p=v;v=k.v;kt=k.t}}if(kt<-1e8)return v;const u=Math.min(1,Math.max(0,(time-kt)/SIT_T));return p+(v-p)*u}
 function sitValAt(o,time){let v=o.sit?1:0;for(const k of (o.sitKeys||[]))if(k.t<=time+1e-6)v=k.v;return v}
 function setSit(o,v){o.sitKeys=o.sitKeys||[];const anim=o.keys.length||o.sitKeys.length;if(!anim&&t<0.03){o.sit=v;return}const i=o.sitKeys.findIndex(k=>Math.abs(k.t-t)<0.03);if(i>=0)o.sitKeys[i].v=v;else{o.sitKeys.push({t:+t.toFixed(2),v});o.sitKeys.sort((a,b)=>a.t-b.t)}}
@@ -389,7 +414,7 @@ function renderView(s,c){
   for(const o of s){const g=V3.map[o.id];if(!g)continue;g.visible=!!o.on;
     g.position.set(o.x,0,o.y);g.rotation.y=-(o.r||0)*Math.PI/180;
     const inr=g.userData.inner;
-    if(o.type==='person'){const z=o.sz||1;inr.scale.set(z,z,z);poseActor(g.userData.actor,sitAt(o,t),s.some(x=>x.carrier===o.id&&x.held))}
+    if(o.type==='person'){const z=o.sz||1;inr.scale.set(z,z,z);poseActor(g.userData.actor,sitAt(o,t),s.some(x=>x.carrier===o.id&&x.held),actPose(o,s))}
     else if(o.type==='board'){inr.scale.set(1,1,1);const w=110*(o.sx||1),h=50*(o.sz||1),zb=(o.z!=null?o.z:130),tx=textAt(o,t);const key=[w.toFixed(1),h.toFixed(1),zb.toFixed(1),tx].join('|');if(g.userData.bkey!==key){while(inr.children.length)inr.remove(inr.children[0]);inr.add(makeBoard(tx,w,h,zb));g.userData.bkey=key}}
     else if(o.type==='plate'){inr.scale.set(o.sx||1,1,o.sx||1);inr.position.y=(o.z!=null?o.z:76)-76}
     else if(o.type==='pack'){inr.position.y=(o.z!=null?o.z:76);inr.scale.set(o.sx||1,o.sz||1,o.sx||1)}
@@ -442,6 +467,7 @@ function renderTL(){
       d.onpointerdown=ev=>{ev.stopPropagation();if(ev.altKey){o.keys.splice(o.keys.indexOf(k),1);render();return}select(o.id);go(k.t);d.setPointerCapture(ev.pointerId);let moved=false;d.onpointermove=e=>{const x=snapT(trackX(e,tr));if(Math.abs(x-k.t)<0.001)return;moved=true;k.t=x;o.keys.sort((p,q)=>p.t-q.t);t=x;d.style.left=(x/dur*100)+'%';document.getElementById('tlabel').textContent=t.toFixed(2)+' s'};d.onpointerup=()=>{d.onpointermove=null;if(moved)render()}};
       tr.appendChild(d)});
     tr.onclick=ev=>{if(ev.target===tr||ev.target===v){select(o.id);go(snapT(trackX(ev,tr)))}};
+    for(const k of (o.actKeys||[])){const d=document.createElement('div');d.className='mk';d.style.background='#7aa7ff';d.style.height='12px';d.style.top='7px';d.style.left=(k.t/dur*100)+'%';d.title=ACTS[k.a]+(k.a==='look'&&k.target&&byId(k.target)?' '+byId(k.target).label:'')+' at '+k.t.toFixed(2)+' s';d.onpointerdown=e=>{e.stopPropagation();if(e.altKey){o.actKeys.splice(o.actKeys.indexOf(k),1);render();return}select(o.id);go(k.t)};tr.appendChild(d)}
     for(const k of (o.sitKeys||[])){const d=document.createElement('div');d.className='mk';d.style.background=k.v?'#4cc38a':'#e0645a';d.style.left=(k.t/dur*100)+'%';d.title=(k.v?'Sit':'Stand')+' at '+k.t.toFixed(2)+' s';d.onpointerdown=e=>{e.stopPropagation();if(e.altKey){o.sitKeys.splice(o.sitKeys.indexOf(k),1);render();return}select(o.id);go(k.t)};tr.appendChild(d)}
     for(const k of (o.textKeys||[])){const d=document.createElement('div');d.className='mk';d.style.background='#e6e7e9';d.style.left=(k.t/dur*100)+'%';d.title='Text: '+k.text.replace(/\n/g,' / ');d.onpointerdown=e=>{e.stopPropagation();if(e.altKey){o.textKeys.splice(o.textKeys.indexOf(k),1);render();return}select(o.id);go(k.t)};tr.appendChild(d)}
     tr.ondblclick=ev=>{if(ev.target===tr||ev.target===v){select(o.id);go(snapT(trackX(ev,tr)));keyObj(o);render();status('Keyed: '+o.label)}};
@@ -498,6 +524,7 @@ document.addEventListener('keydown',ev=>{
   if(c==='Tab'&&!mod){ev.preventDefault();const list=objs.filter(x=>x.on&&!x.locked);if(!list.length)return;let k=list.findIndex(x=>x.id===sel);k=(k+(ev.shiftKey?-1:1)+list.length)%list.length;select(list[k].id);return}
   if(c==='KeyK'){ev.preventDefault();if(ev.altKey)document.getElementById('delKey').click();else if(ev.shiftKey)document.getElementById('addKeyAll').click();else document.getElementById('addKey').click();return}
   if(!o)return;
+  if(o.type==='person'&&['Digit1','Digit2','Digit3','Digit4'].includes(c)){const a=['idle','eat','drink','look'][+c.slice(5)-1];setAct(o,a,o.lookTarget);render();status(ACTS[a]+': '+o.label+' at '+t.toFixed(2)+' s');return}
   if(c==='KeyS'&&o.type==='person'){setSit(o,sitValAt(o,t)>0.5?0:1);render();status((sitValAt(o,t)>0.5?'Sits: ':'Stands: ')+o.label);return}
   if(c==='KeyL'){o.locked=!o.locked;render();status((o.locked?'Locked: ':'Unlocked: ')+o.label);return}
   if(c==='KeyH'){o.on=!o.on;render();status((o.on?'Shown: ':'Hidden: ')+o.label);return}
@@ -531,6 +558,8 @@ document.getElementById('lens').oninput=e=>{const o=sel&&byId(sel);if(o&&o.type=
 document.getElementById('sz').oninput=e=>{if(sel){setPose(byId(sel),{sz:+e.target.value});render()}};
 document.getElementById('carrier').onchange=e=>{const o=sel&&byId(sel);if(!o)return;if(!e.target.value&&o.carrier){const st=stateAt(t).find(x=>x.id===o.id);o.carrier=null;setPose(o,{x:st.x,y:st.y,r:st.r,z:st.z})}else o.carrier=e.target.value||null;render()};
 document.getElementById('sitChk').onchange=e=>{const o=sel&&byId(sel);if(o&&o.type==='person'){setSit(o,e.target.checked?1:0);render()}};
+document.getElementById('actSel').onchange=e=>{const o=sel&&byId(sel);if(o&&o.type==='person'){setAct(o,e.target.value,document.getElementById('lookSel').value||null);render()}};
+document.getElementById('lookSel').onchange=e=>{const o=sel&&byId(sel);if(!o)return;const v=e.target.value||null;o.lookTarget=v;const k=(o.actKeys||[]).filter(k=>k.t<=t+1e-6).pop();if(k&&k.a==='look')k.target=v;render()};
 document.getElementById('hair').onchange=e=>{if(sel){byId(sel).hair=e.target.value;V3.built=false;render()}};
 function textAt(o,time){let tx=o.text||'';for(const k of (o.textKeys||[]))if(k.t<=time+1e-6)tx=k.text;return tx}
 document.getElementById('btext').oninput=e=>{if(!sel)return;const o=byId(sel);if(o.type!=='board')return;const ks=o.textKeys||[];let k=null;for(const x of ks)if(x.t<=t+1e-6)k=x;if(k)k.text=e.target.value;else o.text=e.target.value;render()};
@@ -550,7 +579,7 @@ document.getElementById('vout').onchange=e=>{if(!sel)return;const o=byId(sel),x=
 document.getElementById('selLabel').oninput=e=>{if(!sel)return;const o=byId(sel);o.label=e.target.value;if(o.type==='person')o.short=(o.label.trim()[0]||'?').toUpperCase();render()};
 function addObj(type,from){
   let o;if(from){o=clone(from);o.label=from.label+' 2';o.keys=o.keys.map(k=>{const c=clone(k);if(c.p.x!=null)c.p.x+=30;if(c.p.y!=null)c.p.y+=30;return c});o.x+=30;o.y+=30;o.mount=null}
-  else{o=O('',type,TYPES_RU[type],450,380,0);if(type==='cam'){o.lens=35;o.ch=120}if(type==='pack')o.z=76;if(type==='board'){o.text='Текст\nвторая строка';o.textKeys=[]}if(type==='person'){o.hair='short';o.sit=0;o.sitKeys=[]}if(type==='person'){o.c=objs.filter(x=>x.type==='person').length%COLORS.length;o.short='Г'}}
+  else{o=O('',type,TYPES_RU[type],450,380,0);if(type==='cam'){o.lens=35;o.ch=120}if(type==='pack')o.z=76;if(type==='board'){o.text='Текст\nвторая строка';o.textKeys=[]}if(type==='person'){o.hair='short';o.sit=0;o.sitKeys=[];o.act='idle';o.actKeys=[];o.lookTarget=null}if(type==='person'){o.c=objs.filter(x=>x.type==='person').length%COLORS.length;o.short='Г'}}
   o.id=type+'-'+Date.now().toString(36);objs.push(o);build();select(o.id);
 }
 function delObj(id){objs=objs.filter(o=>o.id!==id);for(const o of objs)if(o.mount===id)o.mount=null;sel=null;build();const i=document.getElementById('selLabel');i.value='';i.disabled=true;render()}
