@@ -117,7 +117,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <h2 style="margin-top:10px">Mouse</h2>
       <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;color:var(--muted)">
       <b>Drag</b><span>Move (Shift: one axis)</span><b>Blue handle</b><span>Rotate</span><b>Alt / R + drag</b><span>Rotate object</span><b>Wheel on object</b><span>Rotate 5°</span>
-      <b>⌘/Ctrl + wheel</b><span>Zoom plan</span><b>Right / middle drag</b><span>Pan plan</span><b>Double-click empty</b><span>Reset view</span><b>Double-click object</b><span>Rename</span>
+      <b>⌘/Ctrl + wheel</b><span>Zoom plan</span><b>Right / middle drag</b><span>Pan plan</span><b>Double-click empty</b><span>Reset view</span><b>Double-click object</b><span>Rename</span><b>Double-click slider</b><span>Reset to default</span>
       <b>Timeline: double-click</b><span>Add key</span><b>Drag ◆</b><span>Retime key</span><b>Alt+click ◆</b><span>Delete key</span><b>Drag bar edges</b><span>In / out</span>
       </div>
     </div>
@@ -565,6 +565,9 @@ function textAt(o,time){let tx=o.text||'';for(const k of (o.textKeys||[]))if(k.t
 document.getElementById('btext').oninput=e=>{if(!sel)return;const o=byId(sel);if(o.type!=='board')return;const ks=o.textKeys||[];let k=null;for(const x of ks)if(x.t<=t+1e-6)k=x;if(k)k.text=e.target.value;else o.text=e.target.value;render()};
 document.getElementById('addTextKey').onclick=()=>{const o=sel&&byId(sel);if(!o||o.type!=='board')return;o.textKeys=o.textKeys||[];const ex=o.textKeys.find(k=>Math.abs(k.t-t)<0.03);if(!ex){o.textKeys.push({t:+t.toFixed(2),text:textAt(o,t)});o.textKeys.sort((a,b)=>a.t-b.t)}status('Text change at '+t.toFixed(2)+' s: edit the text now');document.getElementById('btext').focus();render()};
 document.getElementById('delTextKey').onclick=()=>{const o=sel&&byId(sel);if(!o||o.type!=='board')return;const i=(o.textKeys||[]).findIndex(k=>Math.abs(k.t-t)<0.03);if(i<0){status('No text change at the playhead');return}o.textKeys.splice(i,1);render()};
+const RDEF={sx:1,sy:1,sz:1,lens:35,ch:120,tilt:0,ovx:0,zz:()=>{const o=sel&&byId(sel);return o&&o.type==='board'?130:76}};
+for(const id in RDEF){const el_=document.getElementById(id);if(!el_)continue;el_.addEventListener('dblclick',()=>{const v=typeof RDEF[id]==='function'?RDEF[id]():RDEF[id];el_.value=v;el_.dispatchEvent(new Event('input'));status('Reset to default')});el_.title='Double-click to reset'}
+document.getElementById('rot').title='Double-click to reset';
 document.getElementById('tilt').oninput=e=>{const o=sel&&byId(sel);if(o&&o.type==='cam'){let v=+e.target.value;if(Math.abs(v)<2)v=0;setPose(o,{tilt:v});render()}};
 document.getElementById('zz').oninput=e=>{const o=sel&&byId(sel);if(o){setPose(o,{z:+e.target.value});render()}};
 document.getElementById('ch').oninput=e=>{const o=sel&&byId(sel);if(o&&o.type==='cam'){setPose(o,{ch:+e.target.value});render()}};
