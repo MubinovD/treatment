@@ -94,19 +94,20 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <h2>Selection</h2>
       <input type="text" id="selLabel" placeholder="Nothing selected" aria-label="Object name" disabled>
       <div class="btns" style="margin:8px 0"><button id="dup">Duplicate</button><button id="del">Delete</button></div>
-      <label for="sx">Width <input type="range" id="sx" min="0.3" max="3" step="0.05" value="1"></label>
-      <label for="sy">Depth <input type="range" id="sy" min="0.3" max="3" step="0.05" value="1"></label>
-      <label for="sz">Height <input type="range" id="sz" min="0.3" max="2.5" step="0.01" value="1"><span id="szV" class="tnum">100%</span></label>
+      <div class="row" id="posCtl" style="margin-bottom:4px"><label for="px">X, m</label><input type="text" id="px" style="width:64px"><label for="py">Y, m</label><input type="text" id="py" style="width:64px"></div>
+      <label for="sx" id="sxL"><span>Width</span> <input type="range" id="sx" min="0.3" max="3" step="0.01" value="1"><input type="text" id="sxV" class="tnum" style="width:64px;text-align:right"></label>
+      <label for="sy" id="syL"><span>Depth</span> <input type="range" id="sy" min="0.3" max="3" step="0.01" value="1"><input type="text" id="syV" class="tnum" style="width:64px;text-align:right"></label>
+      <label for="sz" id="szL"><span>Height</span> <input type="range" id="sz" min="0.3" max="2.5" step="0.01" value="1"><input type="text" id="szVi" class="tnum" style="width:64px;text-align:right"></label><span id="szV" style="display:none"></span>
       <div id="carryCtl"><label for="carrier">Carried by <select id="carrier" style="width:auto"></select></label></div>
       <div id="sitCtl"><label><input type="checkbox" id="sitChk"> Sitting at playhead <span style="color:var(--muted)">(S)</span></label></div>
       <div id="actCtl"><label for="actSel">Action at playhead <select id="actSel" style="width:auto"><option value="idle">Idle</option><option value="eat">Eat baursak</option><option value="drink">Drink juice</option></select></label>
       <label for="lookSel">Look at, at playhead <select id="lookSel" style="width:auto"></select></label></div>
       <div id="hairCtl"><label for="hair">Hair <select id="hair" style="width:auto"><option value="short">Short</option><option value="bun">Bun</option><option value="long">Long</option><option value="ponytail">Ponytail</option><option value="none">None</option></select></label></div>
       <div id="textCtl"><label for="btext" style="margin-top:6px">Text at playhead</label><textarea id="btext" rows="2" style="min-height:48px"></textarea>
-      <div class="btns" style="margin-top:4px"><button id="addTextKey">Change text here</button><button id="delTextKey">Remove change</button></div></div>
+      <div class="btns" style="margin-top:4px"><button id="addTextKey">Change text here</button><button id="delTextKey">Remove change</button></div><div class="btns" style="margin-top:4px"><button id="dropIn">Drop in here</button><button id="liftOut">Fly out here</button></div></div>
       <label for="rot">Rotation <input type="range" id="rot" min="-180" max="180" step="1" value="0" list="rotTicks"><input type="text" id="rotV" aria-label="Rotation, degrees" style="width:64px;text-align:right" value="0°"></label><datalist id="rotTicks"><option value="-90"></option><option value="0"></option><option value="90"></option></datalist>
       <div id="camCtl"><label for="lens">Lens <input type="range" id="lens" min="14" max="135" step="1" value="35"><span id="lensV" class="tnum">35 mm</span></label><label for="ch">Height <input type="range" id="ch" min="20" max="220" step="1" value="120"><span id="chV" class="tnum">120 cm</span></label><label for="tilt">Tilt <input type="range" id="tilt" min="-45" max="45" step="1" value="0"><span id="tiltV" class="tnum">0°</span></label></div>
-      <div id="zCtl"><label for="zz">Elevation <input type="range" id="zz" min="0" max="220" step="1" value="110"><span id="zV" class="tnum">76 cm</span></label></div>
+      <div id="zCtl"><label for="zz">Elevation <input type="range" id="zz" min="0" max="340" step="1" value="110"><span id="zV" class="tnum">76 cm</span></label></div>
       <div class="row" style="margin-top:6px"><label><input type="checkbox" id="selOn"> In scene</label><label><input type="checkbox" id="selLock"> Locked</label></div>
       <div class="row" style="margin-top:6px"><label for="vin">In, s</label><input type="text" id="vin" style="width:70px"><label for="vout">Out, s</label><input type="text" id="vout" style="width:70px"></div>
     </div>
@@ -120,7 +121,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <b>Woman, standing</b><span>160–165 cm</span><b>Man, standing</b><span>175–180 cm</span><b>Teen, standing</b><span>150–170 cm</span>
       <b>Eyes, standing</b><span>height − 10 cm (≈ 150–165)</span>
       <b>Head top, seated</b><span>125–135 cm</span><b>Eyes, seated</b><span>110–120 cm</span><b>Hands on table, seated</b><span>≈ 76 cm</span>
-      <b>Juice pack 1 L</b><span>≈ 20 cm tall</span><b>Glass</b><span>≈ 10 cm</span>
+      <b>Juice pack 0.95–1 L</b><span>9.7 × 6.5 × 19.5 cm</span><b>Glass</b><span>≈ 10 cm</span>
       </div>
       <h2 style="margin-top:10px">Camera heights</h2>
       <div style="display:grid;grid-template-columns:1fr auto;gap:3px 10px;font-size:12px;color:var(--muted)">
@@ -282,7 +283,7 @@ function render(){
     const g=nodes.g[o.id];if(!g)continue;g.setAttribute('transform',`translate(${o.x} ${o.y}) rotate(${o.r}) scale(${o.sx||1} ${o.sy||1})`);
     g.style.display=o.on?'':'none';g.style.opacity=o.vis?1:.18;g.style.pointerEvents=o.locked?'none':'';g.style.cursor=o.locked?'default':'grab';
     const l=nodes.lbl[o.id];const off={pack:[0,22],plate:[0,28],foamax:[0,24],cam:[0,30],note:[0,-20]}[o.type]||[0,0];
-    l.textContent=labelFor(o);l.setAttribute('x',o.x+off[0]);l.setAttribute('y',o.y+off[1]);l.style.display=o.on?'':'none';l.style.opacity=o.vis?1:.3;
+    l.textContent=labelFor(o);l.setAttribute('x',o.x+off[0]);l.setAttribute('y',o.y+off[1]);{let lr=o.type==='person'?0:norm(o.r||0);if(lr>90)lr-=180;else if(lr<-90)lr+=180;l.setAttribute('transform',lr?`rotate(${lr} ${o.x} ${o.y})`:'')}l.style.display=o.on?'':'none';l.style.opacity=o.vis?1:.3;
     l.setAttribute('fill',o.type==='person'?COLORS[o.c||0][2]:(o.type==='cam'?'#534ab7':'#1e2a1b'));l.setAttribute('font-size',o.type==='board'?11:(o.type==='person'?18:12));
     if(o.type==='cam'&&o.vis){const f=fovDeg(o.lens)*Math.PI/180,a=o.r*Math.PI/180,L=900;el('polygon',{points:`${o.x},${o.y} ${o.x+Math.cos(a-f/2)*L},${o.y+Math.sin(a-f/2)*L} ${o.x+Math.cos(a+f/2)*L},${o.y+Math.sin(a+f/2)*L}`,fill:'#534ab7',opacity:.12,'pointer-events':'none'},nodes.fovLayer)}
   }
@@ -296,7 +297,7 @@ function render(){
     g.addEventListener('pointerdown',tog);g.addEventListener('keydown',e=>{if(e.key==='Enter')tog(e)});}
   const so=sel&&s.find(o=>o.id===sel);
   if(so){const rr={kitchen:40,table:60,rails:30}[so.type]||36;document.querySelector('label[for=sx]').firstChild.textContent=so.type==='rails'?'Length ':'Width ';nodes.selRing.setAttribute('cx',so.x);nodes.selRing.setAttribute('cy',so.y);nodes.selRing.setAttribute('r',rr);const fa=(so.r+(so.type==='cam'?0:-90))*Math.PI/180,hx=so.x+Math.cos(fa)*(rr+22),hy=so.y+Math.sin(fa)*(rr+22);nodes.rotH.setAttribute('cx',hx);nodes.rotH.setAttribute('cy',hy);nodes.rotH.setAttribute('r',8);nodes.rotLine.setAttribute('x1',so.x);nodes.rotLine.setAttribute('y1',so.y);nodes.rotLine.setAttribute('x2',hx);nodes.rotLine.setAttribute('y2',hy);nodes.rotLine.style.display='';
-    const dr=Math.round(norm(so.r+rOff(so)));document.getElementById('rot').value=dr;if(document.activeElement.id!=='rotV')document.getElementById('rotV').value=dr+'°';document.getElementById('sx').value=so.sx||1;document.getElementById('sy').value=so.sy||1;document.getElementById('sz').value=so.sz||1;document.getElementById('szV').textContent=so.type==='person'?Math.round(165*(so.sz||1))+' cm':(so.type==='board'?Math.round(50*(so.sz||1))+' cm':Math.round((so.sz||1)*100)+'%');
+    const dr=Math.round(norm(so.r+rOff(so)));document.getElementById('rot').value=dr;if(document.activeElement.id!=='rotV')document.getElementById('rotV').value=dr+'°';document.getElementById('sx').value=so.sx||1;document.getElementById('sy').value=so.sy||1;sizeUI(so);document.getElementById('sz').value=so.sz||1;document.getElementById('szV').textContent=so.type==='person'?Math.round(165*(so.sz||1))+' cm':(so.type==='board'?Math.round(50*(so.sz||1))+' cm':Math.round((so.sz||1)*100)+'%');
     document.getElementById('hairCtl').style.display=so.type==='person'?'':'none';document.getElementById('actCtl').style.display=so.type==='person'?'':'none';
     if(so.type==='person'){const po=byId(so.id),cv=actValAt(po,t);document.getElementById('actSel').value=cv.a;const ls=document.getElementById('lookSel');ls.innerHTML='<option value="">Straight ahead</option>'+objs.filter(x=>x.id!==so.id&&['board','person','pack','plate','cam'].includes(x.type)).map(x=>`<option value="${x.id}">${x.label.replace(/</g,'&lt;')}</option>`).join('');ls.value=lookAt_(po,t).cur||''}document.getElementById('sitCtl').style.display=so.type==='person'?'':'none';const cc=['plate','pack','note'].includes(so.type);document.getElementById('carryCtl').style.display=cc?'':'none';if(cc){const cs=document.getElementById('carrier');cs.innerHTML='<option value="">Nobody</option>'+objs.filter(x=>x.type==='person').map(x=>`<option value="${x.id}">${x.label.replace(/</g,'&lt;')}</option>`).join('');cs.value=so.carrier||''}if(so.type==='person')document.getElementById('sitChk').checked=sitValAt(byId(so.id),t)>0.5;if(so.type==='person')document.getElementById('hair').value=so.hair||'short';
     document.getElementById('textCtl').style.display=so.type==='board'?'':'none';if(so.type==='board'&&document.activeElement.id!=='btext')document.getElementById('btext').value=textAt(byId(so.id),t);document.getElementById('selOn').checked=so.on;document.getElementById('selLock').checked=!!so.locked;for(const id of ['sx','sy','rot','rotV','vin','vout','zz','lens','ch'])document.getElementById(id).disabled=!!so.locked;nodes.rotH.style.display=so.locked?'none':'';nodes.rotLine.style.display=so.locked?'none':'';
@@ -360,6 +361,18 @@ function initV3(){
   new ResizeObserver(sizeV3).observe(host);sizeV3();
 }
 function sizeV3(){if(!V3.renderer)return;const host=document.getElementById('view3d');const w=host.clientWidth,h=Math.round(w*9/16);host.style.height=h+'px';V3.renderer.setSize(w,h,false);V3.w=w;V3.h=h;if(nodes&&nodes.fovLayer)render()}
+const FLAV=[['Яблоко','#d8452b','#7cc04a'],['Апельсин','#f39c1f','#f6c04a'],['Персик','#f6a46b','#f3d27a'],['Мультифрукт','#e0453a','#f2c94c'],['Вишня','#8e1b2b','#c2344a']];const PTEX={};
+function packTex(i){if(PTEX[i])return PTEX[i];const [name,c1,c2]=FLAV[i%FLAV.length];const c=document.createElement('canvas');c.width=194;c.height=390;const g=c.getContext('2d');
+  const gr=g.createLinearGradient(0,0,0,390);gr.addColorStop(0,'#4f9a3a');gr.addColorStop(1,'#2d6e2a');g.fillStyle=gr;g.fillRect(0,0,194,390);
+  g.fillStyle='#f4f1e6';g.fillRect(0,0,194,46);g.fillStyle='#2d6e2a';g.font='700 15px Nunito, Arial, sans-serif';g.textAlign='center';g.fillText('ФРУКТОВЫЙ',97,98);
+  g.fillStyle='#ffffff';g.font='italic 900 54px Georgia, serif';g.fillText('Сад',97,150);
+  g.beginPath();g.arc(97,250,56,0,Math.PI*2);g.fillStyle=c1;g.fill();g.beginPath();g.arc(78,232,16,0,Math.PI*2);g.fillStyle='rgba(255,255,255,.35)';g.fill();
+  g.beginPath();g.ellipse(118,192,18,8,-0.6,0,Math.PI*2);g.fillStyle=c2==='#c2344a'?'#4c8b2f':'#5fae3a';g.fill();
+  g.fillStyle='#fffdf5';g.font='800 22px Nunito, Arial, sans-serif';g.fillText(name.toUpperCase(),97,345);g.font='600 13px Nunito, Arial, sans-serif';g.fillText('0,95 л',97,368);
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;PTEX[i]=t;return t}
+function packMesh(i,parent){const side=mat('#2f6e2a',0.6),topm=mat('#f4f1e6',0.5),front=new THREE.MeshStandardMaterial({map:packTex(i),roughness:0.55});
+  const m=new THREE.Mesh(new THREE.BoxGeometry(9.7,19.5,6.5),[side,side,topm,side,front,front]);m.position.y=9.75;m.castShadow=true;m.receiveShadow=true;parent.add(m);
+  const cap=cyl(1.5,1.5,1.6,mat('#2f6e2a',0.4),parent,12);cap.position.set(2.4,20.3,0);return m}
 function boardTexWH(text,w,h){const k=6,c=document.createElement('canvas');c.width=Math.max(64,Math.round(w*k));c.height=Math.max(32,Math.round(h*k));const g=c.getContext('2d');const W=c.width,H=c.height,bw=Math.max(4,Math.min(W,H)*0.06);
   g.fillStyle='#f3e3b6';g.fillRect(0,0,W,H);g.strokeStyle='#8a6a22';g.lineWidth=bw;g.strokeRect(bw/2,bw/2,W-bw,H-bw);
   g.fillStyle='#2b3a22';g.textAlign='center';g.textBaseline='middle';
@@ -418,8 +431,8 @@ function buildV3(){
     else if(T==='board'){g.userData.isBoard=true}
     else if(T==='person'){const a=makeActor(o);inner.add(a);g.userData.actor=a}
     else if(T==='juice'){const fr=mat('#efe9db',0.7),pl=mat('#b9a57e',0.6);box(100,200,2,fr,0,100,-19,inner);box(2,200,40,fr,-49,100,0,inner);box(2,200,40,fr,49,100,0,inner);box(100,2,40,fr,0,199,0,inner);
-      for(let z=0;z<=190;z+=38){box(100,3,40,pl,0,z+1.5,-1,inner);if(z<190)for(let i=0;i<4;i++){const pk=new THREE.Group();pk.position.set(-37+i*24.5,z+3,-14);inner.add(pk);box(18,28,12,mat(i%2?'#3b7d33':'#2f6e2c',0.6),0,14,0,pk);box(18,4,12,mat('#f3efe4',0.5),0,26,0,pk)}}}
-    else if(T==='pack'){box(8,22,6,mat('#3b7d33',0.55),0,11,0,inner);box(8.2,4,6.2,mat('#f3efe4'),0,20,0,inner);const ap=sph(2.2,mat('#d8452b',0.5),inner);ap.position.set(0,9,-3.2);g.userData.pack=true}
+      for(let z=0;z<=190;z+=38){box(100,3,40,pl,0,z+1.5,-1,inner);if(z<190)for(let row=0;row<2;row++)for(let i=0;i<9;i++){const pk=new THREE.Group();pk.position.set(-42+i*10.5,z+3,-12+row*8);inner.add(pk);packMesh(Math.floor(i/2)+Math.floor(z/38),pk)}}}
+    else if(T==='pack'){const pm=packMesh(o.flavor||0,inner);pm.rotation.y=Math.PI;g.userData.pack=true}
     else if(T==='door'){const d=mat('#c98f3e',0.6);box(4,210,90,d,0,105,0,inner);const kn=sph(2.5,mat('#e8d9a8',0.3),inner);kn.position.set(-4,100,35)}
     else if(T==='foamax'){const sh=new THREE.Shape();sh.moveTo(-170,0);sh.lineTo(170,0);sh.lineTo(170,230);sh.lineTo(-170,230);sh.lineTo(-170,0);const h=new THREE.Path();h.absellipse(0,115,60,42.5,0,Math.PI*2,true);sh.holes.push(h);const geo=new THREE.ExtrudeGeometry(sh,{depth:2,bevelEnabled:false});const me=new THREE.Mesh(geo,mat('#7fb24a',0.8));me.castShadow=true;inner.add(me)}
     else if(T==='rails'){const r=mat('#6c7076',0.4);box(820,3,3,r,0,1.5,-5,inner);box(820,3,3,r,0,1.5,5,inner);for(let x=-400;x<=400;x+=40)box(2,1.5,18,mat('#4a4e54'),x,0.75,0,inner)}
@@ -676,7 +689,20 @@ document.getElementById('hair').onchange=e=>{if(sel){byId(sel).hair=e.target.val
 function textAt(o,time){let tx=o.text||'';for(const k of (o.textKeys||[]))if(k.t<=time+1e-6)tx=k.text;return tx}
 document.getElementById('btext').oninput=e=>{if(!sel)return;const o=byId(sel);if(o.type!=='board')return;const ks=o.textKeys||[];let k=null;for(const x of ks)if(x.t<=t+1e-6)k=x;if(k)k.text=e.target.value;else o.text=e.target.value;render()};
 document.getElementById('addTextKey').onclick=()=>{const o=sel&&byId(sel);if(!o||o.type!=='board')return;o.textKeys=o.textKeys||[];const ex=o.textKeys.find(k=>Math.abs(k.t-t)<0.03);if(!ex){o.textKeys.push({t:+t.toFixed(2),text:textAt(o,t)});o.textKeys.sort((a,b)=>a.t-b.t)}status('Text change at '+t.toFixed(2)+' s: edit the text now');document.getElementById('btext').focus();render()};
+function boardDrop(o,dir){const p=poseAt(o,t),zf=p.z!=null?p.z:130,T=+t.toFixed(2),fr=1/25,top=330;const put=(tt,z)=>{tt=Math.max(0,Math.min(dur,+tt.toFixed(2)));const i=o.keys.findIndex(k=>Math.abs(k.t-tt)<0.03);const base=Object.assign(snapPose(o),{z});if(i>=0)o.keys[i].p=Object.assign(o.keys[i].p,{z});else{o.keys.push({t:tt,p:base});o.keys.sort((a,b)=>a.t-b.t)}};
+  if(dir>0){put(T-8*fr,top);put(T,zf-6);put(T+3*fr,zf+2);put(T+5*fr,zf)}else{put(T,zf);put(T+8*fr,top)}status(dir>0?'Board drops in at '+T+' s':'Board flies out from '+T+' s')}
+document.getElementById('dropIn').onclick=()=>{const o=sel&&byId(sel);if(o&&o.type==='board'){boardDrop(o,1);render()}};
+document.getElementById('liftOut').onclick=()=>{const o=sel&&byId(sel);if(o&&o.type==='board'){boardDrop(o,-1);render()}};
 document.getElementById('delTextKey').onclick=()=>{const o=sel&&byId(sel);if(!o||o.type!=='board')return;const i=(o.textKeys||[]).findIndex(k=>Math.abs(k.t-t)<0.03);if(i<0){status('No text change at the playhead');return}o.textKeys.splice(i,1);render()};
+const BASE={kitchen:[520,290,90],table:[300,100,76],chair:[42,42,90],plate:[30,30,3],board:[110,3,50],person:[46,25,165],juice:[100,40,200],pack:[9.7,6.5,19.5],door:[4,90,210],foamax:[340,2,230],rails:[820,20,3],tripod:[60,60,120],note:[0,0,0],cam:[0,0,0]};
+function cmTxt(v){return (Math.round(v*10)/10).toString().replace('.',',')+' cm'}
+function sizeUI(so){const b=BASE[so.type]||[0,0,0],hasW=b[0]>0&&so.type!=='person',hasD=b[1]>0&&!['person','board','rails','foamax'].includes(so.type),hasH=b[2]>0&&!['rails'].includes(so.type);
+  document.getElementById('sxL').style.display=hasW?'':'none';document.getElementById('syL').style.display=hasD?'':'none';document.getElementById('szL').style.display=hasH?'':'none';
+  document.querySelector('#sxL span').textContent=so.type==='rails'?'Length':'Width';
+  const f=(id,v)=>{if(document.activeElement.id!==id)document.getElementById(id).value=cmTxt(v)};f('sxV',b[0]*(so.sx||1));f('syV',b[1]*(so.sy||1));f('szVi',b[2]*(so.sz||1));
+  if(document.activeElement.id!=='px')document.getElementById('px').value=(so.x/100).toFixed(2).replace('.',',');if(document.activeElement.id!=='py')document.getElementById('py').value=(so.y/100).toFixed(2).replace('.',',')}
+for(const [inp,k,ax] of [['sxV','sx',0],['syV','sy',1],['szVi','sz',2]])document.getElementById(inp).onchange=e=>{const o=sel&&byId(sel);if(!o)return;const v=num(String(e.target.value).replace(/[a-zа-я\s]/gi,''));const b=(BASE[o.type]||[1,1,1])[ax];if(v==null||!b)return;setPose(o,{[k]:Math.max(0.05,v/b)});render()};
+for(const [inp,k] of [['px','x'],['py','y']])document.getElementById(inp).onchange=e=>{const o=sel&&byId(sel);if(!o||o.locked)return;const v=num(String(e.target.value).replace(/[a-zа-я\s]/gi,''));if(v==null)return;setPose(o,{[k]:Math.round(v*100)});render()};
 const RDEF={sx:1,sy:1,sz:1,lens:35,ch:120,tilt:0,ovx:0,zz:()=>{const o=sel&&byId(sel);return o&&o.type==='board'?130:76}};
 for(const id in RDEF){const el_=document.getElementById(id);if(!el_)continue;el_.addEventListener('dblclick',()=>{const v=typeof RDEF[id]==='function'?RDEF[id]():RDEF[id];el_.value=v;el_.dispatchEvent(new Event('input'));status('Reset to default')});el_.title='Double-click to reset'}
 document.getElementById('rot').title='Double-click to reset';
