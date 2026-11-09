@@ -84,7 +84,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <button id="delKey">Delete key</button>
       <button id="prevKey">◀ Key</button>
       <button id="nextKey">Key ▶</button>
-      <button id="loopBtn" title="Loop (O). Shift+drag on the ruler sets a range, double-click clears">Loop</button><label for="spd">Speed</label><select id="spd" style="width:auto"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select><label for="fpsSel">FPS</label><select id="fpsSel" style="width:auto"><option>12</option><option>24</option><option selected>25</option><option>30</option><option>50</option></select><span class="tnum" id="fLabel" style="color:var(--muted)">f 0</span>
+      <button id="absBtn" title="Absolute mode (A): moving an object shifts its whole animation instead of creating a key">Absolute</button><button id="loopBtn" title="Loop (O). Shift+drag on the ruler sets a range, double-click clears">Loop</button><label for="spd">Speed</label><select id="spd" style="width:auto"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select><label for="fpsSel">FPS</label><select id="fpsSel" style="width:auto"><option>12</option><option>24</option><option selected>25</option><option>30</option><option>50</option></select><span class="tnum" id="fLabel" style="color:var(--muted)">f 0</span>
       <label for="dur" style="margin-left:auto">Duration</label>
       <select id="dur" style="width:auto"><option value="10">10 s</option><option value="15">15 s</option></select>
     </div>
@@ -133,7 +133,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     <div class="panel" id="help" style="display:none">
       <h2>Shortcuts</h2>
       <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;color:var(--muted)">
-      <b>Space</b><span>Play / pause</span><b>O</b><span>Loop on / off</span><b>J / L</b><span>Frame back / forward when nothing selected</span><b>, / .</b><span>Frame back / forward (Shift: 1 s)</span><b>Home / End</b><span>Start / end</span><b>[ / ]</b><span>Prev / next key</span>
+      <b>Space</b><span>Play / pause</span><b>O</b><span>Loop on / off</span><b>A</b><span>Absolute mode: move shifts the whole animation</span><b>J / L</b><span>Frame back / forward when nothing selected</span><b>, / .</b><span>Frame back / forward (Shift: 1 s)</span><b>Home / End</b><span>Start / end</span><b>[ / ]</b><span>Prev / next key</span>
       <b>K</b><span>Key selected</span><b>Shift+K</b><span>Key all</span><b>Alt+K</b><span>Delete key</span><b>M</b><span>Marker</span>
       <b>Tab</b><span>Next object (Shift: previous)</span><b>Esc</b><span>Deselect</span><b>Enter / F2</b><span>Rename</span>
       <b>Arrows</b><span>Nudge 2 cm (Shift 10, Alt 0.5)</span><b>Q / E</b><span>Rotate 5° (Shift 15°)</span><b>− / =</b><span>Camera lens</span>
@@ -236,8 +236,10 @@ function carriedPose(o,time){const c=byId(o.carrier);if(!c)return null;const sz=
 function stateAt(time){return objs.map(o=>{const st=Object.assign({},o,poseAt(o,time),{vis:visibleAt(o,time)});if(o.carrier){const cp=carriedPose(o,time);if(cp)Object.assign(st,cp)}return st})}
 function snapPose(o){const p=poseAt(o,t),q={};for(const k of POSE)if(p[k]!=null)q[k]=p[k];return q}
 function keyIdx(o,time){return o.keys.findIndex(k=>Math.abs(k.t-time)<0.03)}
+let absMode=false;
 function setPose(o,patch){
   if(!o.keys.length){Object.assign(o,patch);return}
+  if(absMode){const cur=poseAt(o,t);for(const k in patch){if(!POSE.includes(k)||typeof patch[k]!=='number'||typeof cur[k]!=='number'){o[k]=patch[k];continue}const d=patch[k]-cur[k];if(!d)continue;if(typeof o[k]==='number')o[k]+=d;for(const kf of o.keys)if(typeof kf.p[k]==='number')kf.p[k]+=d}return}
   const i=keyIdx(o,t);
   if(i>=0)Object.assign(o.keys[i].p,patch);
   else{const p=Object.assign(snapPose(o),patch);o.keys.push({t:+t.toFixed(2),p});o.keys.sort((a,b)=>a.t-b.t)}
@@ -619,6 +621,7 @@ document.addEventListener('keydown',ev=>{
   if(c==='Escape'&&selKeys.size){selKeys.clear();renderTL();return}
   if(c==='Escape'){sel=null;const i=document.getElementById('selLabel');i.value='';i.disabled=true;render();return}
   if(c==='Tab'&&!mod){ev.preventDefault();const list=objs.filter(x=>x.on&&!x.locked);if(!list.length)return;let k=list.findIndex(x=>x.id===sel);k=(k+(ev.shiftKey?-1:1)+list.length)%list.length;select(list[k].id);return}
+  if(c==='KeyA'&&!ev.ctrlKey&&!ev.metaKey){ev.preventDefault();document.getElementById('absBtn').click();return}
   if(c==='KeyK'){ev.preventDefault();if(ev.altKey)document.getElementById('delKey').click();else if(ev.shiftKey)document.getElementById('addKeyAll').click();else document.getElementById('addKey').click();return}
   if(!o)return;
   if(o.type==='person'&&['Digit1','Digit2','Digit3'].includes(c)){const a=['idle','eat','drink'][+c.slice(5)-1];setAct(o,a);render();status(ACTS[a]+': '+o.label+' at '+t.toFixed(2)+' s');return}
@@ -775,6 +778,7 @@ document.getElementById('del').onclick=()=>{if(sel)delObj(sel)};
 (function(){const p=document.getElementById('palette');for(const k in TYPES){const b=document.createElement('button');b.textContent='+ '+TYPES[k];b.onclick=()=>addObj(k);p.appendChild(b)}})();
 function keyObj(o){const i=keyIdx(o,t),p=snapPose(o);if(i>=0)o.keys[i].p=p;else{o.keys.push({t:+t.toFixed(2),p});o.keys.sort((a,b)=>a.t-b.t)}}
 document.getElementById('addKey').onclick=()=>{if(!sel){status('Select an object');return}keyObj(byId(sel));status('Keyed: '+byId(sel).label+', '+t.toFixed(2)+' s');render()};
+document.getElementById('absBtn').onclick=()=>{absMode=!absMode;const b=document.getElementById('absBtn');b.style.cssText=absMode?'background:#d9822b;border-color:#d9822b;color:#fff':'';document.getElementById('view3d')&&document.body.classList.toggle('absmode',absMode);status(absMode?'Absolute mode: moves shift the whole animation, no new keys':'Keyframe mode');render()};
 document.getElementById('addKeyAll').onclick=()=>{for(const o of objs)keyObj(o);status('Keyed all at '+t.toFixed(2)+' s');render()};
 document.getElementById('delKey').onclick=()=>{if(!sel){status('Select an object');return}const o=byId(sel),i=keyIdx(o,t);if(i<0){status('No key on this object at the playhead');return}const p=poseAt(o,t);o.keys.splice(i,1);if(!o.keys.length)Object.assign(o,p);render()};
 function allKeyTimes(){const ts=new Set();for(const o of (sel?[byId(sel)]:objs))for(const k of o.keys)ts.add(k.t);return[...ts].sort((a,b)=>a-b)}
