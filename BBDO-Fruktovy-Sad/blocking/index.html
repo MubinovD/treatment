@@ -55,17 +55,23 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .tl .ph{position:absolute;top:0;bottom:0;width:1px;background:#ff5a4a;pointer-events:none;z-index:3}
 .dot{width:8px;height:8px;border-radius:50%;flex:none}
 .tab{background:transparent;border:1px solid var(--line);color:var(--muted)}.tab.on{background:var(--panel2);color:#fff;border-color:#4a4e54}
+#dock{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#1b1c1e;border-top:1px solid #33363a;padding:8px 16px 10px;box-shadow:0 -6px 20px rgba(0,0,0,.35)}
+#dock .tl{margin-top:6px;max-height:30vh;overflow:auto}
+#dockGrip{height:6px;margin:-8px -16px 4px;cursor:ns-resize}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 <header>
-  <h1>Blocking</h1><button id="helpBtn" style="padding:3px 9px">Shortcuts ?</button>
+  <h1>Blocking</h1><button id="helpBtn" style="padding:3px 9px">Shortcuts ?</button><button id="pipBtn" style="padding:3px 9px">Preview (P)</button><button id="infoBtn" style="padding:3px 9px">Info (I)</button>
   <p class="hint">Press ? for shortcuts.</p>
 </header>
 <div class="wrap">
   <div class="panel" style="position:relative">
     <div class="row" id="scTabs" style="margin-bottom:8px"></div>
+    <div id="pip" style="position:absolute;z-index:4;right:22px;top:58px;width:300px;background:#111;border:1px solid #4a4e54;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.45);overflow:hidden;resize:horizontal;min-width:180px;max-width:900px">
+      <div id="pipBar" style="display:flex;align-items:center;gap:6px;padding:3px 6px;background:#26282b;cursor:move;font-size:11px;color:#9a9ea5;user-select:none"><span style="flex:1">Camera</span><button id="pipClose" style="padding:0 6px;font-size:11px" aria-label="Hide preview">×</button></div>
+      <canvas id="pipC" style="display:block;width:100%;aspect-ratio:16/9"></canvas></div>
     <div id="ask" style="display:none;position:absolute;z-index:5;left:50%;top:70px;transform:translateX(-50%);background:#26282b;border:1px solid #4a4e54;border-radius:6px;padding:12px 14px;box-shadow:0 8px 24px rgba(0,0,0,.4);display:none"><p id="askMsg" style="margin:0 0 10px;color:#e6e7e9"></p><div class="btns"><button id="askYes" class="primary">Yes</button><button id="askNo">No</button></div></div>
     <svg id="stage" viewBox="0 0 900 620" aria-label="Top view, editable"></svg>
     <div id="view3d" style="position:relative;width:100%;aspect-ratio:16/9;margin-top:8px;border-radius:4px;overflow:hidden;background:#111" aria-label="Camera view 16:9"><div id="ov3d" style="position:absolute;inset:0;pointer-events:none"></div></div>
@@ -104,6 +110,22 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <div class="row" style="margin-top:6px"><label><input type="checkbox" id="selOn"> In scene</label><label><input type="checkbox" id="selLock"> Locked</label></div>
       <div class="row" style="margin-top:6px"><label for="vin">In, s</label><input type="text" id="vin" style="width:70px"><label for="vout">Out, s</label><input type="text" id="vout" style="width:70px"></div>
     </div>
+    <div class="panel" id="info" style="display:none">
+      <h2>Reference heights</h2>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:3px 10px;font-size:12px;color:var(--muted)">
+      <b>Dining table, top</b><span>75–76 cm (scene 76)</span>
+      <b>Chair seat</b><span>45 cm (scene 45)</span><b>Chair back, top</b><span>85–90 cm</span>
+      <b>Kitchen counter</b><span>85–90 cm (scene 90)</span><b>Wall cabinets</b><span>140–150 → 220 cm</span>
+      <b>Door</b><span>200–210 cm (scene 210)</span><b>Ceiling</b><span>260–280 cm (scene 270)</span>
+      <b>Woman, standing</b><span>160–165 cm</span><b>Man, standing</b><span>175–180 cm</span><b>Teen, standing</b><span>150–170 cm</span>
+      <b>Eyes, standing</b><span>height − 10 cm (≈ 150–165)</span>
+      <b>Head top, seated</b><span>125–135 cm</span><b>Eyes, seated</b><span>110–120 cm</span><b>Hands on table, seated</b><span>≈ 76 cm</span>
+      <b>Juice pack 1 L</b><span>≈ 20 cm tall</span><b>Glass</b><span>≈ 10 cm</span>
+      </div>
+      <h2 style="margin-top:10px">Camera heights</h2>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:3px 10px;font-size:12px;color:var(--muted)">
+      <b>Standing eye line</b><span>150–160 cm</span><b>Seated eye line</b><span>110–120 cm</span><b>Table level</b><span>76–90 cm</span><b>Low angle</b><span>30–60 cm</span>
+      </div></div>
     <div class="panel" id="help" style="display:none">
       <h2>Shortcuts</h2>
       <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;color:var(--muted)">
@@ -112,7 +134,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <b>Tab</b><span>Next object (Shift: previous)</span><b>Esc</b><span>Deselect</span><b>Enter / F2</b><span>Rename</span>
       <b>Arrows</b><span>Nudge 2 cm (Shift 10, Alt 0.5)</span><b>Q / E</b><span>Rotate 5° (Shift 15°)</span><b>− / =</b><span>Camera lens</span>
       <b>S</b><span>Sit / stand at playhead</span><b>1–3</b><span>Hands: idle, eat, drink</span><b>4</b><span>Look at target / straight</span><b>L</b><span>Lock</span><b>H</b><span>Hide / show</span><b>Delete</b><span>Delete object</span><b>⌘/Ctrl+D</b><span>Duplicate</span>
-      <b>⌘/Ctrl+Z</b><span>Undo (Shift: redo)</span><b>⌘/Ctrl+S</b><span>Save version</span><b>?</b><span>This panel</span>
+      <b>⌘/Ctrl+Z</b><span>Undo (Shift: redo)</span><b>⌘/Ctrl+S</b><span>Save version</span><b>P</b><span>Camera preview window</span><b>I</b><span>Reference heights</span><b>?</b><span>This panel</span>
       </div>
       <h2 style="margin-top:10px">Mouse</h2>
       <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;color:var(--muted)">
@@ -136,6 +158,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <h2>Versions</h2>
       <input type="text" id="name" value="Фруктовый сад, вариант 1" aria-label="Version name">
       <div class="btns" style="margin-top:8px"><button id="save" class="primary">Save</button><button id="copy">Copy JSON</button><button id="reset">Reset scene</button><button id="clearKeys">Clear all keys</button><button id="resetAll">Reset project</button></div>
+      <h2 style="margin-top:12px">Files</h2>
+      <div class="btns"><button id="expJson">Save scene file</button><button id="impJson">Open scene file</button><input type="file" id="impFile" accept=".json,application/json" style="display:none"></div>
+      <div class="row" style="margin-top:6px"><button id="expMp4">Export MP4</button><select id="expFmt" style="width:auto"><option value="16:9">16:9</option><option value="ov">Current overlay crop</option></select><button id="expPdf">Export PDF</button></div>
       <label for="load" style="margin-top:10px">Open</label>
       <select id="load"><option value="">Saved versions…</option></select>
       <p class="status" id="status"></p>
@@ -277,7 +302,7 @@ function render(){
     document.getElementById('textCtl').style.display=so.type==='board'?'':'none';if(so.type==='board'&&document.activeElement.id!=='btext')document.getElementById('btext').value=textAt(byId(so.id),t);document.getElementById('selOn').checked=so.on;document.getElementById('selLock').checked=!!so.locked;for(const id of ['sx','sy','rot','rotV','vin','vout','zz','lens','ch'])document.getElementById(id).disabled=!!so.locked;nodes.rotH.style.display=so.locked?'none':'';nodes.rotLine.style.display=so.locked?'none':'';
     if(document.activeElement.id!=='vin')document.getElementById('vin').value=String(so.vin||0).replace('.',',');
     if(document.activeElement.id!=='vout')document.getElementById('vout').value=so.vout==null?'':String(so.vout).replace('.',',');
-  }else{nodes.selRing.setAttribute('r',0);nodes.rotH.setAttribute('r',0);nodes.rotLine.style.display='none'}
+  }else{for(const id of ['hairCtl','actCtl','sitCtl','textCtl','carryCtl','zCtl'])document.getElementById(id).style.display='none';nodes.selRing.setAttribute('r',0);nodes.rotH.setAttribute('r',0);nodes.rotLine.style.display='none'}
   const zc=so&&(so.type==='pack'||so.type==='board');document.getElementById('zCtl').style.display=zc?'':'none';if(zc){const zv=Math.round(so.z!=null?so.z:(so.type==='board'?130:76));document.getElementById('zz').value=zv;document.getElementById('zV').textContent=zv+' cm'}
   document.getElementById('camCtl').style.display=so&&so.type==='cam'?'':'none';
   if(so&&so.type==='cam'){document.getElementById('lens').value=Math.round(so.lens);document.getElementById('lensV').textContent=Math.round(so.lens)+' mm';document.getElementById('ch').value=Math.round(so.ch||120);document.getElementById('chV').textContent=Math.round(so.ch||120)+' cm';document.getElementById('tilt').value=Math.round(so.tilt||0);document.getElementById('tiltV').textContent=Math.round(so.tilt||0)+'°'}
@@ -307,7 +332,7 @@ function initV3(){
   V3.cam=new THREE.PerspectiveCamera(40,16/9,2,4000);
   V3.scene.add(new THREE.HemisphereLight(new THREE.Color('#fff6e8'),new THREE.Color('#9c8a70'),0.9));
   const sun=new THREE.DirectionalLight('#fff1dc',0.7);sun.position.set(150,420,620);sun.target.position.set(450,0,240);
-  sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);const sc=sun.shadow.camera;sc.left=-600;sc.right=600;sc.top=600;sc.bottom=-600;sc.near=10;sc.far=2000;sun.shadow.bias=-0.0006;
+  sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);const sc=sun.shadow.camera;sc.left=-600;sc.right=600;sc.top=600;sc.bottom=-600;sc.near=10;sc.far=2000;sun.shadow.bias=-0.0004;sun.shadow.normalBias=1.2;
   V3.scene.add(sun,sun.target);
   const fill=new THREE.DirectionalLight('#dfe8ff',0.25);fill.position.set(900,250,300);V3.scene.add(fill);
   // room shell (fixed)
@@ -392,7 +417,7 @@ function buildV3(){
     else if(T==='plate'){const p=new THREE.Mesh(new THREE.CylinderGeometry(15,11,2.5,28),mat('#fbfaf6',0.3));p.position.y=77.5;p.castShadow=true;inner.add(p);const bm=mat('#d6923a',0.7);for(const [x,z,y] of [[-6,-4,80.5],[5,-5,80.5],[0,5,80.5],[-2,0,84],[7,3,80.5]])box(7,4,6,bm,x,y,z,inner)}
     else if(T==='board'){g.userData.isBoard=true}
     else if(T==='person'){const a=makeActor(o);inner.add(a);g.userData.actor=a}
-    else if(T==='juice'){const fr=mat('#efe9db',0.7),pl=mat('#b9a57e',0.6);box(100,200,40,fr,0,100,0,inner).material.side=THREE.FrontSide;
+    else if(T==='juice'){const fr=mat('#efe9db',0.7),pl=mat('#b9a57e',0.6);box(100,200,2,fr,0,100,-19,inner);box(2,200,40,fr,-49,100,0,inner);box(2,200,40,fr,49,100,0,inner);box(100,2,40,fr,0,199,0,inner);
       for(let z=0;z<=190;z+=38){box(100,3,40,pl,0,z+1.5,-1,inner);if(z<190)for(let i=0;i<4;i++){const pk=new THREE.Group();pk.position.set(-37+i*24.5,z+3,-14);inner.add(pk);box(18,28,12,mat(i%2?'#3b7d33':'#2f6e2c',0.6),0,14,0,pk);box(18,4,12,mat('#f3efe4',0.5),0,26,0,pk)}}}
     else if(T==='pack'){box(8,22,6,mat('#3b7d33',0.55),0,11,0,inner);box(8.2,4,6.2,mat('#f3efe4'),0,20,0,inner);const ap=sph(2.2,mat('#d8452b',0.5),inner);ap.position.set(0,9,-3.2);g.userData.pack=true}
     else if(T==='door'){const d=mat('#c98f3e',0.6);box(4,210,90,d,0,105,0,inner);const kn=sph(2.5,mat('#e8d9a8',0.3),inner);kn.position.set(-4,100,35)}
@@ -444,6 +469,8 @@ function renderView(s,c){
   const a=c.r*Math.PI/180,tl=(c.tilt||0)*Math.PI/180,ch=c.ch||120;
   V3.cam.position.set(c.x,ch,c.y);V3.cam.lookAt(c.x+Math.cos(a)*Math.cos(tl)*100,ch+Math.sin(tl)*100,c.y+Math.sin(a)*Math.cos(tl)*100);
   V3.renderer.render(V3.scene,V3.cam);
+  const pip=document.getElementById('pip');if(pip.style.display!=='none'){const pc=document.getElementById('pipC'),pw=pc.clientWidth,ph=Math.round(pw*9/16);if(pc.width!==pw*2){pc.width=pw*2;pc.height=ph*2}const px=pc.getContext('2d');px.drawImage(V3.renderer.domElement,0,0,pc.width,pc.height);
+    const o3=document.getElementById('ov').value;if(o3!=='none'){const [rw,rh]=o3.split(':').map(Number),H2=pc.height,W2=pc.width,cw=H2*rw/rh,cx=W2/2+(+document.getElementById('ovx').value)*(W2-cw)/2,lx=cx-cw/2;px.fillStyle='rgba(0,0,0,.55)';px.fillRect(0,0,lx,H2);px.fillRect(lx+cw,0,W2-lx-cw,H2);px.strokeStyle='#fff';px.setLineDash([6,4]);px.lineWidth=2;px.strokeRect(lx,1,cw,H2-2);px.setLineDash([])}}
   const o2=document.getElementById('ov').value,off=+document.getElementById('ovx').value;
   const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none';ov.appendChild(svg);
   if(o2!=='none'){const [rw,rh]=o2.split(':').map(Number);const cw=H*rw/rh,cx=W/2+off*(W-cw)/2,lx=cx-cw/2;
@@ -537,6 +564,8 @@ document.addEventListener('keydown',ev=>{
   if(c==='End'){ev.preventDefault();go(dur);return}
   if(c==='BracketLeft'){document.getElementById('prevKey').click();return}
   if(c==='BracketRight'){document.getElementById('nextKey').click();return}
+  if(c==='KeyP'){togglePip();return}
+  if(c==='KeyI'){toggleInfo();return}
   if(c==='KeyM'){const m=marks.find(m=>Math.abs(m.t-t)<0.03);if(!m){marks.push({t:+t.toFixed(2),note:'—'});marks.sort((a,b)=>a.t-b.t);render();document.getElementById('keyNote').focus()}return}
   if(c==='Slash'&&ev.shiftKey||ev.key==='?'){toggleHelp();return}
   if(c==='Escape'){sel=null;const i=document.getElementById('selLabel');i.value='';i.disabled=true;render();return}
@@ -569,6 +598,69 @@ function undo(){pushHist();if(hpos<=0){status('Nothing to undo');return}hpos--;r
 function redo(){if(hpos>=hist.length-1){status('Nothing to redo');return}hpos++;restore(hist[hpos]);status('Redo')}
 // ---------- help ----------
 document.getElementById('helpBtn').onclick=()=>toggleHelp();
+function toggleInfo(){const h=document.getElementById('info');h.style.display=h.style.display==='none'?'':'none'}
+document.getElementById('infoBtn').onclick=()=>toggleInfo();
+// ---------- export ----------
+let dlcap=null;(async()=>{try{if(window.claude&&claude.use)dlcap=await claude.use('downloads')}catch(e){}})();
+async function saveFile(name,data){try{if(dlcap){await dlcap.save({filename:name,data});status('Saved '+name);return}
+  const blob=data instanceof Blob?data:new Blob([data]);const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);status('Saved '+name)}catch(e){status(e&&e.code==='declined'?'Save cancelled':'Save failed: '+(e&&e.message||e))}}
+function slug(){return (document.getElementById('name').value||'blocking').replace(/[\\/:*?"<>|]+/g,' ').trim().slice(0,80)||'blocking'}
+document.getElementById('expJson').onclick=()=>{const p=payload();saveFile(slug()+'.json',JSON.stringify(p,null,1))};
+document.getElementById('impJson').onclick=()=>document.getElementById('impFile').click();
+document.getElementById('impFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!(d.v>=2)){status('This file is not a blocking scene');return}apply(d);status('Opened '+f.name)}catch(err){status('Could not read the file')}e.target.value=''};
+function loadScript(src,test){return new Promise((res,rej)=>{if(test())return res();const sc=document.createElement('script');sc.src=src;sc.onload=()=>test()?res():rej(new Error('not loaded'));sc.onerror=()=>rej(new Error('blocked: '+src));document.head.appendChild(sc)})}
+function cropRect(W,H){const sel_=document.getElementById('expFmt').value,ov=document.getElementById('ov').value;if(sel_!=='ov'||ov==='none')return{x:0,y:0,w:W,h:H};const [rw,rh]=ov.split(':').map(Number);let cw=Math.round(H*rw/rh/2)*2;const cx=W/2+(+document.getElementById('ovx').value)*(W-cw)/2;return{x:Math.round(cx-cw/2),y:0,w:cw,h:H}}
+let exporting=false;
+async function renderAt(time){t=time;render();await new Promise(r=>setTimeout(r,0))}
+async function withSize(W,H,fn){const pipShown=document.getElementById('pip').style.display;document.getElementById('pip').style.display='none';V3.renderer.setPixelRatio(1);V3.renderer.setSize(W,H,false);V3.w=W;V3.h=H;try{return await fn()}finally{V3.renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));document.getElementById('pip').style.display=pipShown;sizeV3()}}
+document.getElementById('expMp4').onclick=async()=>{if(exporting||!V3.renderer)return;exporting=true;const keepT=t,wasPlay=playing;playing=false;
+  try{const W=1920,H=1080,cr=cropRect(W,H),fps=25,n=Math.round(dur*fps);const cv=document.createElement('canvas');cv.width=cr.w;cv.height=cr.h;const cx=cv.getContext('2d');
+    let useWC=typeof VideoEncoder!=='undefined';if(useWC){try{await loadScript('https://cdn.jsdelivr.net/npm/mp4-muxer@5.1.3/build/mp4-muxer.min.js',()=>typeof Mp4Muxer!=='undefined')}catch(e){useWC=false}}
+    let cfg=null;if(useWC){for(const codec of ['avc1.640028','avc1.4d0028','avc1.42e01f']){const c={codec,width:cr.w,height:cr.h,bitrate:10e6,framerate:fps};try{const r=await VideoEncoder.isConfigSupported(c);if(r.supported){cfg=c;break}}catch(e){}}if(!cfg)useWC=false}
+    if(useWC){const muxer=new Mp4Muxer.Muxer({target:new Mp4Muxer.ArrayBufferTarget(),video:{codec:'avc',width:cr.w,height:cr.h,frameRate:fps},fastStart:'in-memory'});let err=null;
+      const enc=new VideoEncoder({output:(ch,meta)=>muxer.addVideoChunk(ch,meta),error:e=>{err=e}});enc.configure(cfg);
+      await withSize(W,H,async()=>{for(let i=0;i<n;i++){await renderAt(i/fps);cx.drawImage(V3.renderer.domElement,cr.x,cr.y,cr.w,cr.h,0,0,cr.w,cr.h);const fr=new VideoFrame(cv,{timestamp:Math.round(i*1e6/fps),duration:Math.round(1e6/fps)});enc.encode(fr,{keyFrame:i%50===0});fr.close();if(enc.encodeQueueSize>8)await new Promise(r=>setTimeout(r,10));if(i%10===0)status('Rendering MP4… '+Math.round(i/n*100)+'%');if(err)throw err}});
+      await enc.flush();muxer.finalize();await saveFile(slug()+(cr.w<W?' '+document.getElementById('ov').value.replace(':','x'):'')+'.mp4',new Blob([muxer.target.buffer],{type:'video/mp4'}))}
+    else{if(typeof MediaRecorder==='undefined')throw new Error('video export is not supported in this browser');const mt=['video/mp4;codecs=avc1','video/mp4','video/webm;codecs=vp9','video/webm'].find(m=>MediaRecorder.isTypeSupported(m));const ext=mt.startsWith('video/mp4')?'mp4':'webm';
+      const st=cv.captureStream(fps),rec=new MediaRecorder(st,{mimeType:mt,videoBitsPerSecond:10e6}),chunks=[];rec.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};rec.start();
+      await withSize(W,H,async()=>{for(let i=0;i<n;i++){await renderAt(i/fps);cx.drawImage(V3.renderer.domElement,cr.x,cr.y,cr.w,cr.h,0,0,cr.w,cr.h);await new Promise(r=>setTimeout(r,1000/fps));if(i%10===0)status('Recording… '+Math.round(i/n*100)+'%')}});
+      await new Promise(r=>{rec.onstop=r;rec.stop()});await saveFile(slug()+'.'+ext,new Blob(chunks,{type:mt}));if(ext==='webm')status('Saved as WebM: this browser cannot encode MP4')}}
+  catch(e){status('Video export failed: '+(e&&e.message||e))}finally{exporting=false;t=keepT;render();if(wasPlay)togglePlay()}};
+function eventsAt(time){const ev=[],near=x=>Math.abs(x-time)<0.03;for(const o of objs){if(o.keys.some(k=>near(k.t)))ev.push(o.label+': движение');for(const k of (o.sitKeys||[]))if(near(k.t))ev.push(o.label+': '+(k.v?'садится':'встаёт'));for(const k of (o.actKeys||[]))if(near(k.t))ev.push(o.label+': '+({idle:'исходное',eat:'ест баурсак',drink:'пьёт сок'}[k.a]||k.a));for(const k of (o.lookKeys||[]))if(near(k.t))ev.push(o.label+': '+(k.target&&byId(k.target)?'смотрит на «'+byId(k.target).label+'»':'смотрит прямо'));for(const k of (o.textKeys||[]))if(near(k.t))ev.push(o.label+': текст «'+k.text.replace(/\n/g,' / ')+'»');if(o.vin&&near(o.vin))ev.push(o.label+': появляется');if(o.vout!=null&&near(o.vout))ev.push(o.label+': исчезает')}for(const m of marks)if(near(m.t))ev.unshift('★ '+m.note);return ev}
+function beatTimes(){const ts=new Set([0]);for(const o of objs){for(const arr of [o.keys,o.sitKeys,o.actKeys,o.lookKeys,o.textKeys])for(const k of (arr||[]))ts.add(+k.t.toFixed(2));if(o.vin)ts.add(+o.vin.toFixed(2));if(o.vout!=null)ts.add(+o.vout.toFixed(2))}for(const m of marks)ts.add(+m.t.toFixed(2));return[...ts].filter(x=>x<=dur).sort((a,b)=>a-b).slice(0,30)}
+function planImage(){return new Promise(res=>{const c=stage.cloneNode(true);c.setAttribute('xmlns','http://www.w3.org/2000/svg');c.setAttribute('width','1800');c.setAttribute('height','1240');const sel_=c.querySelectorAll('circle[stroke-dasharray],line[stroke="#4c8bf5"],circle[fill="#4c8bf5"]');sel_.forEach(e=>e.remove());const xml=new XMLSerializer().serializeToString(c);const img=new Image();img.onload=()=>res(img);img.onerror=()=>res(null);img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(xml)})}
+function wrapText(g,text,x,y,maxW,lh,maxLines){const words=String(text).split(/\s+/);let line='',n=0;for(const w of words){const test=line?line+' '+w:w;if(g.measureText(test).width>maxW&&line){g.fillText(line,x,y+n*lh);n++;line=w;if(n>=maxLines)return n}else line=test}if(line&&n<maxLines){g.fillText(line,x,y+n*lh);n++}return n}
+document.getElementById('expPdf').onclick=async()=>{if(exporting||!V3.renderer)return;exporting=true;const keepT=t,keepSel=sel;sel=null;
+  try{status('Preparing PDF…');await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',()=>window.jspdf&&window.jspdf.jsPDF);
+    const PW=1754,PH=1240,pdf=new window.jspdf.jsPDF({orientation:'landscape',unit:'px',format:[PW,PH],hotfixes:['px_scaling']});const FF='Inter, Nunito, Arial, sans-serif';
+    const page=()=>{const c=document.createElement('canvas');c.width=PW;c.height=PH;const g=c.getContext('2d');g.fillStyle='#ffffff';g.fillRect(0,0,PW,PH);return{c,g}};
+    const head=(g,title,sub)=>{g.fillStyle='#17181a';g.font='600 34px '+FF;g.fillText(title,70,90);g.fillStyle='#6b6f76';g.font='400 22px '+FF;g.fillText(sub,70,124);g.fillStyle='#e3e4e6';g.fillRect(70,140,PW-140,2)};
+    const sc=scenes[active].name,proj=document.getElementById('name').value||'Blocking';
+    await withSize(1280,720,async()=>{
+      // page 1: overview
+      await renderAt(keepT);const P1=page();head(P1.g,proj+' — '+sc,'Мизансцена · хрон '+dur+' с · '+new Date().toLocaleDateString('ru-RU'));
+      const pl=await planImage();if(pl){P1.g.drawImage(pl,70,170,900,620);P1.g.strokeStyle='#d0d2d6';P1.g.strokeRect(70,170,900,620)}
+      P1.g.drawImage(V3.renderer.domElement,1010,170,674,379);P1.g.fillStyle='#6b6f76';P1.g.font='400 20px '+FF;P1.g.fillText('Кадр на '+keepT.toFixed(2)+' с',1010,580);
+      const note=document.getElementById('sceneNote').value;P1.g.fillStyle='#17181a';P1.g.font='600 22px '+FF;P1.g.fillText('Заметки',1010,630);P1.g.font='400 20px '+FF;P1.g.fillStyle='#33363a';let yy=665;for(const para of (note||'—').split('\n')){const k=wrapText(P1.g,para,1010,yy,674,28,20);yy+=k*28+8;if(yy>1150)break}
+      pdf.addImage(P1.c.toDataURL('image/jpeg',0.9),'JPEG',0,0,PW,PH);
+      // storyboard
+      const times=beatTimes();const per=6;for(let p=0;p<times.length;p+=per){const P=page();head(P.g,'Раскадровка — '+sc,'Ключевые моменты '+(p+1)+'–'+Math.min(times.length,p+per)+' из '+times.length);
+        for(let j=0;j<per&&p+j<times.length;j++){const tm=times[p+j],col=j%2,row=Math.floor(j/2),x=70+col*820,y=170+row*350;await renderAt(tm);
+          P.g.drawImage(V3.renderer.domElement,x,y,480,270);P.g.strokeStyle='#d0d2d6';P.g.strokeRect(x,y,480,270);
+          const pi=await planImage();if(pi){P.g.drawImage(pi,x+495,y,265,183);P.g.strokeRect(x+495,y,265,183)}
+          P.g.fillStyle='#17181a';P.g.font='600 22px '+FF;P.g.fillText(tm.toFixed(2).replace('.',',')+' с',x,y+300);
+          P.g.font='400 17px '+FF;P.g.fillStyle='#33363a';let ly=y+195+20;for(const e of eventsAt(tm).slice(0,5)){const k=wrapText(P.g,e,x+495,ly,265,21,2);ly+=k*21+2}}
+        pdf.addPage([PW,PH],'landscape');pdf.addImage(P.c.toDataURL('image/jpeg',0.9),'JPEG',0,0,PW,PH)}
+    });
+    sel=keepSel;t=keepT;render();await saveFile(slug()+' — мизансцена.pdf',pdf.output('blob'))}
+  catch(e){status('PDF export failed: '+(e&&e.message||e))}finally{exporting=false;sel=keepSel;t=keepT;render()}};
+function togglePip(force){const p=document.getElementById('pip');const show=force!=null?force:p.style.display==='none';p.style.display=show?'':'none';try{localStorage.setItem('fs-pip',JSON.stringify({show,l:p.style.left,t:p.style.top,w:p.style.width}))}catch(e){}if(show)render()}
+document.getElementById('pipBtn').onclick=()=>togglePip();document.getElementById('pipClose').onclick=()=>togglePip(false);
+(function(){const p=document.getElementById('pip'),bar=document.getElementById('pipBar');try{const st=JSON.parse(localStorage.getItem('fs-pip')||'null');if(st){if(st.l){p.style.left=st.l;p.style.right='auto'}if(st.t)p.style.top=st.t;if(st.w)p.style.width=st.w;if(st.show===false)p.style.display='none'}}catch(e){}
+  let d=null;bar.addEventListener('pointerdown',e=>{if(e.target.id==='pipClose')return;const r=p.getBoundingClientRect(),pr=p.offsetParent.getBoundingClientRect();d={x:e.clientX,y:e.clientY,l:r.left-pr.left,t:r.top-pr.top};bar.setPointerCapture(e.pointerId)});
+  bar.addEventListener('pointermove',e=>{if(!d)return;const pr=p.offsetParent.getBoundingClientRect();let l=d.l+e.clientX-d.x,t_=d.t+e.clientY-d.y;l=Math.max(0,Math.min(pr.width-p.offsetWidth,l));t_=Math.max(0,Math.min(pr.height-40,t_));p.style.left=l+'px';p.style.top=t_+'px';p.style.right='auto'});
+  bar.addEventListener('pointerup',()=>{if(d){d=null;togglePip(true)}});
+  new ResizeObserver(()=>{if(p.style.display!=='none')render()}).observe(p)})();
 function toggleHelp(){const h=document.getElementById('help');h.style.display=h.style.display==='none'?'':'none'}
 document.getElementById('rot').oninput=e=>{if(sel){let v=+e.target.value;if(Math.abs(v)<4)v=0;const o=byId(sel);setPose(o,{r:norm(v-rOff(o))});render()}};
 document.getElementById('rotV').onchange=e=>{if(!sel)return;const v=num(String(e.target.value).replace('°',''));if(v==null)return;const o=byId(sel);setPose(o,{r:norm(v-rOff(o))});render()};
@@ -643,6 +735,9 @@ async function refreshList(){if(!db)return;try{const snap=await db.collection('s
 document.getElementById('save').onclick=async()=>{const p=payload();if(!db){try{localStorage.setItem('fs-blocking',JSON.stringify(p));status('Saved in this browser only')}catch(e){status('Save failed')}return}
   try{const prev=window._docs.find(x=>x.data.name===p.name);const id=prev?prev.id:('s-'+Date.now());await db.doc('scenes/'+id).set(p);status('Saved: '+p.name);refreshList()}catch(e){status('Save failed: '+(e&&e.message||'error'))}};
 document.getElementById('load').onchange=e=>{const d=window._docs.find(x=>x.id===e.target.value);if(d){apply(d.data);status('Opened: '+d.data.name)}};
+(function(){const tl_=document.getElementById('tl'),row=document.getElementById('play').parentElement,d=document.createElement('div');d.id='dock';const grip=document.createElement('div');grip.id='dockGrip';grip.title='Drag to resize';d.appendChild(grip);d.appendChild(row);d.appendChild(tl_);document.body.appendChild(d);
+  const pad=()=>{document.body.style.paddingBottom=(d.offsetHeight+12)+'px'};new ResizeObserver(pad).observe(d);pad();
+  let g=null;grip.addEventListener('pointerdown',e=>{g={y:e.clientY,h:tl_.clientHeight};grip.setPointerCapture(e.pointerId)});grip.addEventListener('pointermove',e=>{if(!g)return;const h=Math.max(60,Math.min(window.innerHeight*0.7,g.h+(g.y-e.clientY)));tl_.style.maxHeight=h+'px';tl_.style.height=h+'px'});grip.addEventListener('pointerup',()=>{g=null})})();
 initV3();renderTabs();build();go(0);
 (async()=>{let restored=false;
  try{if(window.claude&&claude.use){const timer=setTimeout(()=>status('Storage did not respond; working locally'),10000);db=await claude.use('db');clearTimeout(timer);
