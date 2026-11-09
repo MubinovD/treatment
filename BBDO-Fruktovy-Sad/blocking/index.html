@@ -225,9 +225,14 @@ function poseAt(o,time){
 function visibleAt(o,time){return o.on&&time>=(o.vin||0)-1e-6&&time<=(o.vout==null?dur:o.vout)+1e-6}
 function fwdOf(r){const a=r*Math.PI/180;return[Math.sin(a),-Math.cos(a)]}
 function lastSitTime(c,time){let ts=c.sit?0:null,v=c.sit?1:0;for(const k of (c.sitKeys||[])){if(k.t>time+1e-6)break;if(k.v&&!v)ts=k.t;v=k.v}return v?ts:null}
-function carriedPose(o,time){const c=byId(o.carrier);if(!c)return null;const ts=lastSitTime(c,time);const sz=c.sz||1;
-  if(ts==null){const p=poseAt(c,time),f=fwdOf(p.r);return{x:p.x+f[0]*38*sz,y:p.y+f[1]*38*sz,r:p.r,z:118*sz,held:true}}
-  const p=poseAt(c,ts),f=fwdOf(p.r);return{x:p.x+f[0]*42,y:p.y+f[1]*42,r:p.r,z:76,held:false}}
+function carriedPose(o,time){const c=byId(o.carrier);if(!c)return null;const sz=c.sz||1;
+  let ts=c.sit?0:null;for(const k of (c.sitKeys||[])){if(k.t>time+SIT_T+1e-6)break;if(k.v)ts=k.t}
+  const sv=sitAt(c,time),e=sv<.5?2*sv*sv:1-Math.pow(-2*sv+2,2)/2;
+  const p=poseAt(c,time),f=fwdOf(p.r),H={x:p.x+f[0]*38*sz,y:p.y+f[1]*38*sz,r:p.r,z:118*sz};
+  if(ts==null||e<=0)return Object.assign(H,{held:true});
+  const q=poseAt(c,ts),g=fwdOf(q.r),T={x:q.x+g[0]*42,y:q.y+g[1]*42,r:q.r,z:76};
+  if(e>=1)return Object.assign(T,{held:false});
+  return{x:H.x+(T.x-H.x)*e,y:H.y+(T.y-H.y)*e,r:H.r+(T.r-H.r)*e,z:H.z+(T.z-H.z)*e,held:true}}
 function stateAt(time){return objs.map(o=>{const st=Object.assign({},o,poseAt(o,time),{vis:visibleAt(o,time)});if(o.carrier){const cp=carriedPose(o,time);if(cp)Object.assign(st,cp)}return st})}
 function snapPose(o){const p=poseAt(o,t),q={};for(const k of POSE)if(p[k]!=null)q[k]=p[k];return q}
 function keyIdx(o,time){return o.keys.findIndex(k=>Math.abs(k.t-time)<0.03)}
