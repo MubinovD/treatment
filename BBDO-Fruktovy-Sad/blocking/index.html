@@ -63,7 +63,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 </head>
 <body>
 <header>
-  <h1>Blocking</h1><button id="helpBtn" style="padding:3px 9px">Shortcuts ?</button><button id="pipBtn" style="padding:3px 9px">Preview (P)</button><button id="infoBtn" style="padding:3px 9px">Info (I)</button>
+  <h1>Blocking</h1><button id="helpBtn" style="padding:3px 9px">Shortcuts ?</button><button id="pipBtn" style="padding:3px 9px">Preview (P)</button><button id="infoBtn" style="padding:3px 9px">Info (I)</button><button id="undoBtn" style="padding:3px 9px" title="Undo (⌘/Ctrl+Z)">↶ Undo</button><button id="redoBtn" style="padding:3px 9px" title="Redo (⌘/Ctrl+Shift+Z)">↷ Redo</button><button id="histBtn" style="padding:3px 9px">History (Y)</button>
   <p class="hint">Press ? for shortcuts.</p>
 </header>
 <div class="wrap">
@@ -111,6 +111,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <div class="row" style="margin-top:6px"><label><input type="checkbox" id="selOn"> In scene</label><label><input type="checkbox" id="selLock"> Locked</label></div>
       <div class="row" style="margin-top:6px"><label for="vin">In, s</label><input type="text" id="vin" style="width:70px"><label for="vout">Out, s</label><input type="text" id="vout" style="width:70px"></div>
     </div>
+    <div class="panel" id="histPanel" style="display:none"><h2>History</h2><div id="histList" style="display:flex;flex-direction:column;gap:3px;max-height:320px;overflow:auto"></div><p class="status" style="margin-top:6px">Click a step to go back to it. A new edit after going back drops the later steps.</p></div>
     <div class="panel" id="info" style="display:none">
       <h2>Reference heights</h2>
       <div style="display:grid;grid-template-columns:1fr auto;gap:3px 10px;font-size:12px;color:var(--muted)">
@@ -135,7 +136,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <b>Tab</b><span>Next object (Shift: previous)</span><b>Esc</b><span>Deselect</span><b>Enter / F2</b><span>Rename</span>
       <b>Arrows</b><span>Nudge 2 cm (Shift 10, Alt 0.5)</span><b>Q / E</b><span>Rotate 5° (Shift 15°)</span><b>− / =</b><span>Camera lens</span>
       <b>S</b><span>Sit / stand at playhead</span><b>1–3</b><span>Hands: idle, eat, drink</span><b>4</b><span>Look at target / straight</span><b>L</b><span>Lock</span><b>H</b><span>Hide / show</span><b>Delete</b><span>Delete object</span><b>⌘/Ctrl+D</b><span>Duplicate</span>
-      <b>⌘/Ctrl+Z</b><span>Undo (Shift: redo)</span><b>⌘/Ctrl+S</b><span>Save version</span><b>P</b><span>Camera preview window</span><b>I</b><span>Reference heights</span><b>?</b><span>This panel</span>
+      <b>⌘/Ctrl+Z</b><span>Undo (Shift: redo)</span><b>⌘/Ctrl+Y</b><span>Redo</span><b>Y</b><span>History panel</span><b>⌘/Ctrl+S</b><span>Save version</span><b>P</b><span>Camera preview window</span><b>I</b><span>Reference heights</span><b>?</b><span>This panel</span>
       </div>
       <h2 style="margin-top:10px">Mouse</h2>
       <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;color:var(--muted)">
@@ -565,7 +566,7 @@ stage.addEventListener('pointerdown',ev=>{if(ev.button!==0||ev.altKey)return;if(
 const FPS=25;
 function codeKey(ev){return ev.code||''}
 document.addEventListener('keydown',ev=>{
-  if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){if(ev.key==='Escape')document.activeElement.blur();return}
+  const ae=document.activeElement;if(/INPUT|TEXTAREA|SELECT/.test(ae.tagName)){const isText=ae.tagName==='TEXTAREA'||(ae.tagName==='INPUT'&&ae.type==='text');if((ev.metaKey||ev.ctrlKey)&&(ev.code==='KeyZ'||ev.code==='KeyY')&&!isText){ev.preventDefault();ae.blur();(ev.code==='KeyY'||ev.shiftKey)?redo():undo();return}if(ev.key==='Escape')ae.blur();return}
   const c=codeKey(ev),mod=ev.metaKey||ev.ctrlKey,o=sel&&byId(sel);
   if(mod&&c==='KeyZ'){ev.preventDefault();ev.shiftKey?redo():undo();return}
   if(mod&&c==='KeyY'){ev.preventDefault();redo();return}
@@ -580,6 +581,7 @@ document.addEventListener('keydown',ev=>{
   if(c==='BracketRight'){document.getElementById('nextKey').click();return}
   if(c==='KeyP'){togglePip();return}
   if(c==='KeyI'){toggleInfo();return}
+  if(c==='KeyY'&&!mod){toggleHist();return}
   if(c==='KeyM'){const m=marks.find(m=>Math.abs(m.t-t)<0.03);if(!m){marks.push({t:+t.toFixed(2),note:'—'});marks.sort((a,b)=>a.t-b.t);render();document.getElementById('keyNote').focus()}return}
   if(c==='Slash'&&ev.shiftKey||ev.key==='?'){toggleHelp();return}
   if(c==='Escape'){sel=null;const i=document.getElementById('selLabel');i.value='';i.disabled=true;render();return}
@@ -603,17 +605,25 @@ document.addEventListener('keydown',ev=>{
   else return;
   ev.preventDefault();render()});
 // ---------- undo ----------
-let hist=[],hpos=-1,hTimer=null,restoring=false;
+let hist=[],hpos=-1,hTimer=null,restoring=false,histLabel='';
 function snapProj(){stash();return JSON.stringify({scenes,active})}
-function pushHist(){if(restoring)return;const js=snapProj();if(hist[hpos]===js)return;hist=hist.slice(0,hpos+1);hist.push(js);if(hist.length>120)hist.shift();hpos=hist.length-1}
+function guessLabel(prev,cur){try{const a=JSON.parse(prev),b=JSON.parse(cur);if(a.active!==b.active||a.scenes.length!==b.scenes.length)return 'Scenes changed';const A=a.scenes[a.active].objects||[],B=b.scenes[b.active].objects||[];if(A.length!==B.length)return B.length>A.length?'Added '+(B.find(x=>!A.some(y=>y.id===x.id))||{}).label:'Deleted '+(A.find(x=>!B.some(y=>y.id===x.id))||{}).label;
+  for(const o of B){const p=A.find(x=>x.id===o.id);if(!p)continue;if(JSON.stringify(p)!==JSON.stringify(o)){if(JSON.stringify(p.keys)!==JSON.stringify(o.keys))return 'Animated '+o.label;if(p.x!==o.x||p.y!==o.y)return 'Moved '+o.label;if(p.r!==o.r)return 'Rotated '+o.label;return 'Edited '+o.label}}return 'Edited scene'}catch(e){return 'Edit'}}
+function pushHist(){if(restoring)return;const js=snapProj();if(hist[hpos]&&hist[hpos].js===js)return;const label=hist.length?(histLabel||guessLabel(hist[hpos].js,js)):'Start';histLabel='';hist=hist.slice(0,hpos+1);hist.push({js,label,at:new Date()});if(hist.length>150)hist.shift();hpos=hist.length-1;renderHist()}
 function schedHist(){if(restoring||drag)return;clearTimeout(hTimer);hTimer=setTimeout(pushHist,350)}
-function restore(js){restoring=true;const d=JSON.parse(js);scenes=d.scenes;const keepT=t,keepSel=sel;loadScene(d.active);if(keepSel&&byId(keepSel))select(keepSel);go(keepT);restoring=false}
-function undo(){pushHist();if(hpos<=0){status('Nothing to undo');return}hpos--;restore(hist[hpos]);status('Undo')}
-function redo(){if(hpos>=hist.length-1){status('Nothing to redo');return}hpos++;restore(hist[hpos]);status('Redo')}
+function restore(js){restoring=true;const d=JSON.parse(js);scenes=d.scenes;const keepT=t,keepSel=sel;loadScene(d.active);if(keepSel&&byId(keepSel))select(keepSel);go(keepT);restoring=false;renderHist()}
+function undo(){clearTimeout(hTimer);pushHist();if(hpos<=0){status('Nothing to undo');return}const l=hist[hpos].label;hpos--;restore(hist[hpos].js);status('Undo: '+l)}
+function redo(){if(hpos>=hist.length-1){status('Nothing to redo');return}hpos++;restore(hist[hpos].js);status('Redo: '+hist[hpos].label)}
+function jumpHist(i){clearTimeout(hTimer);pushHist();if(i<0||i>=hist.length)return;hpos=i;restore(hist[i].js);status('History: '+hist[i].label)}
+function renderHist(){const box=document.getElementById('histList');if(!box)return;box.innerHTML='';for(let i=hist.length-1;i>=0;i--){const h=hist[i],b=document.createElement('button');b.style.cssText='display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;padding:4px 8px;font-size:12px;'+(i===hpos?'background:#2a3446;border-color:#4c8bf5;color:#fff':(i>hpos?'opacity:.45':''));const a=document.createElement('span');a.textContent=h.label;const tm=document.createElement('span');tm.style.color='#9a9ea5';tm.textContent=h.at.toTimeString().slice(0,8);b.append(a,tm);b.onclick=()=>jumpHist(i);box.appendChild(b)}
+  document.getElementById('undoBtn').disabled=hpos<=0;document.getElementById('redoBtn').disabled=hpos>=hist.length-1}
 // ---------- help ----------
 document.getElementById('helpBtn').onclick=()=>toggleHelp();
 function toggleInfo(){const h=document.getElementById('info');h.style.display=h.style.display==='none'?'':'none'}
 document.getElementById('infoBtn').onclick=()=>toggleInfo();
+document.getElementById('undoBtn').onclick=()=>undo();document.getElementById('redoBtn').onclick=()=>redo();
+function toggleHist(){const h=document.getElementById('histPanel');h.style.display=h.style.display==='none'?'':'none';renderHist()}
+document.getElementById('histBtn').onclick=()=>toggleHist();
 // ---------- export ----------
 let dlcap=null;(async()=>{try{if(window.claude&&claude.use)dlcap=await claude.use('downloads')}catch(e){}})();
 async function saveFile(name,data){try{if(dlcap){await dlcap.save({filename:name,data});status('Saved '+name);return}
