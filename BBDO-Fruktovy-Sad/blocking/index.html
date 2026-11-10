@@ -133,7 +133,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     <div class="panel" id="help" style="display:none">
       <h2>Shortcuts</h2>
       <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;color:var(--muted)">
-      <b>Space</b><span>Play / pause</span><b>O</b><span>Loop on / off</span><b>A</b><span>Absolute mode: move shifts the whole animation</span><b>J / L</b><span>Frame back / forward when nothing selected</span><b>, / .</b><span>Frame back / forward (Shift: 1 s)</span><b>Home / End</b><span>Start / end</span><b>[ / ]</b><span>Prev / next key</span>
+      <b>Space</b><span>Play / pause</span><b>O</b><span>Loop on / off</span><b>Alt ← →</b><span>Nudge selected keys 1 frame (Shift: 10)</span><b>A</b><span>Absolute mode: move shifts the whole animation</span><b>J / L</b><span>Frame back / forward when nothing selected</span><b>, / .</b><span>Frame back / forward (Shift: 1 s)</span><b>Home / End</b><span>Start / end</span><b>[ / ]</b><span>Prev / next key</span>
       <b>K</b><span>Key selected</span><b>Shift+K</b><span>Key all</span><b>Alt+K</b><span>Delete key</span><b>M</b><span>Marker</span>
       <b>Tab</b><span>Next object (Shift: previous)</span><b>Esc</b><span>Deselect</span><b>Enter / F2</b><span>Rename</span>
       <b>Arrows</b><span>Nudge 2 cm (Shift 10, Alt 0.5)</span><b>Q / E</b><span>Rotate 5° (Shift 15°)</span><b>− / =</b><span>Camera lens</span>
@@ -532,10 +532,11 @@ function renderTL(){
   const keyEl=(o,arrName,k,tr,cls,css,title)=>{const d=document.createElement('div');d.className=cls+(arrName==='keys'&&Math.abs(k.t-t)<0.03?' at':'');d.style.cssText=css||'';d.style.left=(k.t/dur*100)+'%';d.title=title;if(selKeys.has(k)){d.style.outline='2px solid #fff';d.style.outlineOffset='1px';d.style.zIndex=2}
     d.onpointerdown=ev=>{ev.stopPropagation();const arr=o[arrName];if(ev.altKey){arr.splice(arr.indexOf(k),1);selKeys.delete(k);render();return}
       if(ev.shiftKey||ev.metaKey||ev.ctrlKey){selKeys.has(k)?selKeys.delete(k):selKeys.add(k);renderTL();return}
-      if(!selKeys.has(k)){selKeys.clear();selKeys.add(k)}select(o.id);go(k.t);d.setPointerCapture(ev.pointerId);
-      const group=[...selKeys].map(x=>({k:x,t0:x.t})),x0=snapF(trackX(ev,tr));let moved=false;
-      d.onpointermove=e=>{let dx=snapF(trackX(e,tr))-x0;const mn=Math.min(...group.map(g=>g.t0)),mx=Math.max(...group.map(g=>g.t0));dx=Math.max(-mn,Math.min(dur-mx,dx));if(!moved&&Math.abs(dx)<1e-6)return;moved=true;for(const g of group)g.k.t=+(g.t0+dx).toFixed(3);sortAllKeys();t=k.t;render()};
-      d.onpointerup=()=>{d.onpointermove=null;if(moved){status('Moved '+group.length+' key'+(group.length>1?'s':''))}}};
+      const TR=tr.getBoundingClientRect();if(!selKeys.has(k)){selKeys.clear();selKeys.add(k)}select(o.id);go(k.t);
+      const group=[...selKeys].map(x=>({k:x,t0:x.t})),tx=e=>Math.max(0,Math.min(dur,(e.clientX-TR.left)/TR.width*dur)),x0=snapF(tx(ev));let moved=false;document.body.style.cursor='ew-resize';
+      const mv=e=>{let dx=snapF(tx(e))-x0;const mn=Math.min(...group.map(g=>g.t0)),mx=Math.max(...group.map(g=>g.t0));dx=Math.max(-mn,Math.min(dur-mx,dx));if(!moved&&Math.abs(dx)<1e-6)return;moved=true;for(const g of group)g.k.t=+(g.t0+dx).toFixed(3);sortAllKeys();t=k.t;render();status((dx>=0?'+':'')+Math.round(dx*fps)+' f · '+k.t.toFixed(2)+' s')};
+      const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);document.body.style.cursor='';if(moved){status('Moved '+group.length+' key'+(group.length>1?'s':''));render()}};
+      addEventListener('pointermove',mv);addEventListener('pointerup',up)};
     tr.appendChild(d);keyEls.push({d,k});return d};
   const list=[...objs].sort((a,b)=>(LAYER[b.type]-LAYER[a.type]));
   for(const o of list){
@@ -566,6 +567,7 @@ function renderTL(){
   for(const tr of rows){const p=document.createElement('div');p.className='ph';p.style.left=(t/dur*100)+'%';tr.appendChild(p)}
 }
 function sortAllKeys(){for(const o of objs)for(const arr of ['keys','sitKeys','actKeys','lookKeys','textKeys'])if(o[arr])o[arr].sort((a,b)=>a.t-b.t)}
+function nudgeKeys(n){const ks=[...selKeys];if(!ks.length)return;let d=n/fps;const mn=Math.min(...ks.map(k=>k.t)),mx=Math.max(...ks.map(k=>k.t));d=Math.max(-mn,Math.min(dur-mx,d));for(const k of ks)k.t=+snapF(k.t+d).toFixed(3);sortAllKeys();t=ks[0].t;render();status('Keys '+(n>0?'+':'')+n+' f')}
 function deleteSelKeys(){let n=0;for(const o of objs)for(const arr of ['keys','sitKeys','actKeys','lookKeys','textKeys']){if(!o[arr])continue;const before=o[arr].length;if(arr==='keys'&&o.keys.some(k=>selKeys.has(k))){const p=poseAt(o,t);o.keys=o.keys.filter(k=>!selKeys.has(k));if(!o.keys.length)Object.assign(o,p)}else o[arr]=o[arr].filter(k=>!selKeys.has(k));n+=before-o[arr].length}selKeys.clear();render();status('Deleted '+n+' key'+(n===1?'':'s'))}
 function updLoopBtn(){const b=document.getElementById('loopBtn');if(b){b.style.background=loopOn?'#2f6fe0':'';b.style.color=loopOn?'#fff':'';b.textContent=loopOn?(loopA!=null?'Loop '+loopA.toFixed(2)+'–'+loopB.toFixed(2):'Loop all'):'Loop'}}
 // ---------- interaction ----------
@@ -621,6 +623,7 @@ document.addEventListener('keydown',ev=>{
   if(c==='KeyY'&&!mod){toggleHist();return}
   if(c==='KeyM'){const m=marks.find(m=>Math.abs(m.t-t)<0.03);if(!m){marks.push({t:+t.toFixed(2),note:'—'});marks.sort((a,b)=>a.t-b.t);render();document.getElementById('keyNote').focus()}return}
   if(c==='Slash'&&ev.shiftKey||ev.key==='?'){toggleHelp();return}
+  if(ev.altKey&&(c==='ArrowLeft'||c==='ArrowRight')&&selKeys.size){ev.preventDefault();nudgeKeys((c==='ArrowLeft'?-1:1)*(ev.shiftKey?10:1));return}
   if(c==='Escape'&&selKeys.size){selKeys.clear();renderTL();return}
   if(c==='Escape'){sel=null;const i=document.getElementById('selLabel');i.value='';i.disabled=true;render();return}
   if(c==='Tab'&&!mod){ev.preventDefault();const list=objs.filter(x=>x.on&&!x.locked);if(!list.length)return;let k=list.findIndex(x=>x.id===sel);k=(k+(ev.shiftKey?-1:1)+list.length)%list.length;select(list[k].id);return}
