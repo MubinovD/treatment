@@ -530,13 +530,13 @@ function renderTL(){
   for(const m of marks){const d=document.createElement('div');d.className='mk';d.style.left=(m.t/dur*100)+'%';d.title=m.note;d.onpointerdown=e=>{e.stopPropagation();go(m.t)};mtr.appendChild(d)}
   mtr.onclick=ev=>go(snapF(trackX(ev,mtr)));
   const keyEl=(o,arrName,k,tr,cls,css,title)=>{const d=document.createElement('div');d.className=cls+(arrName==='keys'&&Math.abs(k.t-t)<0.03?' at':'');d.style.cssText=css||'';d.style.left=(k.t/dur*100)+'%';d.title=title;if(selKeys.has(k)){d.style.outline='2px solid #fff';d.style.outlineOffset='1px';d.style.zIndex=2}
-    d.onpointerdown=ev=>{ev.stopPropagation();const arr=o[arrName];if(ev.altKey){arr.splice(arr.indexOf(k),1);selKeys.delete(k);render();return}
+    d.style.touchAction='none';d.style.cursor='ew-resize';d.onpointerdown=ev=>{ev.stopPropagation();ev.preventDefault();const arr=o[arrName];if(ev.altKey){arr.splice(arr.indexOf(k),1);selKeys.delete(k);render();return}
       if(ev.shiftKey||ev.metaKey||ev.ctrlKey){selKeys.has(k)?selKeys.delete(k):selKeys.add(k);renderTL();return}
       const TR=tr.getBoundingClientRect();if(!selKeys.has(k)){selKeys.clear();selKeys.add(k)}select(o.id);go(k.t);
       const group=[...selKeys].map(x=>({k:x,t0:x.t})),tx=e=>Math.max(0,Math.min(dur,(e.clientX-TR.left)/TR.width*dur)),x0=snapF(tx(ev));let moved=false;document.body.style.cursor='ew-resize';
       const mv=e=>{let dx=snapF(tx(e))-x0;const mn=Math.min(...group.map(g=>g.t0)),mx=Math.max(...group.map(g=>g.t0));dx=Math.max(-mn,Math.min(dur-mx,dx));if(!moved&&Math.abs(dx)<1e-6)return;moved=true;for(const g of group)g.k.t=+(g.t0+dx).toFixed(3);sortAllKeys();t=k.t;render();status((dx>=0?'+':'')+Math.round(dx*fps)+' f · '+k.t.toFixed(2)+' s')};
-      const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);document.body.style.cursor='';if(moved){status('Moved '+group.length+' key'+(group.length>1?'s':''));render()}};
-      addEventListener('pointermove',mv);addEventListener('pointerup',up)};
+      const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up);document.body.style.cursor='';if(moved){status('Moved '+group.length+' key'+(group.length>1?'s':''));render()}};
+      addEventListener('pointermove',mv);addEventListener('pointerup',up);addEventListener('pointercancel',up)};
     tr.appendChild(d);keyEls.push({d,k});return d};
   const list=[...objs].sort((a,b)=>(LAYER[b.type]-LAYER[a.type]));
   for(const o of list){
