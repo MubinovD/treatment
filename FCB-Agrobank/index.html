@@ -292,7 +292,7 @@ requestAnimationFrame(f)}f();
 </div>
 <div id="menu"></div>
 <div id="ui"><button id="mb">Разделы</button><div class="r"><button id="pv" aria-label="Назад">←</button><span id="cnt"></span><button id="nx" aria-label="Вперёд">→</button></div></div>
-<div id="load">
+<div id="load" style="display:none">
   <img src="assets/logo_white.png" alt="Agrobank">
   <h1>Assalomu<br>alaykum!</h1>
   <p>Ипотека Agrobank · режиссёрский тритмент Дамира Мубинова</p>
@@ -370,10 +370,12 @@ function ready(){btn.textContent='Начать';btn.classList.add('ready')}
 var total=imgs.length;imgs.forEach(function(im){if(im.complete){done++}else{im.addEventListener('load',tick);im.addEventListener('error',tick)}});
 function tick(){done++;btn.textContent='Загружаю… '+Math.round(done/total*100)+'%';if(done>=total)ready()}
 if(done>=total)ready();setTimeout(ready,9000);
-btn.onclick=function(){if(started)return;started=true;document.getElementById('load').classList.add('out');document.body.classList.add('ui');
+function start(){if(started)return;started=true;document.getElementById('load').classList.add('out');document.body.classList.add('ui');
   var h=parseInt((location.hash||'').slice(1),10);go(h>0&&h<=S.length?h-1:0,0,1);
-  hideT=setTimeout(function(){document.body.classList.remove('ui')},2500)};
+  hideT=setTimeout(function(){document.body.classList.remove('ui')},2500)}
+btn.onclick=start;
 S.forEach(function(s){setStep(s,0)});
+start();
 })();
 </script>
 <script>document.addEventListener('click',function(e){var y=e.target.closest&&e.target.closest('.yt');if(!y)return;e.stopPropagation();var f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+y.dataset.yt+'?rel=0&modestbranding=1&autoplay=1';f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.style.cssText=y.style.cssText+';border:0;cursor:auto';y.replaceWith(f);},true);</script>
