@@ -35,7 +35,7 @@ main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(380px,1fr);gap:22
 .th{padding:0;overflow:hidden}.th img{width:100%;height:100%;object-fit:contain;display:block}.th.none{white-space:normal}.hero-summary{font-size:12px;color:var(--mute);margin:0 0 8px}.empty{font-size:12px;padding:12px 0;color:var(--mute)}#status{min-height:20px;font-size:12px;color:var(--mute)}#status.error{color:#a22}.draft{padding:8px;background:#fff0d4;border-radius:6px;margin-bottom:8px;font-size:12px}.saved-preview{padding:0;border:0;background:none;border-radius:0;width:100%}.saved figcaption{white-space:pre-line}.saved .x{padding:0}.saved img{width:100%}dialog{border:1px solid var(--line);border-radius:12px;background:var(--bg);max-width:95vw;max-height:95vh}dialog::backdrop{background:#201b16aa}dialog img{display:block;max-width:88vw;max-height:74vh}dialog textarea{width:70vw;max-width:700px;height:170px}button:focus-visible,input:focus-visible{outline:3px solid #cc964f;outline-offset:2px}button:disabled{opacity:.5;cursor:wait}@media(max-width:540px){header{position:static;padding:12px;gap:8px}main{padding:12px;gap:12px}header button{font-size:12px;padding:7px 10px}h1 small{display:block;margin-left:0}}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script></head><body>
 <header><h1>Fitting<small>Фруктовый сад · кухня · мама / дочь / сын</small></h1>
-<div class="chips" id="scn"><span style="align-self:center;color:#6f655a;margin-right:4px">Фон</span><button data-s="ny">НГ</button><button data-s="nz">Наурыз</button></div><div class="chips" id="filt"><button data-f="all" class="on">Всё</button><button data-f="ny">НГ</button><button data-f="nz">Наурыз</button></div>
+<div class="chips" id="scn"><span style="align-self:center;color:#6f655a;margin-right:4px">Фон</span><button data-s="ny">НГ</button><button data-s="nz">Наурыз</button></div><div class="chips" id="order" style="align-items:center;gap:2px"></div><div class="chips" id="filt"><button data-f="all" class="on">Всё</button><button data-f="ny">НГ</button><button data-f="nz">Наурыз</button></div>
 <label style="display:flex;gap:8px;align-items:center;margin-left:12px;color:#6f655a">Размытие фона <input id="blur" type="range" min="0" max="16" step="0.5" value="0" style="width:120px"><span id="blurv">0</span></label><div class="sp"></div>
 <button id="rnd">Случайно</button><button id="cp">Копировать состав</button><button id="keep">В подборку</button><button id="dlall">Скачать подборку</button><button class="pri" id="dl">Сохранить эскиз PNG</button></header>
 <main>
@@ -50,7 +50,9 @@ const IMAGE_DATA={"assets/apron/beige.png":"assets/apron/beige.webp","assets/apr
 for(const [target,source] of [])IMAGE_DATA[target]=IMAGE_DATA[source];
 'use strict';
 const HEROES=[{key:'mama',name:'Мама'},{key:'daughter',name:'Дочь'},{key:'son',name:'Сын'}];
-const POS_BY={ny:{mama:{x:476,top:138,feet:916},daughter:{x:668,top:150,feet:895},son:{x:857,top:100,feet:935}},nz:{mama:{x:476,top:138,feet:916},daughter:{x:668,top:150,feet:895},son:{x:857,top:100,feet:935}}};let CUR='ny';const POS=new Proxy({},{get:(_,k)=>POS_BY[CUR][k]});
+const POS_BY={ny:{mama:{x:476,top:138,feet:916},daughter:{x:668,top:150,feet:895},son:{x:857,top:100,feet:935}},nz:{mama:{x:476,top:138,feet:916},daughter:{x:668,top:150,feet:895},son:{x:857,top:100,feet:935}}};let CUR='ny',ORDER=['mama','daughter','son'];const SLOTS=['mama','daughter','son'];
+const POS=new Proxy({},{get:(_,who)=>{const g=POS_BY[CUR];const slot=SLOTS[ORDER.indexOf(who)];const s=g[slot],own=g[who];if(slot===who)return s;
+ const HZ=300,k=(s.feet-HZ)/(own.feet-HZ),H=(own.feet-own.top)*k;return{x:s.x,top:s.feet-H,feet:s.feet}}});
 const SW=1672,SH=941,CAP=110;
 const HOLIDAY={ny:'НГ',nz:'Наурыз'};
 const APRON_NAMES={apron_beige:'бежевый',apron_brown:'коричневый',apron_green:'зелёный',apron_stripe:'в полоску'};
@@ -61,7 +63,7 @@ function readStorage(key,fallback){try{return JSON.parse(localStorage.getItem(ke
 function writeStorage(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch{return false}}
 function validSelection(id,who,kind){const it=BY_ID.get(id);return it?.who===who&&it.kind===kind}
 function normalizeState(value={}){
-  const out={scene:['ny','nz'].includes(value.scene)?value.scene:'ny',filter:['all','ny','nz'].includes(value.filter)?value.filter:'all',blur:Math.max(0,Math.min(16,Number(value.blur)||0))};
+  const ord=Array.isArray(value.order)&&value.order.length===3&&['mama','daughter','son'].every(k=>value.order.includes(k))?value.order.slice():['mama','daughter','son'];const out={order:ord,scene:['ny','nz'].includes(value.scene)?value.scene:'ny',filter:['all','ny','nz'].includes(value.filter)?value.filter:'all',blur:Math.max(0,Math.min(16,Number(value.blur)||0))};
   for(const {key} of HEROES){const given=value[key]||{};out[key]={};for(const kind of ['top','bottom'])out[key][kind]=validSelection(given[kind],key,kind)?given[kind]:list(key,kind)[0]?.id??null;out[key].apron=key==='mama'&&validSelection(given.apron,key,'apron')?given.apron:null;out[key].scarf=key==='mama'&&validSelection(given.scarf,key,'scarf')?given.scarf:null}
   return out;
 }
@@ -99,7 +101,7 @@ function renderPanel(){
   document.querySelector('#blur').value=state.blur;document.querySelector('#blurv').textContent=state.blur;document.querySelectorAll('#scn button').forEach(b=>b.classList.toggle('on',b.dataset.s===state.scene));document.querySelector('#reference').src=state.scene==='nz'?'img/nz_scene.jpg':(IMAGE_DATA['img/scene.jpg']||'img/scene.jpg');
 }
 function choose(who,kind,id){state[who][kind]=id;commit()}
-function commit(){writeStorage(STORAGE_KEY,state);renderPanel();scheduleDraw()}
+function commit(){writeStorage(STORAGE_KEY,state);renderPanel();try{renderOrder()}catch{}scheduleDraw()}
 function heroRect(who){const p=POS[who],base=CATALOG.canvas,scale=(p.feet-p.top)/(base.feetY-base.crownY);return{x:p.x-base.centerX*scale,y:p.top-base.crownY*scale,width:base.width*scale,height:base.height*scale}}
 async function drawHero(ctx,who,snapshot){
   const rect=heroRect(who),p=POS[who],H=p.feet-p.top;
@@ -117,14 +119,14 @@ function drawCaption(ctx,snapshot){
   ctx.textAlign='right';ctx.fillStyle='#a7332c';ctx.font='600 17px -apple-system,sans-serif';ctx.fillText('Фруктовый сад · fitting',SW-28,SH+37);ctx.fillStyle='#82766b';ctx.font='15px -apple-system,sans-serif';ctx.fillText('Эскиз сочетания вещей',SW-28,SH+64);
 }
 async function renderScene(snapshot,isCancelled=()=>false){
-  CUR=snapshot.scene||'ny';const NZ=CUR==='nz';const[bg,chair,fg]=await Promise.all((NZ?['img/nz_empty.jpg','img/nz_backchair.webp','img/nz_fg.webp']:['img/empty.jpg','img/backchair.webp','img/fg.webp']).map(loadImage));const b=snapshot.blur;
+  CUR=snapshot.scene||'ny';ORDER=snapshot.order||SLOTS;const NZ=CUR==='nz';const[bg,chair,fg]=await Promise.all((NZ?['img/nz_empty.jpg','img/nz_backchair.webp','img/nz_fg.webp']:['img/empty.jpg','img/backchair.webp','img/fg.webp']).map(loadImage));const b=snapshot.blur;
   if(isCancelled())return null;
   const canvas=document.createElement('canvas');canvas.width=SW;canvas.height=SH+CAP;const ctx=canvas.getContext('2d');
   ctx.fillStyle='#f6f1e8';ctx.fillRect(0,0,canvas.width,canvas.height);
   ctx.save();ctx.beginPath();ctx.rect(0,0,SW,SH);ctx.clip();
   ctx.save();ctx.filter=b?`blur(${b}px)`:'none';ctx.drawImage(bg,0,0,SW,SH);ctx.restore();
   ctx.save();ctx.filter=b?`blur(${b*.6}px)`:'none';ctx.drawImage(chair,600,460);ctx.restore();
-  for(const{key}of HEROES){await drawHero(ctx,key,snapshot);if(isCancelled())return null;}
+  for(const key of (snapshot.order||SLOTS)){await drawHero(ctx,key,snapshot);if(isCancelled())return null;}
   ctx.save();ctx.filter=b?`blur(${b*.35}px)`:'none';ctx.drawImage(fg,0,0,SW,SH);ctx.restore();ctx.restore();
   drawCaption(ctx,snapshot);return canvas;
 }
@@ -140,7 +142,11 @@ function renderSaved(){
   saved.forEach((entry,index)=>{const card=document.createElement('figure'),preview=document.createElement('button');preview.className='saved-preview';preview.setAttribute('aria-label','Вернуть образ из подборки');const img=document.createElement('img');img.src=entry.image;img.alt=entry.text;preview.append(img);preview.onclick=()=>{state=normalizeState(entry.state);commit()};const remove=document.createElement('button');remove.className='x';remove.textContent='×';remove.setAttribute('aria-label','Удалить образ из подборки');remove.onclick=()=>{saved.splice(index,1);writeStorage(SAVED_KEY,saved);renderSaved()};const text=document.createElement('figcaption');text.textContent=entry.text;card.append(preview,remove,text);holder.append(card)});
 }
 document.querySelectorAll('#filt button').forEach(button=>button.onclick=()=>{state.filter=button.dataset.f;commit()});
+function renderOrder(){const el=document.querySelector('#order');if(!el)return;const N={mama:'Мама',daughter:'Дочь',son:'Сын'};el.innerHTML='<span style="color:#6f655a;margin-right:6px">Места</span>';
+ state.order.forEach((k,i)=>{const s=document.createElement('span');s.textContent=N[k];s.style.cssText='padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:#fff';el.append(s);
+  if(i<2){const b=document.createElement('button');b.textContent='⇄';b.title='Поменять местами';b.style.padding='7px 9px';b.onclick=()=>{const o=state.order.slice();[o[i],o[i+1]]=[o[i+1],o[i]];state.order=o;commit()};el.append(b)}})}
 document.querySelectorAll('#scn button').forEach(b=>b.onclick=()=>{state.scene=b.dataset.s;commit()});
+try{renderOrder()}catch{}
 document.querySelector('#blur').oninput=event=>{state.blur=Number(event.target.value);document.querySelector('#blurv').textContent=state.blur;writeStorage(STORAGE_KEY,state);scheduleDraw()};
 document.querySelector('#rnd').onclick=()=>{const pick=arr=>arr[Math.floor(Math.random()*arr.length)];for(const{key}of HEROES){for(const kind of ['top','bottom']){const options=list(key,kind,state.filter);if(options.length)state[key][kind]=pick(options).id}if(key==='mama'){const aprons=list(key,'apron');state[key].apron=Math.random()<.6&&aprons.length?pick(aprons).id:null}}commit()};
 document.querySelector('#cp').onclick=async()=>{const text=summary();try{await navigator.clipboard.writeText(text);toast('Состав скопирован')}catch{const dialog=document.querySelector('#text-dialog'),field=dialog.querySelector('textarea');field.value=text;dialog.showModal();field.select()}};
