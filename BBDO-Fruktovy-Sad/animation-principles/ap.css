@@ -108,3 +108,8 @@ footer a{color:var(--sage)}
   .row .ctl{order:4;flex-direction:column}
   .row .ctl button{width:34px;height:34px}
 }
+
+.tag.vari{background:#FBEFC9;color:#8a6a12}
+.card.mine{outline:2.5px solid var(--yellow);outline-offset:-2.5px}
+.card.mine .tc{color:#8a6a12}
+.num.star{background:var(--yellow);color:var(--ink);font-family:Nunito,sans-serif;font-size:22px}

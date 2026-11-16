@@ -4,6 +4,10 @@
   D.sections.forEach(function(s){ SEC[s.id] = s; });
   var $ = function(s, r){ return (r||document).querySelector(s); };
   var KEY = 'ap12-sel';
+  var V = function(id){ var it = BY[id]; return it.v || ('v/' + id + '.mp4'); };
+  var PO = function(id){ var it = BY[id]; return it.p || ('p/' + id + '.jpg'); };
+  var G = function(id){ return 'g/' + id + '.gif'; };
+  var TAG = function(it){ if (!it.tag && !it.tagText) return ''; var c = it.tag || 'vari'; var t = it.tagText || (it.tag === 'bad' ? 'Плохо' : 'Хорошо'); return '<span class="tag ' + c + '">' + t + '</span>'; };
   var esc = function(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
 
   /* ---------- selection store ---------- */
@@ -24,7 +28,7 @@
     es.forEach(function(e){
       var th = e.target, v = th.querySelector('video');
       if (e.isIntersecting){
-        if (!v){ v = document.createElement('video'); v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute('playsinline',''); v.setAttribute('muted',''); v.preload = 'auto'; v.src = 'v/' + th.dataset.id + '.mp4'; th.appendChild(v); }
+        if (!v){ v = document.createElement('video'); v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute('playsinline',''); v.setAttribute('muted',''); v.preload = 'auto'; v.src = V(th.dataset.id); th.appendChild(v); }
         var p = v.play(); if (p && p.catch) p.catch(function(){});
       } else if (v){ v.pause(); }
     });
@@ -32,7 +36,7 @@
   function thumb(id){
     var d = document.createElement('div');
     d.className = 'thumb'; d.dataset.id = id;
-    d.style.backgroundImage = 'url(p/' + id + '.jpg)';
+    d.style.backgroundImage = 'url(' + PO(id) + ')';
     if (io) io.observe(d);
     return d;
   }
@@ -76,16 +80,16 @@
   function show(){
     var it = BY[lbList[lbI]], s = SEC[it.s];
     $('.lb-count', lb).textContent = (lbI + 1) + ' / ' + lbList.length;
-    $('.lb-sec', lb).textContent = parseInt(it.s, 10) + '. ' + s.ru;
-    $('h3', lb).innerHTML = (it.tag ? '<span class="tag ' + it.tag + '">' + (it.tag === 'bad' ? 'Плохо' : 'Хорошо') + '</span> ' : '') + esc(it.t);
+    $('.lb-sec', lb).textContent = (it.test ? 'Наш тест · ' : parseInt(it.s, 10) + '. ') + s.ru.replace('Наши стоп-моушн тесты', 'Фруктовый сад');
+    $('h3', lb).innerHTML = TAG(it) + ' ' + esc(it.t);
     $('p', lb).textContent = it.d;
-    $('.lb-gif', lb).href = 'g/' + it.id + '.gif';
-    lbV.poster = 'p/' + it.id + '.jpg';
-    lbV.src = 'v/' + it.id + '.mp4';
+    $('.lb-gif', lb).href = G(it.id);
+    lbV.poster = PO(it.id);
+    lbV.src = V(it.id);
     var p = lbV.play(); if (p && p.catch) p.catch(function(){});
     paintPick();
     var n = BY[lbList[(lbI + 1) % lbList.length]];
-    if (n){ var pre = new Image(); pre.src = 'p/' + n.id + '.jpg'; }
+    if (n){ var pre = new Image(); pre.src = PO(n.id); }
   }
   function go(d){ lbI = (lbI + d + lbList.length) % lbList.length; show(); }
   function openLB(list, i){
@@ -119,23 +123,25 @@
 
   /* ---------- index page ---------- */
   function initIndex(){
-    var main = $('main'), nav = $('nav'), all = D.items.map(function(i){ return i.id; });
-    nav.innerHTML = D.sections.map(function(s){ return '<a href="#p' + s.id + '"><b>' + parseInt(s.id, 10) + '</b>' + esc(s.ru) + '</a>'; }).join('');
+    var main = $('main'), nav = $('nav'), all = [];
+    nav.innerHTML = D.sections.map(function(s){ return '<a href="#p' + s.id + '"><b>' + (s.id === '13' ? '★' : parseInt(s.id, 10)) + '</b>' + esc(s.id === '13' ? 'Наши тесты' : s.ru) + '</a>'; }).join('');
     D.sections.forEach(function(s){
       var sec = document.createElement('section'); sec.id = 'p' + s.id;
-      sec.innerHTML = '<div class="ph"><span class="num">' + parseInt(s.id, 10) + '</span><div><h2>' + esc(s.ru) + '</h2><div class="en">' + esc(s.en) + '</div></div></div><p class="lead">' + esc(s.lead) + '</p>' +
+      sec.innerHTML = '<div class="ph"><span class="num' + (s.id === '13' ? ' star' : '') + '">' + (s.id === '13' ? '★' : parseInt(s.id, 10)) + '</span><div><h2>' + esc(s.ru) + '</h2><div class="en">' + esc(s.en) + '</div></div></div><p class="lead">' + esc(s.lead) + '</p>' +
         (s.id === '03' ? '<div class="rule"><b>×3</b> Текст на экране держим столько, чтобы его можно было прочитать трижды.</div>' : '') + '<div class="grid"></div>';
       var g = $('.grid', sec);
-      D.items.filter(function(it){ return it.s === s.id; }).forEach(function(it){
+      D.items.filter(function(it){ return it.s === s.id || (it.also || []).indexOf(s.id) >= 0; }).forEach(function(it){
+        var pos = all.length; all.push(it.id);
         var c = document.createElement('div'); c.className = 'card';
         var th = thumb(it.id);
-        th.onclick = function(){ openLB(all, all.indexOf(it.id)); };
+        th.onclick = function(){ openLB(all, pos); };
         var pk = document.createElement('button'); pk.className = 'pick'; pk.dataset.id = it.id;
         pk.onclick = function(e){ e.stopPropagation(); toggle(it.id); };
         c.appendChild(th); c.appendChild(pk);
         var t = document.createElement('div'); t.className = 't';
-        t.innerHTML = '<div><span class="tc">' + esc(it.tc) + '</span>' + (it.tag ? '<span class="tag ' + it.tag + '">' + (it.tag === 'bad' ? 'Плохо' : 'Хорошо') + '</span>' : '') +
-          '<h3>' + esc(it.t) + '</h3><p>' + esc(it.d) + '</p></div><a class="dl" href="g/' + it.id + '.gif" download>GIF ↓</a>';
+        if (it.test && s.id !== '13') c.classList.add('mine');
+        t.innerHTML = '<div><span class="tc">' + (it.test && s.id !== '13' ? 'Наш тест · ' : '') + esc(it.tc) + '</span>' + TAG(it) +
+          '<h3>' + esc(it.t) + '</h3><p>' + esc(it.d) + '</p></div><a class="dl" href="' + G(it.id) + '" download>GIF ↓</a>';
         c.appendChild(t); g.appendChild(c);
       });
       main.appendChild(sec);
@@ -174,7 +180,7 @@
         var th = thumb(id); th.onclick = function(){ openLB(mem.slice(), mem.indexOf(id)); };
         r.appendChild(th);
         var tx = document.createElement('div'); tx.className = 'tx';
-        tx.innerHTML = '<div class="sec">' + parseInt(it.s, 10) + '. ' + esc(s.ru) + (it.tag ? '<span class="tag ' + it.tag + '">' + (it.tag === 'bad' ? 'Плохо' : 'Хорошо') + '</span>' : '') + '</div><h3>' + esc(it.t) + '</h3><p>' + esc(it.d) + '</p>';
+        tx.innerHTML = '<div class="sec">' + (it.test ? 'Наш тест' : parseInt(it.s, 10) + '. ' + esc(s.ru)) + TAG(it) + '</div><h3>' + esc(it.t) + '</h3><p>' + esc(it.d) + '</p>';
         r.appendChild(tx);
         var ctl = document.createElement('div'); ctl.className = 'ctl';
         ctl.innerHTML = '<button title="Выше">↑</button><button title="Ниже">↓</button><button title="Убрать">×</button>';
