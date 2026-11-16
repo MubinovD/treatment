@@ -113,3 +113,5 @@ footer a{color:var(--sage)}
 .card.mine{outline:2.5px solid var(--yellow);outline-offset:-2.5px}
 .card.mine .tc{color:#8a6a12}
 .num.star{background:var(--yellow);color:var(--ink);font-family:Nunito,sans-serif;font-size:22px}
+.hbtn{display:inline-block;margin-top:18px;background:var(--yellow);color:var(--ink);font-weight:800;text-decoration:none;border-radius:99px;padding:11px 20px;font-size:15px}
+nav a[href='#p13']{background:#FBEFC9}

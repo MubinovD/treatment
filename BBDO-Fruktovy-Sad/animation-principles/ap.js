@@ -124,7 +124,7 @@
   /* ---------- index page ---------- */
   function initIndex(){
     var main = $('main'), nav = $('nav'), all = [];
-    nav.innerHTML = D.sections.map(function(s){ return '<a href="#p' + s.id + '"><b>' + (s.id === '13' ? '★' : parseInt(s.id, 10)) + '</b>' + esc(s.id === '13' ? 'Наши тесты' : s.ru) + '</a>'; }).join('');
+    nav.innerHTML = D.sections.slice().sort(function(x, y){ return (y.id === '13') - (x.id === '13'); }).map(function(s){ return '<a href="#p' + s.id + '"><b>' + (s.id === '13' ? '★' : parseInt(s.id, 10)) + '</b>' + esc(s.id === '13' ? 'Наши тесты' : s.ru) + '</a>'; }).join('');
     D.sections.forEach(function(s){
       var sec = document.createElement('section'); sec.id = 'p' + s.id;
       sec.innerHTML = '<div class="ph"><span class="num' + (s.id === '13' ? ' star' : '') + '">' + (s.id === '13' ? '★' : parseInt(s.id, 10)) + '</span><div><h2>' + esc(s.ru) + '</h2><div class="en">' + esc(s.en) + '</div></div></div><p class="lead">' + esc(s.lead) + '</p>' +
