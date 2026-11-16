@@ -20,9 +20,10 @@ h1{font-size:15px;font-weight:600;margin:0;letter-spacing:.01em}
 .wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:12px;padding:8px 16px 20px}
 @media (max-width:980px){.wrap{grid-template-columns:1fr}}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px}
-#stage{width:100%;height:auto;display:block;touch-action:none;overscroll-behavior:contain;background:#fbfaf5;border-radius:4px}
+#stage{width:100%;height:calc(100vh - var(--dockH,260px) - 112px);min-height:280px;display:block;touch-action:none;overscroll-behavior:contain;background:#fbfaf5;border-radius:4px}
 #view{width:100%;height:auto;display:block;background:#111;border-radius:4px;margin-top:8px}
-.side{display:flex;flex-direction:column;gap:10px}
+.side{display:flex;flex-direction:column;gap:10px;position:sticky;top:8px;align-self:start;max-height:calc(100vh - var(--dockH,260px) - 16px);overflow:auto;overscroll-behavior:contain}
+@media (max-width:980px){.side{position:static;max-height:none}}
 h2{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 8px;font-weight:600}
 label{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
 input[type=range]{flex:1;accent-color:var(--accent)}
@@ -73,7 +74,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <div id="pipBar" style="display:flex;align-items:center;gap:6px;padding:3px 6px;background:#26282b;cursor:move;font-size:11px;color:#9a9ea5;user-select:none"><span style="flex:1">Camera</span><button id="pipClose" style="padding:0 6px;font-size:11px" aria-label="Hide preview">×</button></div>
       <canvas id="pipC" style="display:block;width:100%;aspect-ratio:16/9"></canvas></div>
     <div id="ask" style="display:none;position:absolute;z-index:5;left:50%;top:70px;transform:translateX(-50%);background:#26282b;border:1px solid #4a4e54;border-radius:6px;padding:12px 14px;box-shadow:0 8px 24px rgba(0,0,0,.4);display:none"><p id="askMsg" style="margin:0 0 10px;color:#e6e7e9"></p><div class="btns"><button id="askYes" class="primary">Yes</button><button id="askNo">No</button></div></div>
-    <svg id="stage" viewBox="0 0 900 620" aria-label="Top view, editable"></svg>
+    <div id="stageWrap" style="position:relative"><svg id="stage" viewBox="0 0 900 620" aria-label="Top view, editable"></svg>
+    <div id="zoomBar" style="position:absolute;left:8px;bottom:8px;display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:4px 6px;background:rgba(38,40,43,.92);border:1px solid #4a4e54;border-radius:6px;font-size:12px;color:#e6e7e9;z-index:3">
+      <button id="zOut" title="Zoom out" style="padding:2px 8px">−</button><input type="range" id="zRange" min="-1.2" max="1.5" step="0.01" value="0" style="width:110px;flex:none" aria-label="Plan zoom"><button id="zIn" title="Zoom in" style="padding:2px 8px">+</button><span id="zPct" class="tnum" style="min-width:40px;text-align:right">100%</span>
+      <button id="zFit" title="Center the scene and fit it" style="padding:2px 8px">Center</button><button id="zCenter" title="Center the scene, keep zoom" style="padding:2px 8px">Center, keep zoom</button></div></div>
     <div id="view3d" style="position:relative;width:100%;aspect-ratio:16/9;margin-top:8px;border-radius:4px;overflow:hidden;background:#111" aria-label="Camera view 16:9"><div id="ov3d" style="position:absolute;inset:0;pointer-events:none"></div></div>
     <div class="row" style="margin-top:8px"><label for="ov">Overlay</label><select id="ov" style="width:auto"><option value="none">None</option><option value="9:16">9:16</option><option value="4:5">4:5</option><option value="1:1">1:1</option></select><label for="ovx" style="flex:1">Offset <input type="range" id="ovx" min="-1" max="1" step="0.01" value="0"></label></div>
     <div class="row" style="margin-top:12px">
@@ -105,8 +109,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <div id="actCtl"><label for="actSel">Action at playhead <select id="actSel" style="width:auto"><option value="idle">Idle</option><option value="eat">Eat baursak</option><option value="drink">Drink juice</option></select></label>
       <label for="lookSel">Look at, at playhead <select id="lookSel" style="width:auto"></select></label></div>
       <div id="hairCtl"><label for="hair">Hair <select id="hair" style="width:auto"><option value="short">Short</option><option value="bun">Bun</option><option value="long">Long</option><option value="ponytail">Ponytail</option><option value="none">None</option></select></label></div>
-      <div id="fruitCtl"><label for="fruitKind">Fruit <select id="fruitKind" style="width:auto"></select></label></div>
-      <div id="fillCtl" class="row" style="margin:4px 0 6px;flex-wrap:wrap"><span style="font-size:12px;color:var(--muted);min-width:92px">Fill at playhead</span><div class="btns" id="fillBtns" style="gap:0"></div><button id="delFillKey" style="margin-left:6px">Remove change</button></div>
+      <div id="fruitCtl" style="display:none"><label for="fruitKind">Fruit <select id="fruitKind" style="width:auto"></select></label></div>
+      <div id="fillCtl" class="row" style="display:none;margin:4px 0 6px;flex-wrap:wrap"><span style="font-size:12px;color:var(--muted);min-width:92px">Fill at playhead</span><div class="btns" id="fillBtns" style="gap:0"></div><button id="delFillKey" style="margin-left:6px">Remove change</button></div>
       <div id="textCtl"><label for="btext" style="margin-top:6px">Text at playhead</label><textarea id="btext" rows="2" style="min-height:48px"></textarea>
       <div class="btns" style="margin-top:4px"><button id="addTextKey">Change text here</button><button id="delTextKey">Remove change</button></div><div class="btns" style="margin-top:4px"><button id="dropIn">Drop in here</button><button id="liftOut">Fly out here</button></div></div>
       <label for="rot">Rotation <input type="range" id="rot" min="-180" max="180" step="1" value="0" list="rotTicks"><input type="text" id="rotV" aria-label="Rotation, degrees" style="width:64px;text-align:right" value="0°"></label><datalist id="rotTicks"><option value="-90"></option><option value="0"></option><option value="90"></option></datalist>
@@ -145,7 +149,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <h2 style="margin-top:10px">Mouse</h2>
       <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;color:var(--muted)">
       <b>Drag</b><span>Move (Shift: one axis)</span><b>Blue handle</b><span>Rotate</span><b>Alt / R + drag</b><span>Rotate object</span><b>Alt + wheel on object</b><span>Rotate 5°</span><b>Wheel / trackpad on plan</b><span>Pan plan (page doesn't scroll)</span>
-      <b>⌘/Ctrl + wheel, pinch</b><span>Zoom plan</span><b>Right / middle drag</b><span>Pan plan</span><b>Double-click empty</b><span>Reset view</span><b>Double-click object</b><span>Rename</span><b>Double-click slider</b><span>Reset to default</span>
+      <b>Pinch on trackpad</b><span>Zoom plan (or the zoom bar, bottom left)</span><b>Right / middle drag</b><span>Pan plan</span><b>Double-click empty</b><span>Center the scene</span><b>Double-click object</b><span>Rename</span><b>Double-click slider</b><span>Reset to default</span>
       <b>Timeline: drag empty area</b><span>Select keys (Shift adds)</span><b>Click / Shift+click key</b><span>Select / add to selection</span><b>Drag a selected key</b><span>Move all selected</span><b>Delete</b><span>Delete selected keys</span><b>Shift+click track name</b><span>Select all its keys</span><b>Shift+drag ruler</b><span>Set loop range (double-click clears)</span><b>Wheel on ruler</b><span>Scrub by frame (Shift: 1 s)</span><b>Timeline: double-click</b><span>Add key</span><b>Drag ◆</b><span>Retime key</span><b>Alt+click ◆</b><span>Delete key</span><b>Drag bar edges</b><span>In / out</span>
       </div>
     </div>
@@ -201,7 +205,7 @@ let objs=defaults(),marks=[],t=0,dur=10,sel=null,playing=false;
 let scenes=[{id:'sc-kitchen',name:'Кухня',duration:10,objects:null,marks:[],sceneNote:''}],active=0;
 function blankScene(){return[O('tripod','tripod','Штатив',450,520,0),O('cam','cam','Камера',450,520,-90,{lens:35,ch:120})]}
 function stash(){const sc=scenes[active];sc.fps=fps;sc.objects=clone(objs);sc.marks=clone(marks);sc.duration=dur;sc.sceneNote=document.getElementById('sceneNote').value}
-function loadScene(i){active=i;const sc=scenes[i];fps=sc.fps||25;SIT_T=6/fps;const fs_=document.getElementById('fpsSel');if(fs_)fs_.value=String(fps);selKeys=new Set();objs=clone(sc.objects||defaults());for(const o of objs){if(o.type==='board'){if(o.text==null)o.text=o.id==='board1'?'3 салата в работе\n30 баурсаков':(o.id==='board2'?'Украшено: ½ комнаты\nВыпито: ½ стакана':o.label);if(!o.textKeys)o.textKeys=[]}if(o.id==='plate'&&o.carrier===undefined)o.carrier='mom';if(o.type==='person'){if(!o.lookKeys)o.lookKeys=[];if(o.act==='look'){o.look=o.lookTarget||null;o.act='idle'}if(o.actKeys){let prevA=o.act||'idle';const keep=[];for(const k of o.actKeys){if(k.a==='look'){o.lookKeys.push({t:k.t,target:k.target||o.lookTarget||null});keep.push({t:k.t,a:prevA})}else{keep.push(k);prevA=k.a}}o.actKeys=keep}if(!o.actKeys)o.actKeys=[];if(!o.act)o.act='idle';if(o.lookTarget===undefined)o.lookTarget=o.id==='son'?'board2':(o.id==='daughter'||o.id==='mom'?'board1':null)}if(o.type==='person'&&o.sit==null){o.sitKeys=o.sitKeys||[];if(o.id==='daughter'&&!o.keys.length){const ch=objs.find(x=>x.id==='chairD');if(ch){o.x=ch.x;o.y=ch.y}o.sit=1}else o.sit=0}if(o.type==='person'&&!o.hair)o.hair=o.id==='mom'?'bun':(o.id==='daughter'?'long':'short');if(o.type==='pack'&&o.z===110&&!o.keys.length)o.z=76;if(o.id==='rails'&&(o.sx||1)===1&&!o.keys.length){const tb=objs.find(x=>x.id==='table');if(tb){o.sx=+(300*(tb.sx||1)/820).toFixed(3);o.x=tb.x}}}marks=clone(sc.marks||[]);dur=sc.duration||10;document.getElementById('dur').value=String(dur);document.getElementById('sceneNote').value=sc.sceneNote||'';sel=null;t=0;build();renderTabs();go(0)}
+function loadScene(i){active=i;const sc=scenes[i];fps=sc.fps||25;SIT_T=6/fps;const fs_=document.getElementById('fpsSel');if(fs_)fs_.value=String(fps);selKeys=new Set();objs=clone(sc.objects||defaults());for(const o of objs){if(o.type==='board'){if(o.text==null)o.text=o.id==='board1'?'3 салата в работе\n30 баурсаков':(o.id==='board2'?'Украшено: ½ комнаты\nВыпито: ½ стакана':o.label);if(!o.textKeys)o.textKeys=[]}if(o.id==='plate'&&o.carrier===undefined)o.carrier='mom';if(o.type==='person'){if(!o.lookKeys)o.lookKeys=[];if(o.act==='look'){o.look=o.lookTarget||null;o.act='idle'}if(o.actKeys){let prevA=o.act||'idle';const keep=[];for(const k of o.actKeys){if(k.a==='look'){o.lookKeys.push({t:k.t,target:k.target||o.lookTarget||null});keep.push({t:k.t,a:prevA})}else{keep.push(k);prevA=k.a}}o.actKeys=keep}if(!o.actKeys)o.actKeys=[];if(!o.act)o.act='idle';if(o.lookTarget===undefined)o.lookTarget=o.id==='son'?'board2':(o.id==='daughter'||o.id==='mom'?'board1':null)}if(o.type==='person'&&o.sit==null){o.sitKeys=o.sitKeys||[];if(o.id==='daughter'&&!o.keys.length){const ch=objs.find(x=>x.id==='chairD');if(ch){o.x=ch.x;o.y=ch.y}o.sit=1}else o.sit=0}if(o.type==='person'&&!o.hair)o.hair=o.id==='mom'?'bun':(o.id==='daughter'?'long':'short');if(o.type==='pack'&&o.z===110&&!o.keys.length)o.z=76;if(o.id==='rails'&&(o.sx||1)===1&&!o.keys.length){const tb=objs.find(x=>x.id==='table');if(tb){o.sx=+(300*(tb.sx||1)/820).toFixed(3);o.x=tb.x}}}marks=clone(sc.marks||[]);dur=sc.duration||10;document.getElementById('dur').value=String(dur);document.getElementById('sceneNote').value=sc.sceneNote||'';sel=null;t=0;build();renderTabs();go(0);requestAnimationFrame(()=>centerView(false))}
 function renderTabs(){const bar=document.getElementById('scTabs');bar.innerHTML='';scenes.forEach((sc,i)=>{const b=document.createElement('button');b.className='tab'+(i===active?' on':'');b.textContent=sc.name;b.onclick=()=>{if(i===active)return;stash();loadScene(i)};bar.appendChild(b)});
   const mk=(t_,f)=>{const b=document.createElement('button');b.textContent=t_;b.onclick=f;bar.appendChild(b)};
   const nm=document.createElement('input');nm.type='text';nm.value=scenes[active].name;nm.style.width='150px';nm.setAttribute('aria-label','Scene name');nm.onchange=()=>{scenes[active].name=nm.value||'Scene';renderTabs();build();render()};
@@ -641,13 +645,29 @@ stage.addEventListener('pointermove',ev=>{if(!drag)return;const p=pt(ev),o=byId(
   setPose(o,{x:nx,y:ny});render()});
 stage.addEventListener('pointerup',()=>{if(drag)setTimeout(pushHist,0);if(drag&&!drag.rot){const po=byId(drag.id);if(po&&po.type==='person')setTimeout(()=>askSit(po),0)}if(drag){const o=byId(drag.id);if(o&&o.type==='cam'&&!o.mount){const cp=poseAt(o,t);for(const r of objs)if(r.type==='rails'&&r.on){const q=projectToRail(cp,poseAt(r,t));if(q.dist<25){setPose(o,{x:q.x,y:q.y});o.mount=r.id;status('Camera mounted on rails');render();break}}}}drag=null});
 let vb={x:0,y:0,w:900,h:620},pan=null;
-function setVB(){stage.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`)}
-stage.addEventListener('wheel',ev=>{if(ev.altKey&&!(ev.ctrlKey||ev.metaKey)&&ev.target.closest('g[tabindex]'))return;ev.preventDefault();ev.stopPropagation();if(!(ev.ctrlKey||ev.metaKey)){const r=stage.getBoundingClientRect(),kk=vb.w/r.width,m=ev.deltaMode===1?16:(ev.deltaMode===2?r.height:1);let dx=ev.deltaX*m,dy=ev.deltaY*m;if(ev.shiftKey&&!dx){dx=dy;dy=0}vb.x+=dx*kk;vb.y+=dy*kk;setVB();return}const p=pt(ev),k=Math.exp(ev.deltaY*(ev.ctrlKey&&Math.abs(ev.deltaY)<40?0.01:0.0015));const nw=Math.max(200,Math.min(1800,vb.w*k)),nh=nw*620/900;vb.x=p.x-(p.x-vb.x)*nw/vb.w;vb.y=p.y-(p.y-vb.y)*nh/vb.h;vb.w=nw;vb.h=nh;setVB()},{passive:false});
+function asp(){const r=stage.getBoundingClientRect();return r.width>10&&r.height>10?r.height/r.width:620/900}
+function setVB(){const cy=vb.y+vb.h/2;vb.h=vb.w*asp();vb.y=cy-vb.h/2;stage.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);const zr=document.getElementById('zRange'),z=900/vb.w;if(zr&&document.activeElement!==zr)zr.value=Math.log2(z).toFixed(2);const zp=document.getElementById('zPct');if(zp)zp.textContent=Math.round(z*100)+'%'}
+function sceneBox(){let x0=20,y0=20,x1=880,y1=460;try{const s=stateAt(t);for(const o of s){if(!o.on||o.type==='rails'||o.type==='foamax')continue;const g=nodes.g[o.id];let hw=30;if(g){try{const b=g.getBBox();hw=Math.max(b.width*(o.sx||1),b.height*(o.sy||1))/2}catch(e){}}x0=Math.min(x0,o.x-hw);x1=Math.max(x1,o.x+hw);y0=Math.min(y0,o.y-hw);y1=Math.max(y1,o.y+hw)}}catch(e){}return{x:x0,y:y0,w:x1-x0,h:y1-y0}}
+function centerView(keep){const b=sceneBox(),cx=b.x+b.w/2,cy=b.y+b.h/2;if(!keep){const w=Math.max(b.w*1.08,b.h*1.12/asp());vb.w=Math.max(200,Math.min(1800,w))}vb.h=vb.w*asp();vb.x=cx-vb.w/2;vb.y=cy-vb.h/2;setVB()}
+function zoomAt(nw,px,py){nw=Math.max(200,Math.min(1800,nw));const nh=nw*asp();if(px==null){px=vb.x+vb.w/2;py=vb.y+vb.h/2}vb.x=px-(px-vb.x)*nw/vb.w;vb.y=py-(py-vb.y)*nh/vb.h;vb.w=nw;vb.h=nh;setVB()}
+new ResizeObserver(()=>setVB()).observe(stage);
+document.getElementById('zIn').onclick=()=>zoomAt(vb.w/1.25);
+document.getElementById('zOut').onclick=()=>zoomAt(vb.w*1.25);
+document.getElementById('zRange').oninput=e=>zoomAt(900/Math.pow(2,+e.target.value));
+document.getElementById('zRange').ondblclick=()=>zoomAt(900);
+document.getElementById('zFit').onclick=()=>centerView(false);
+document.getElementById('zCenter').onclick=()=>centerView(true);
+for(const id of ['zIn','zOut','zFit','zCenter','zRange'])document.getElementById(id).addEventListener('pointerdown',e=>e.stopPropagation());
+document.getElementById('zoomBar').addEventListener('dblclick',e=>e.stopPropagation());
+stage.addEventListener('wheel',ev=>{if(ev.target.closest('#zoomBar'))return;if(ev.altKey&&!ev.ctrlKey&&ev.target.closest('g[tabindex]'))return;ev.preventDefault();ev.stopPropagation();
+  if(ev.ctrlKey){const p=pt(ev);zoomAt(vb.w*Math.exp(ev.deltaY*0.01),p.x,p.y);return}
+  const r=stage.getBoundingClientRect(),kk=vb.w/r.width,m=ev.deltaMode===1?16:(ev.deltaMode===2?r.height:1);let dx=ev.deltaX*m,dy=ev.deltaY*m;if(ev.shiftKey&&!dx){dx=dy;dy=0}vb.x+=dx*kk;vb.y+=dy*kk;setVB()},{passive:false});
+document.addEventListener('gesturestart',e=>{if(e.target.closest&&e.target.closest('#stage'))e.preventDefault()});
 stage.addEventListener('contextmenu',ev=>ev.preventDefault());
 stage.addEventListener('pointerdown',ev=>{if(ev.button===1||ev.button===2||(ev.button===0&&!ev.target.closest('g[tabindex]')&&ev.altKey)){ev.preventDefault();pan={x:ev.clientX,y:ev.clientY,vx:vb.x,vy:vb.y};stage.setPointerCapture(ev.pointerId)}});
 stage.addEventListener('pointermove',ev=>{if(!pan)return;const r=stage.getBoundingClientRect(),k=vb.w/r.width;vb.x=pan.vx-(ev.clientX-pan.x)*k;vb.y=pan.vy-(ev.clientY-pan.y)*k;setVB()});
 stage.addEventListener('pointerup',()=>{pan=null});
-stage.addEventListener('dblclick',ev=>{if(!ev.target.closest('g[tabindex]')){vb={x:0,y:0,w:900,h:620};setVB()}else{const i=document.getElementById('selLabel');i.focus();i.select()}});
+stage.addEventListener('dblclick',ev=>{if(!ev.target.closest('g[tabindex]')){centerView(false)}else{const i=document.getElementById('selLabel');i.focus();i.select()}});
 stage.addEventListener('pointerdown',ev=>{if(ev.button!==0||ev.altKey)return;if(!drag&&!ev.target.closest('g[tabindex]')){sel=null;const i=document.getElementById('selLabel');i.value='';i.disabled=true;render()}});
 // ---------- hotkeys ----------
 const FPS=25;
@@ -884,9 +904,9 @@ document.getElementById('save').onclick=async()=>{const p=payload();if(!db){cons
   try{const prev=window._docs.find(x=>x.data.name===p.name);const id=prev?prev.id:('s-'+Date.now());await db.doc('scenes/'+id).set(p);status('Saved: '+p.name);refreshList()}catch(e){status('Save failed: '+(e&&e.message||'error'))}};
 document.getElementById('load').onchange=e=>{const d=window._docs.find(x=>x.id===e.target.value);if(d){apply(d.data);status('Opened: '+d.data.name)}};
 (function(){const tl_=document.getElementById('tl'),row=document.getElementById('play').parentElement,d=document.createElement('div');d.id='dock';const grip=document.createElement('div');grip.id='dockGrip';grip.title='Drag to resize';d.appendChild(grip);d.appendChild(row);d.appendChild(tl_);document.body.appendChild(d);
-  const pad=()=>{document.body.style.paddingBottom=(d.offsetHeight+12)+'px'};new ResizeObserver(pad).observe(d);pad();
+  const pad=()=>{document.body.style.paddingBottom=(d.offsetHeight+12)+'px';document.documentElement.style.setProperty('--dockH',d.offsetHeight+'px')};new ResizeObserver(pad).observe(d);pad();
   let g=null;grip.addEventListener('pointerdown',e=>{g={y:e.clientY,h:tl_.clientHeight};grip.setPointerCapture(e.pointerId)});grip.addEventListener('pointermove',e=>{if(!g)return;const h=Math.max(60,Math.min(window.innerHeight*0.7,g.h+(g.y-e.clientY)));tl_.style.maxHeight=h+'px';tl_.style.height=h+'px'});grip.addEventListener('pointerup',()=>{g=null})})();
-initV3();renderTabs();build();go(0);
+initV3();renderTabs();build();go(0);requestAnimationFrame(()=>centerView(false));
 (async()=>{let restored=false;
  try{if(window.claude&&claude.use){const timer=setTimeout(()=>status('Storage did not respond; working locally'),10000);db=await claude.use('db');clearTimeout(timer);
    if(db){status('Storage connected');await refreshList();
