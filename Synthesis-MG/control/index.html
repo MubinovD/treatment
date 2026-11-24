@@ -27,6 +27,7 @@ main{display:grid;grid-template-columns:1fr 1.25fr;gap:0;min-height:0}
 .r h4{font-size:12px;font-weight:700;letter-spacing:.1em;color:#8B8B93;margin:18px 0 8px}.r h4:first-child{margin-top:0}
 .r ul{list-style:none;display:flex;flex-direction:column;gap:10px}
 #say li{font-size:21px;line-height:1.42;padding-left:18px;position:relative}#say li:before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;border-radius:50%;background:#A00022}
+#say li .ru{font-size:15px;line-height:1.4;color:#8B8B93;margin-top:5px}
 #notes li{font-size:16px;line-height:1.45;color:#B9B8B2;padding-left:18px;position:relative}#notes li:before{content:"–";position:absolute;left:0}
 #todo li{font-size:14px;line-height:1.4;color:#D9A441;padding-left:18px;position:relative}#todo li:before{content:"!";position:absolute;left:3px}
 button{font:inherit;color:#F2F1EC;background:#2A2A30;border:0;border-radius:10px;padding:9px 16px;cursor:pointer}button:hover{background:#3A3A42}
@@ -58,7 +59,7 @@ footer{justify-content:space-between}#upnext{color:#C9C8C2}
 <script>
 const $=id=>document.getElementById(id), ch='BroadcastChannel' in window?new BroadcastChannel('mg-treatment'):null;
 const send=(c,x)=>{const m=Object.assign({t:'cmd',c,ts:Date.now()},x||{}); if(ch)ch.postMessage(m); try{localStorage.setItem('mg-treatment-cmd',JSON.stringify(m))}catch(e){}};
-const li=(ul,arr)=>{ul.innerHTML='';arr.forEach(t=>{const e=document.createElement('li');e.textContent=t;ul.appendChild(e)})};
+const li=(ul,arr,ru)=>{ul.innerHTML='';arr.forEach((t,i)=>{const e=document.createElement('li');e.textContent=t;if(ru&&ru[i]){const r=document.createElement('div');r.className='ru';r.textContent=ru[i];e.appendChild(r)}ul.appendChild(e)})};
 let NOTES=null,LAST=null; const QL=new URLSearchParams(location.search).get('lang')||'ru';
 const KEY=location.hash.slice(1), b64=s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
 async function loadNotes(){ try{
@@ -73,7 +74,7 @@ function show(m){ if(!m||m.t!=='state')return; LAST=m; $('dot').className='live'
   $('pos').textContent=(m.idx+1)+' / '+m.total; $('lang').textContent='/'+m.lang; $('title').textContent=m.title; $('now').textContent=m.now||'Заголовок';
   $('steps').innerHTML=Array.from({length:m.steps},(_,i)=>'<i class="'+(i<m.step?'on':'')+'"></i>').join('');
   $('nextlab').textContent=m.next.kind==='step'?'ДАЛЬШЕ ПОЯВИТСЯ':(m.next.kind==='slide'?'ДАЛЬШЕ — СЛЕДУЮЩИЙ СЛАЙД':'КОНЕЦ'); $('next').textContent=m.next.text||'—';
-  li($('say'),m.say); li($('notes'),m.notes); li($('todo'),m.todo); $('hn').className=m.notes.length?'':'hide'; $('ht').className=m.todo.length?'':'hide';
+  li($('say'),m.say,N.ru); li($('notes'),m.notes); li($('todo'),m.todo); $('hn').className=m.notes.length?'':'hide'; $('ht').className=m.todo.length?'':'hide';
   $('upnext').textContent=m.nextTitle||'—'; $('vid').className=m.hasVideo?'':'hide';
   const a=$('aud'); a.style.display=m.hasAudio?'flex':'none'; if(m.hasAudio&&!a.children.length){for(let i=0;i<5;i++){const b=document.createElement('button');b.textContent='MG '+(i+1);b.onclick=()=>send('audio',{i});a.appendChild(b)}}
 }

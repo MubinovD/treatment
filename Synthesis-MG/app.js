@@ -32,7 +32,10 @@
   // ---------- рендер по типам
   const R = {
     cover(s) { const c = section('cover', "Director’s treatment", s.id); c.inn.append(h('div', 'lock', '<h1>Director’s</h1><span class="script">treatment</span>'));
-      c.pin.append(h('div', 'by', 'Damir Mubinov')); if (s.cover_img) { const i = h('img', 'cov'); i.src = A(s.cover_img); c.inn.append(i); } },
+      c.pin.append(h('div', 'by', 'Damir Mubinov'));
+      if (s.cover_video) { c.el.classList.add('hasvid'); const v = h('video', 'covv'); v.src = A('video/' + s.cover_video + '.mp4'); v.poster = A('video/' + s.cover_video + '_poster.jpg'); v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true; v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+        c.pin.prepend(v, h('div', 'covscrim')); c.media = v; v.play().catch(() => { }); }
+      if (s.cover_img) { const i = h('img', 'cov'); i.src = A(s.cover_img); c.inn.append(i); } },
     chapter(s) { const c = section('chapter', s.title, s.id); c.inn.append(h('h1', '', esc(s.title)), h('p', 'sub', esc(s.sub))); },
     thanks(s) { const c = section('thanks', s.title, s.id); const [a, b] = s.title.split('! '); c.inn.append(h('div', 'lock', '<h1>' + esc(a) + '!</h1><span class="script">' + esc(b || '') + '</span>')); c.inn.append(c.step(h('p', 'said', esc(s.text)), s.text)); },
     statement(s) { const c = section('statement', s.title, s.id); c.inn.append(h('h2', '', esc(s.title))); c.inn.append(c.step(h('p', 'big', esc(s.text)), s.text)); },
@@ -50,10 +53,10 @@
       // TODO turntable: когда появится assets/video/turntable.mp4 — вписать в content "turntable" и крутить его по скроллу
       let car; if (s.turntable) { car = h('video', 'car'); car.src = A(s.turntable); car.muted = true; car.playsInline = true; car.preload = 'auto'; c.scrub = car; } else { car = h('img', 'car'); car.src = A('car/zs_red.png'); }
       st.append(car);
-      const P = { logo: [532, 333], trunk: [1204, 306], hood: [672, 284] }, POS = { logo: [0, 300, 350], trunk: [1296, 150, 368], hood: [120, 10, 420] };
+      const P = { logo: [532, 333], trunk: [1204, 306], hood: [672, 284] }, POS = { logo: [0, 300, 350], trunk: [1296, 150, 368], hood: [120, s.turntable ? -14 : 10, 420] };
       const FROM = { logo: [364, 60], trunk: [-12, 60], hood: [430, 110] };
       s.callouts.forEach(([who, av, q, part]) => { const g = h('div'); const [lx, ly, w] = POS[part], [px, py] = P[part], [fx, fy] = FROM[part];
-        g.innerHTML = `<svg><line x1="${lx + fx}" y1="${ly + fy}" x2="${px}" y2="${py}" stroke="#FD2F33" stroke-width="3"/><polygon transform="translate(${px - 9},${py - 9}) scale(1.8)" points="2.93,0 7.07,0 10,2.93 10,7.07 7.07,10 2.93,10 0,7.07 0,2.93" fill="#FD2F33"/></svg>
+        g.innerHTML = (s.turntable ? '' : `<svg><line x1="${lx + fx}" y1="${ly + fy}" x2="${px}" y2="${py}" stroke="#FD2F33" stroke-width="3"/><polygon transform="translate(${px - 9},${py - 9}) scale(1.8)" points="2.93,0 7.07,0 10,2.93 10,7.07 7.07,10 2.93,10 0,7.07 0,2.93" fill="#FD2F33"/></svg>`) + `
           <div class="callout" style="left:${lx}px;top:${ly}px;width:${w}px"><img src="${A('av/' + av + '.jpg')}" alt=""><div><p class="who">${esc(who)}</p><p class="q">${esc(q)}</p></div></div>`;
         st.append(c.step(g, who + ': ' + q)); });
       const fit = () => { const k = Math.min(1, (wrap.clientWidth) / 1664, (innerHeight * .56) / 560); st.style.transform = `scale(${k})`; wrap.style.height = 560 * k + 'px'; };
@@ -74,7 +77,7 @@
         b.onclick = play; c.audio.push(au); (c.plays = c.plays || []).push(play); arc.append(c.step(b, 'MG — ' + lab)); });
       c.inn.append(arc); },
     video(s) { if (!s.video && !DRAFT) return; const c = section('video', s.title, s.id); c.inn.append(h('h2', '', esc(s.title)));
-      if (s.video) { const v = h('video', 'vid'); v.src = A('video/' + s.video + '.mp4'); v.poster = A('video/' + s.poster + '.jpg'); v.controls = true; v.playsInline = true; v.preload = 'metadata'; c.inn.append(v); c.media = v; if (s.youtube) c.inn.append(h('p', 'yt', `<a href="${s.youtube}" target="_blank" rel="noopener">Смотреть на YouTube</a>`)); }
+      if (s.video) { const v = h('video', 'vid'); v.src = A('video/' + s.video + '.mp4'); v.poster = A('video/' + s.poster + '.jpg'); v.controls = true; v.playsInline = true; v.preload = 'metadata'; c.inn.append(v); c.media = v; if (s.youtube) c.inn.append(h('p', 'yt', `<a href="${s.youtube}" target="_blank" rel="noopener">${LANG === 'ru' ? 'Смотреть на YouTube' : 'Watch on YouTube'}</a>`)); }
       else c.inn.append(ph(s.ph)); },
     lines_table(s) { const c = section('text', s.title, s.id); c.inn.append(h('p', 'tagx', 'Экстра · из режзаметок'), h('h2', '', esc(s.title)));
       c.inn.append(h('table', 'lt', '<tr><th>Кадр</th><th>В брифе</th><th>Предлагаю</th></tr>' + s.rows.map(r => '<tr>' + r.map(x => `<td>${esc(x)}</td>`).join('') + '</tr>').join(''))); },
@@ -90,8 +93,8 @@
     const real = frames.filter(f => f.kind === 'frame'); const seq = [];
     frames.forEach(f => {
       if (f.kind === 'frame') { const im = h('img'); im.loading = 'lazy'; im.src = A('sb/' + f.img + '.jpg'); im.alt = f.title; imgs.append(im);
-        const t = h('div', 't', `<div class="pframe"><span>${esc(sitTitle.split(' · ')[1] || '')}</span><span>${esc(f.title)}</span></div><p class="cap">${esc(f.cap)}</p>` + f.lines.map(([en, ru]) => `<div class="ln"><p class="ru">«${esc(LANG === 'ru' ? ru : en)}»</p>${LANG === 'ru' ? `<p class="en">${esc(en)}</p>` : ''}</div>`).join('')); txts.append(t);
-        seq.push({ f, im, t, txt: false, text: 'Кадр ' + f.title }); seq.push({ f, im, t, txt: true, text: f.cap + (f.lines.length ? ' ' + f.lines.map(l => '«' + (LANG === 'ru' ? l[1] : l[0]) + '»').join(' ') : '') }); }
+        const t = h('div', 't', `<div class="pframe"><span>${esc(sitTitle.split(' · ')[1] || '')}</span><span>${esc(f.title)}</span></div><p class="cap">${esc(f.cap)}</p>` + f.lines.map(([en, ru]) => `<div class="ln"><p class="ru">${LANG === 'ru' ? '«' + esc(ru) + '»' : '“' + esc(en) + '”'}</p>${LANG === 'ru' ? `<p class="en">${esc(en)}</p>` : ''}</div>`).join('')); txts.append(t);
+        seq.push({ f, im, t, txt: false, text: (LANG === 'ru' ? 'Кадр ' : 'Shot ') + f.title }); seq.push({ f, im, t, txt: true, text: f.cap + (f.lines.length ? ' ' + f.lines.map(l => LANG === 'ru' ? '«' + l[1] + '»' : '“' + l[0] + '”').join(' ') : '') }); }
       else if (f.kind === 'hovli') { const p = h('div', 'pop', `<p class="kicker">${esc(f.kicker)}</p><h3>${esc(f.title)}</h3><p>${esc(f.text)}</p><div class="ims">${f.imgs.map(i => `<img src="${A('loc/' + (i === 'hovli_a' ? '15_zs_court_street_A' : '16_hs_court_reverse_A') + '.jpg')}" alt="">`).join('')}</div>`); c.pin.append(p);
         const prev = seq[seq.length - 1]; seq.push({ ...prev, pop: p, f, text: f.title + ': ' + f.text, keep: prev.f }); }
     });
