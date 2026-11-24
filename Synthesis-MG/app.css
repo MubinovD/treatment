@@ -245,3 +245,7 @@ figcaption,.figcap{font-family:var(--mono);text-transform:uppercase;letter-spaci
 .snd:not(.on){animation:sndp 2.6s ease-in-out 1.8s 1}
 .snd:not(.on) .w{animation:sndw 2.6s linear 1.8s 1}.snd:not(.on) .x{animation:sndx 2.6s linear 1.8s 1}
 @media(prefers-reduced-motion:reduce){.snd:not(.on),.snd:not(.on) .w,.snd:not(.on) .x{animation:none}}
+
+.s-cover .covb{gap:1vh;bottom:4.4vh}
+.s-cover .covb .lock{align-items:baseline}
+.s-cover .covb .script{line-height:.9}
