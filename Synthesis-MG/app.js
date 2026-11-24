@@ -44,7 +44,7 @@
       s.body.forEach(p => col.append(c.step(h('p', '', esc(p)), p)));
       if (s.phs) { const side = h('div', 'side draftonly'); s.phs.forEach(p => side.append(ph(p))); row.append(side); }
       if (s.pics) { const side = h('div', 'side pics'); s.pics.forEach(([k, m, part]) => side.append(c.step(h('div', 'pic3', `<img src="${A(k + '.jpg')}" alt=""><div><p class="kicker">${esc(part)}</p><h2>${esc(m)}</h2></div>`), m))); row.append(side); }
-      if (s.pic) { const side = h('div', 'side'); const im = h('img', 'pic1'); im.src = A(s.pic[0] + '.jpg'); im.alt = s.pic[1]; side.append(c.step(im, s.pic[1])); row.append(side); }
+      if (s.pic) { const side = h('div', 'side'); const im = h('img', 'pic1'); im.onload = () => { if (im.naturalHeight > im.naturalWidth) im.classList.add('tall'); }; im.src = A(s.pic[0] + '.jpg'); im.alt = s.pic[1]; side.append(s.pic_static ? im : c.step(im, s.pic[1])); row.append(side); }
       c.inn.append(row); },
     idea_world(s) { const c = section('idea', s.title, s.id); c.inn.append(h('h2', '', esc(s.title)), h('p', 'lead', esc(s.lead)));
       const w = h('div', 'world'); w.append(c.step(h('p', 'pill', esc(s.bubble)), s.bubble)); const i = h('img'); i.src = A('car/zs_red.png'); i.alt = 'MG ZS'; w.append(i); c.inn.append(w); },
