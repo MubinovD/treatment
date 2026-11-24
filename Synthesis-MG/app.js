@@ -9,13 +9,15 @@
   const DRAFT = Q.has('draft');           // ?draft — показывать плейсхолдеры и экстраслайды
   const PITCH = Q.has('pitch');           // ?pitch — пошаговое появление текста, как на защите
   if (DRAFT) document.body.classList.add('draft');
-  const A = p => BASE + 'assets/' + p;
+  let AV = {};            // короткий хэш каждого файла: когда файл меняется, меняется и адрес, браузер не держит старую версию
+  const A = p => BASE + 'assets/' + p + (AV[p] ? '?v=' + AV[p] : '');
   const T = LANG === 'ru'
     ? { yt: 'Смотреть на YouTube', play: 'Смотреть', scroll: 'Просто скролльте', hear: 'Нажмите на MG, чтобы услышать', shot: 'Кадр' }
     : { yt: 'Watch on YouTube', play: 'Play', scroll: 'Just scroll', hear: 'Click MG to hear it', shot: 'Shot' };
   let resp = await fetch(BASE + 'content_' + LANG + '.json', { cache: 'no-store' });
   if (!resp.ok) resp = await fetch(BASE + 'content_ru.json', { cache: 'no-store' });
   const data = await resp.json();
+  AV = (data.meta && data.meta.av) || {};
   const root = document.getElementById('app');
   const h = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
   const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
@@ -41,8 +43,8 @@
   // ---------- рендер по типам
   const R = {
     cover(s) { const c = section('cover', "Director’s treatment", s.id);
-      c.inn.append(h('div', 'lock', '<h1>Director’s</h1><span class="script">treatment</span>'));
-      c.pin.append(h('div', 'by', 'Damir Mubinov'));
+      // название и автор — одним блоком в левом нижнем углу, от края страницы
+      c.pin.append(h('div', 'covb', '<div class="lock"><h1>Director’s</h1><span class="script">treatment</span></div><p class="by">by Damir Mubinov</p>'));
       if (s.cred) c.pin.append(h('div', 'cred', s.cred.map(x => x[0] === 'img' ? `<img src="${A(x[1])}" alt="${esc(x[2])}">` : `<span>${esc(x[1])}</span>`).join('')));
       if (s.cover_video) { c.el.classList.add('hasvid'); const v = h('video', 'covv autov'); v.src = A('video/' + s.cover_video + '.mp4'); v.poster = A('video/' + s.cover_video + '_poster.jpg'); v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true; v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
         c.pin.prepend(v, h('div', 'covscrim')); c.media = v; v.play().catch(() => { });
