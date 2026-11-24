@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:,">
+<title>MG · контроль</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+*{box-sizing:border-box;margin:0}
+body{background:#121214;color:#F2F1EC;font-family:'Inter',Arial,sans-serif;height:100vh;display:grid;grid-template-rows:auto 1fr auto;overflow:hidden}
+header,footer{display:flex;align-items:center;gap:18px;padding:12px 22px;background:#1B1B1F;font-size:15px;color:#A9A9B0}
+header b{color:#F2F1EC;font-weight:600}
+#timer{margin-left:auto;font-variant-numeric:tabular-nums;font-size:22px;color:#F2F1EC;cursor:pointer}
+#dot{width:10px;height:10px;border-radius:50%;background:#555}#dot.live{background:#3CCB7F}
+main{display:grid;grid-template-columns:1fr 1.25fr;gap:0;min-height:0}
+.l,.r{padding:22px 26px;overflow:auto;min-height:0}
+.l{border-right:1px solid #2A2A30;display:flex;flex-direction:column;gap:18px}
+.lab{font-size:12px;font-weight:700;letter-spacing:.1em;color:#8B8B93;margin-bottom:6px}
+#title{font-size:30px;font-weight:700;line-height:1.15}
+#now{font-size:19px;line-height:1.45;color:#C9C8C2;min-height:1.4em}
+.nextbox{background:#2A0A12;border:1px solid #A00022;border-radius:14px;padding:16px 18px}
+.nextbox .lab{color:#FF8FA5}
+#next{font-size:22px;line-height:1.4;font-weight:500}
+#steps{display:flex;gap:5px;flex-wrap:wrap}#steps i{width:16px;height:6px;border-radius:3px;background:#34343A}#steps i.on{background:#F2F1EC}
+.r h4{font-size:12px;font-weight:700;letter-spacing:.1em;color:#8B8B93;margin:18px 0 8px}.r h4:first-child{margin-top:0}
+.r ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+#say li{font-size:21px;line-height:1.42;padding-left:18px;position:relative}#say li:before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;border-radius:50%;background:#A00022}
+#notes li{font-size:16px;line-height:1.45;color:#B9B8B2;padding-left:18px;position:relative}#notes li:before{content:"–";position:absolute;left:0}
+#todo li{font-size:14px;line-height:1.4;color:#D9A441;padding-left:18px;position:relative}#todo li:before{content:"!";position:absolute;left:3px}
+button{font:inherit;color:#F2F1EC;background:#2A2A30;border:0;border-radius:10px;padding:9px 16px;cursor:pointer}button:hover{background:#3A3A42}
+footer{justify-content:space-between}#upnext{color:#C9C8C2}
+.hide{display:none}
+</style>
+</head>
+<body>
+<header><span id="dot"></span><b id="pos">—</b><span id="lang"></span><span>Листай тритмент в основном окне — это окно идёт следом</span><a id="open" target="mgmain" style="color:#F2F1EC">открыть тритмент ↗</a><span id="warn" style="color:#D9A441"></span><span id="timer" title="Клик — старт/сброс">00:00</span></header>
+<main>
+  <div class="l">
+    <div><div class="lab">СЕЙЧАС НА ЭКРАНЕ</div><div id="title">Открой тритмент во втором окне</div></div>
+    <div id="steps"></div>
+    <div id="now"></div>
+    <div class="nextbox"><div class="lab" id="nextlab">ДАЛЬШЕ ПОЯВИТСЯ</div><div id="next">—</div></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:auto">
+      <button id="prev">← назад</button><button id="nextb">вперёд →</button>
+      <button id="vid" class="hide">▶ видео / пауза</button>
+      <span id="aud" class="hide" style="display:none;gap:8px"></span>
+    </div>
+  </div>
+  <div class="r">
+    <h4>ГОВОРЮ</h4><ul id="say"></ul>
+    <h4 id="hn">ИЗ ЗАМЕТОК</h4><ul id="notes"></ul>
+    <h4 id="ht">ПРОВЕРИТЬ</h4><ul id="todo"></ul>
+  </div>
+</main>
+<footer><span>Следующий слайд: <b id="upnext">—</b></span><span>← → на этом окне тоже листают основное</span></footer>
+<script>
+const $=id=>document.getElementById(id), ch='BroadcastChannel' in window?new BroadcastChannel('mg-treatment'):null;
+const send=(c,x)=>{const m=Object.assign({t:'cmd',c,ts:Date.now()},x||{}); if(ch)ch.postMessage(m); try{localStorage.setItem('mg-treatment-cmd',JSON.stringify(m))}catch(e){}};
+const li=(ul,arr)=>{ul.innerHTML='';arr.forEach(t=>{const e=document.createElement('li');e.textContent=t;ul.appendChild(e)})};
+let NOTES=null,LAST=null; const QL=new URLSearchParams(location.search).get('lang')||'ru';
+const KEY=location.hash.slice(1), b64=s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+async function loadNotes(){ try{
+  if(KEY){ const r=await fetch('notes_'+QL+'.enc',{cache:'no-store'}); if(!r.ok)throw 0; const raw=b64((await r.text()).trim());
+    const k=await crypto.subtle.importKey('raw',b64(KEY),'AES-GCM',false,['decrypt']);
+    NOTES=JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:raw.slice(0,12)},k,raw.slice(12)))); }
+  else { const r=await fetch('notes_'+QL+'.json',{cache:'no-store'}); if(r.ok)NOTES=await r.json(); }
+  }catch(e){ $('warn').textContent='Заметки не открылись: проверь, что ссылка скопирована целиком, вместе с частью после #'; }
+  if(LAST)show(LAST); }
+loadNotes();
+function show(m){ if(!m||m.t!=='state')return; LAST=m; $('dot').className='live'; const N=(NOTES&&NOTES[m.id])||{}; m=Object.assign({},m,{say:N.say||m.say||[],notes:N.notes||m.notes||[],todo:N.todo||m.todo||[]});
+  $('pos').textContent=(m.idx+1)+' / '+m.total; $('lang').textContent='/'+m.lang; $('title').textContent=m.title; $('now').textContent=m.now||'Заголовок';
+  $('steps').innerHTML=Array.from({length:m.steps},(_,i)=>'<i class="'+(i<m.step?'on':'')+'"></i>').join('');
+  $('nextlab').textContent=m.next.kind==='step'?'ДАЛЬШЕ ПОЯВИТСЯ':(m.next.kind==='slide'?'ДАЛЬШЕ — СЛЕДУЮЩИЙ СЛАЙД':'КОНЕЦ'); $('next').textContent=m.next.text||'—';
+  li($('say'),m.say); li($('notes'),m.notes); li($('todo'),m.todo); $('hn').className=m.notes.length?'':'hide'; $('ht').className=m.todo.length?'':'hide';
+  $('upnext').textContent=m.nextTitle||'—'; $('vid').className=m.hasVideo?'':'hide';
+  const a=$('aud'); a.style.display=m.hasAudio?'flex':'none'; if(m.hasAudio&&!a.children.length){for(let i=0;i<5;i++){const b=document.createElement('button');b.textContent='MG '+(i+1);b.onclick=()=>send('audio',{i});a.appendChild(b)}}
+}
+if(ch)ch.onmessage=e=>show(e.data);
+addEventListener('storage',e=>{if(e.key==='mg-treatment-state'&&e.newValue)show(JSON.parse(e.newValue))});
+try{const s=localStorage.getItem('mg-treatment-state'); if(s)show(JSON.parse(s))}catch(e){}
+$('open').href=(/control\.html$/.test(location.pathname)?'':'../')+QL+'/';
+send('hello');
+$('prev').onclick=()=>send('prev'); $('nextb').onclick=()=>send('next'); $('vid').onclick=()=>send('video');
+addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();send('next')} if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();send('prev')}});
+let t0=0,tm=null; $('timer').onclick=()=>{ if(tm){clearInterval(tm);tm=null;$('timer').textContent='00:00';return} t0=Date.now(); tm=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);$('timer').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')},500)};
+</script>
+</body>
+</html>
