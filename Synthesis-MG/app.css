@@ -170,7 +170,7 @@ p{font-size:clamp(17px,1.36vw,26px);line-height:1.2;letter-spacing:-.03em;color:
 .lnav:hover a span{max-width:280px;opacity:1}
 .lnav a:hover{color:var(--mg-red)}
 .side.gal{display:grid;gap:2.2vh 1.4vw;align-content:start}
-.gal.g4{grid-template-columns:1fr 1fr}.gal.g2{grid-template-columns:1.23fr 1fr;align-items:start}.gal.g3{grid-template-columns:1fr 1fr 1fr}
+.gal.g4{grid-template-columns:1fr 1fr}.gal.g2{grid-template-columns:1.23fr 1fr;align-items:end}.gal.g3{grid-template-columns:1fr 1fr 1fr}
 .gal figure{margin:0}.gal img{width:100%;display:block;object-fit:cover}.gal.g4 img{aspect-ratio:16/9}
 figcaption,.figcap{font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;font-size:clamp(10px,.75vw,14px);margin-top:.9em;line-height:1.3}
 .side.loop{align-items:flex-start}.loopv{height:min(58vh,720px);width:auto;max-width:100%;display:block;background:#000}
