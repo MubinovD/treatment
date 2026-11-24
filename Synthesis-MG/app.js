@@ -110,7 +110,9 @@
       s.arc.forEach(([lab, file, word, wave], k) => { const b = h('button', 'mg k' + (k + 1), `<div class="w">${esc(word || 'MG')}</div>${wave ? `<svg class="wave" viewBox="0 0 194 90">${wave}</svg>` : ''}<p class="lab">${esc(lab)}</p>`); const au = new Audio(A(`audio/${LANG}/${file}.mp3`)); au.preload = 'auto'; b.title = T.hear;
         const play = () => { c.audio.forEach(x => { x.pause(); x.currentTime = 0; }); au.play().catch(() => { }); arc.querySelectorAll('.mg').forEach(x => x.classList.remove('playing')); b.classList.add('playing'); au.onended = () => b.classList.remove('playing'); };
         b.onclick = play; c.audio.push(au); (c.plays = c.plays || []).push(play); arc.append(c.step(b, (word || 'MG') + ' — ' + lab)); });
-      side.append(arc, h('p', 'hint', '<i></i>' + esc(T.hear))); },
+      side.append(arc, h('p', 'hint', '<i></i>' + esc(T.hear)));
+      // один раз, когда блок появился на экране: слова по очереди «подпрыгивают», подсказка подсвечивается
+      if ('IntersectionObserver' in window) { const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { side.classList.add('attn'); io.disconnect(); } }), { threshold: .7 }); io.observe(side); } },
     // плеер YouTube: обложка, по клику подгружается встроенный плеер
     video(s) { if (!s.youtube && !s.video && !DRAFT) return; const c = section('video', s.title, s.id); c.inn.append(h('h2', '', esc(s.title)));
       (s.body || []).forEach(p => c.inn.append(h('p', 'vnote', esc(p))));
