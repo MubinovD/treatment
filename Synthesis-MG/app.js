@@ -59,6 +59,7 @@
       const fit = () => { const k = Math.min(1, (wrap.clientWidth) / 1664, (innerHeight * .56) / 560); st.style.transform = `scale(${k})`; wrap.style.height = 560 * k + 'px'; };
       addEventListener('resize', fit); requestAnimationFrame(fit); },
     value_table(s) { const c = section('value', s.title, s.id); c.inn.append(h('h2', '', esc(s.title)), h('p', 'vlead', esc(s.lead))); const vt = h('div', 'vt');
+      if (s.heads) vt.append(h('div', 'vr vhd', `<p class="who">${esc(s.heads[0])}</p><p class="who">${esc(s.heads[1])}</p><p class="who">${esc(s.heads[2])}</p>`));
       s.table.forEach(([who, av, q, ben]) => { const r = h('div', 'vr', `<img src="${A('av/' + av + '.jpg')}" alt=""><p class="who">${esc(who)}</p><p>${esc(q)}</p>`); r.append(c.step(h('p', 'ben', esc(ben)), who + ' → ' + ben)); vt.append(r); });
       c.inn.append(vt); },
     culture(s) { const c = section('culture', s.title, s.id); c.inn.append(h('h2', '', esc(s.title))); const row = h('div', 'row'), col = h('div', 'col'), side = h('div', 'side'); row.append(col, side);
