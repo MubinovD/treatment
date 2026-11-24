@@ -67,14 +67,15 @@
       c.inn.append(vt); },
     culture(s) { const c = section('culture', s.title, s.id); c.inn.append(h('h2', '', esc(s.title))); const row = h('div', 'row'), col = h('div', 'col'), side = h('div', 'side'); row.append(col, side);
       s.body.forEach(p => col.append(c.step(h('p', '', esc(p)), p)));
-      const f = h('div', 'faces' + (s.face_imgs ? '' : ' draftonly')); s.faces.forEach((l, i) => { const d = h('div', 'face'); if (s.face_imgs) { const im = h('img'); im.src = A(s.face_imgs[i]); d.append(im); } else d.append(ph('лицо дедушки')); d.append(h('p', 'lab', esc(l))); f.append(d); });
-      side.append(c.step(f, s.faces.join(' → '))); c.inn.append(row); },
+      const f = h('div', 'faces' + (s.face_imgs ? '' : ' draftonly')); s.faces.forEach((l, i) => { const d = h('div', 'face'); if (s.face_imgs) { const im = h('img'); im.src = A(s.face_imgs[i]); im.alt = l; d.append(im); } else d.append(ph('лицо дедушки')); d.append(h('p', 'lab', esc(l))); f.append(s.face_imgs ? c.step(d, l) : d); });
+      if (s.face_imgs) side.append(f); else side.append(c.step(f, s.faces.join(' → '))); c.inn.append(row); },
     mnemonic(s) { const c = section('mnemonic', s.title, s.id); c.inn.append(h('h2', '', esc(s.title))); const row = h('div', 'row'), col = h('div', 'col'); row.append(col); c.inn.append(row);
       s.body.forEach(p => col.append(c.step(h('p', '', esc(p)), p)));
       const arc = h('div', 'arc'); c.audio = [];
-      s.arc.forEach(([lab, file]) => { const b = h('button', 'mg', `<div class="w">MG</div><p class="lab">${esc(lab)}</p>`); const au = new Audio(A(`audio/${LANG}/${file}.mp3`)); au.preload = 'auto';
+      if (s.arc.length === 4) arc.classList.add('arc4');
+      s.arc.forEach(([lab, file, word, wave], k) => { const b = h('button', 'mg k' + (k + 1), `<div class="w">${esc(word || 'MG')}</div>${wave ? `<svg class="wave" viewBox="0 0 194 90">${wave}</svg>` : ''}<p class="lab">${esc(lab)}</p>`); const au = new Audio(A(`audio/${LANG}/${file}.mp3`)); au.preload = 'auto';
         const play = () => { c.audio.forEach(x => { x.pause(); x.currentTime = 0; }); au.play().catch(() => { }); b.classList.add('playing'); au.onended = () => b.classList.remove('playing'); };
-        b.onclick = play; c.audio.push(au); (c.plays = c.plays || []).push(play); arc.append(c.step(b, 'MG — ' + lab)); });
+        b.onclick = play; c.audio.push(au); (c.plays = c.plays || []).push(play); arc.append(c.step(b, (word || 'MG') + ' — ' + lab)); });
       c.inn.append(arc); },
     video(s) { if (!s.video && !DRAFT) return; const c = section('video', s.title, s.id); c.inn.append(h('h2', '', esc(s.title)));
       if (s.video) { const v = h('video', 'vid'); v.src = A('video/' + s.video + '.mp4'); v.poster = A('video/' + s.poster + '.jpg'); v.controls = true; v.playsInline = true; v.preload = 'metadata'; c.inn.append(v); c.media = v; if (s.youtube) c.inn.append(h('p', 'yt', `<a href="${s.youtube}" target="_blank" rel="noopener">${LANG === 'ru' ? 'Смотреть на YouTube' : 'Watch on YouTube'}</a>`)); }
