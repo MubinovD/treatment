@@ -155,7 +155,7 @@ p{font-size:clamp(17px,1.36vw,26px);line-height:1.2;letter-spacing:-.03em;color:
 
 /* ====== 24.11 вечер: практичный режим, оглавление, навигатор, сториборд с ползунком, продакшн ====== */
 .s-cover .cred{position:absolute;right:5vh;bottom:3.7vh;display:flex;align-items:center;gap:.9em;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;font-size:clamp(11px,.75vw,14px);z-index:1;color:#fff}
-.s-cover .cred img{height:1.9em;width:auto;display:block}.s-cover .cred img[alt="Lunar"]{height:1.25em}
+.s-cover .cred img{height:1.6em;width:auto;display:block}.s-cover .cred img[alt="Lunar"]{height:.72em}
 .toc{display:grid;grid-auto-flow:column;grid-template-columns:repeat(3,1fr);column-gap:2.4vw;margin-top:5vh}
 .toci{display:flex;gap:1.2em;align-items:baseline;border-top:1px solid var(--line);padding:1.05em 0 1.25em;color:#000;text-decoration:none;font-size:clamp(17px,1.36vw,26px);letter-spacing:-.03em;transition:color .15s}
 .toci .n{font-family:var(--mono);font-size:clamp(11px,.85vw,16px);letter-spacing:.1em;color:var(--mute)}
