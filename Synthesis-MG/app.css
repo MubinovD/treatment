@@ -149,3 +149,6 @@ p{font-size:clamp(17px,1.36vw,26px);line-height:1.2;letter-spacing:-.03em;color:
 .face .lab,.mg .lab{position:static;display:block;text-align:left;margin-top:1.2vh}
 
 .pic1.tall{width:auto;height:min(64vh,720px);align-self:flex-start}
+
+.row.picleft{flex-direction:row-reverse;justify-content:flex-end}.row.picleft .side{flex:0 0 auto}
+@media(max-width:820px){.row.picleft{flex-direction:column-reverse}}
