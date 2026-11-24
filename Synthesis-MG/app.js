@@ -109,7 +109,7 @@
   const flush = () => { if (group && group.length) storyboard(group, sit); group = null; };
   for (const s of data.slides) {
     if (s.extra && !DRAFT) continue;
-    if (s.kind === 'frame' || s.kind === 'hovli') { (group = group || []).push(s); continue; }
+    if (s.kind === 'frame' || s.kind === 'hovli') { if (s.group && s.group !== sit) { flush(); sit = s.group; } (group = group || []).push(s); continue; }
     flush(); if (s.kind === 'chapter' && s.id.startsWith('sit-')) sit = s.title + ' · ' + s.sub;
     (R[s.kind] || R.text)(s);
   }
