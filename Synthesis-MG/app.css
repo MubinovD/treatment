@@ -214,3 +214,6 @@ figcaption,.figcap{font-family:var(--mono);text-transform:uppercase;letter-spaci
 .arcside .arc4{gap:1.5vw}.arcside .arc4 .k1 .w{font-size:clamp(28px,3.2vw,62px)}.arcside .arc4 .k2 .w{font-size:clamp(30px,3.5vw,68px)}.arcside .arc4 .k3 .w{font-size:clamp(38px,4.6vw,90px)}.arcside .arc4 .k4 .w{font-size:clamp(46px,5.6vw,110px)}
 .arcside .arc4 .wave{width:clamp(84px,7.6vw,150px)}
 .ytbox{width:min(100%,calc((100vh - 40vh) * 16 / 9))}
+
+.snd{position:absolute;left:50%;bottom:3.2vh;transform:translateX(-50%);z-index:2;background:none;border:0;padding:6px;color:#fff;opacity:.4;cursor:pointer;transition:opacity .2s}
+.snd:hover,.snd.on{opacity:1}.snd svg{width:20px;height:20px;display:block}.snd .w{display:none}.snd.on .w{display:block}.snd.on .x{display:none}

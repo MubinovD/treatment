@@ -45,7 +45,10 @@
       c.pin.append(h('div', 'by', 'Damir Mubinov'));
       if (s.cred) c.pin.append(h('div', 'cred', s.cred.map(x => x[0] === 'img' ? `<img src="${A(x[1])}" alt="${esc(x[2])}">` : `<span>${esc(x[1])}</span>`).join('')));
       if (s.cover_video) { c.el.classList.add('hasvid'); const v = h('video', 'covv autov'); v.src = A('video/' + s.cover_video + '.mp4'); v.poster = A('video/' + s.cover_video + '_poster.jpg'); v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true; v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
-        c.pin.prepend(v, h('div', 'covscrim')); c.media = v; v.play().catch(() => { }); }
+        c.pin.prepend(v, h('div', 'covscrim')); c.media = v; v.play().catch(() => { });
+        // незаметная кнопка звука: по клику у обложки появляется звук
+        const sb = h('button', 'snd', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path class="w" d="M15.5 9.2a4 4 0 0 1 0 5.6M18 6.8a7.4 7.4 0 0 1 0 10.4"/><path class="x" d="M16 9.5l5 5M21 9.5l-5 5"/></svg>'); sb.title = sb.ariaLabel = LANG === 'ru' ? 'Звук' : 'Sound';
+        sb.onclick = () => { v.muted = !v.muted; if (!v.muted) v.play().catch(() => { }); sb.classList.toggle('on', !v.muted); }; c.pin.append(sb); }
       if (s.cover_img) { const i = h('img', 'cov'); i.src = A(s.cover_img); c.inn.append(i); } },
     chapter(s) { const c = section('chapter', s.title, s.id); c.inn.append(h('h1', '', esc(s.title)), h('p', 'sub', esc(s.sub))); },
     thanks(s) { const c = section('thanks', s.title, s.id); const [a, b] = s.title.split('! '); c.inn.append(h('div', 'lock', '<h1>' + esc(a) + '!</h1><span class="script">' + esc(b || '') + '</span>')); c.inn.append(c.step(h('p', 'said', esc(s.text)), s.text)); },
