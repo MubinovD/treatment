@@ -9,6 +9,11 @@
   const DRAFT = Q.has('draft');           // ?draft — показывать плейсхолдеры и экстраслайды
   const PITCH = Q.has('pitch');           // ?pitch — пошаговое появление текста, как на защите
   if (DRAFT) document.body.classList.add('draft');
+  // телефон: разделы идут обычным потоком, закреплены только сториборд и вращающаяся машина
+  const MQ = matchMedia('(max-width:820px)'), MOB = MQ.matches, FLOW = MOB && !PITCH;
+  const TOUCH = matchMedia('(pointer:coarse)').matches;
+  if (MOB) document.body.classList.add('mob');
+  if (MQ.addEventListener) MQ.addEventListener('change', () => location.reload());
   let AV = {};            // короткий хэш каждого файла: когда файл меняется, меняется и адрес, браузер не держит старую версию
   const A = p => BASE + 'assets/' + p + (AV[p] ? '?v=' + AV[p] : '');
   const T = LANG === 'ru'
@@ -18,6 +23,10 @@
   if (!resp.ok) resp = await fetch(BASE + 'content_ru.json', { cache: 'no-store' });
   const data = await resp.json();
   AV = (data.meta && data.meta.av) || {};
+  const DIM = (data.meta && data.meta.dim) || {}, TT = data.meta && data.meta.tt;
+  // высота экрана без панелей браузера: на телефоне она не «дышит», когда панели прячутся при скролле
+  const probe = document.createElement('div'); probe.className = 'vhp'; document.body.append(probe);
+  const VH = () => probe.offsetHeight || innerHeight;
   const root = document.getElementById('app');
   const h = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
   const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
@@ -37,6 +46,16 @@
     SECTIONS.push(sec); return sec;
   }
   const ph = t => h('div', 'ph', 'Плейсхолдер · ' + esc(t));
+  // вращение машины из кадров: первый кадр сразу, потом редкая сетка, потом остальные — машина видна с первой секунды и крутится без дыр
+  function frameSeq(cv, f) {
+    const ims = new Array(f.n), ctx = cv.getContext('2d'); cv.width = f.w; cv.height = f.h; let cur = null, want = 0;
+    const src = i => BASE + 'assets/' + f.dir + '/' + String(i).padStart(3, '0') + '.jpg' + (f.v ? '?v=' + f.v : '');
+    const draw = () => { for (let d = 0; d < f.n; d++) for (const i of [want - d, want + d]) { const im = ims[(i + f.n) % f.n]; if (im) { if (cur !== im) { cur = im; ctx.drawImage(im, 0, 0, f.w, f.h); } return; } } };
+    const load = i => new Promise(r => { const im = new Image(); im.onload = () => { ims[i] = im; draw(); r(); }; im.onerror = r; im.src = src(i); });
+    const order = [0]; for (const st of [8, 4, 2, 1]) for (let i = 0; i < f.n; i += st) if (!order.includes(i)) order.push(i);
+    load(0).then(() => setTimeout(() => { let k = 1; const run = async () => { while (k < order.length) await load(order[k++]); }; for (let j = 0; j < 4; j++) run(); }, 600));
+    return p => { want = Math.max(0, Math.min(f.n - 1, Math.round(p * (f.n - 1)))); draw(); };
+  }
   const jump = id => { const s = SECTIONS.find(x => x.noteId === id); if (s) scrollTo({ top: s.el.offsetTop, behavior: 'smooth' }); };
   const lineHtml = ([en, ru]) => `<div class="ln"><p class="ru">${LANG === 'ru' ? '«' + esc(ru) + '»' : '“' + esc(en) + '”'}</p>${LANG === 'ru' ? `<p class="en">${esc(en)}</p>` : ''}</div>`;
 
@@ -74,8 +93,11 @@
     idea_callouts(s) { const c = section('idea', s.title, s.id); c.inn.append(h('h2', '', esc(s.title)), h('p', 'lead', esc(s.lead)));
       const wrap = h('div', 'stagewrap'), st = h('div', 'stage'); wrap.append(st); c.inn.append(wrap);
       const VX = 334, VW = 996, VH0 = 560, DUR = 30;
-      let car; if (s.turntable) { car = h('video', 'car'); car.src = A(s.turntable); car.muted = true; car.playsInline = true; car.preload = 'auto'; car.setAttribute('playsinline', ''); c.scrub = car; } else { car = h('img', 'car'); car.src = A('car/zs_red.png'); }
+      // на телефоне и планшете видео без касания не грузится (а в режиме энергосбережения не грузится совсем) — там машина собрана из кадров
+      let car; if (s.turntable && TT && (TOUCH || MOB)) { car = h('canvas', 'car'); c.scrubTo = frameSeq(car, TT); }
+      else if (s.turntable) { car = h('video', 'car'); car.src = A(s.turntable); car.muted = true; car.playsInline = true; car.preload = 'auto'; car.setAttribute('playsinline', ''); c.scrub = car; } else { car = h('img', 'car'); car.src = A('car/zs_red.png'); }
       st.append(car);
+      const list = MOB ? h('div', 'clist') : null; if (list) { st.classList.add('m'); st.append(list); }
       // t — секунда ролика, x/y — доли кадра; у эмблемы время считаем от −15 до 15 (она видна на стыке круга)
       const TR = { badge: { k: [[-5, .08, .53], [-2.5, .124, .555], [0, .26, .53], [2.5, .504, .52], [5, .74, .53], [7.5, .90, .56]], vis: [-4.5, 7], wrap: 1, stop: 2.5 },
         wheel: { k: [[5, .48, .73], [7.5, .644, .73], [10, .766, .72], [12.5, .816, .71], [15, .784, .67]], vis: [4.5, 13.5], stop: 9.5 },
@@ -85,22 +107,29 @@
       const svg = document.createElementNS(NS, 'svg'); if (s.turntable) st.append(svg);
       const items = s.callouts.map(([who, av, q, part, pos]) => ({ who, av, q, tr: TR[part] || TR.badge, pos: pos || [0, 300, 350] })).sort((a, b) => a.tr.stop - b.tr.stop);
       items.forEach(it => { const [lx, ly, w] = it.pos;
-        const g = h('div', 'callout', `<img src="${A('av/' + it.av + '.jpg')}" alt=""><div><p class="who">${esc(it.who)}</p><p class="q">${esc(it.q)}</p></div>`); g.style.cssText = `left:${lx}px;top:${ly}px;width:${w}px`;
-        st.append(c.step(g, it.who + ': ' + it.q, null, true)); it.node = g;
+        const g = h('div', 'callout', `<img src="${A('av/' + it.av + '.jpg')}" alt=""><div><p class="who">${esc(it.who)}</p><p class="q">${esc(it.q)}</p></div>`); if (!MOB) g.style.cssText = `left:${lx}px;top:${ly}px;width:${w}px`;
+        (list || st).append(c.step(g, it.who + ': ' + it.q, null, true)); it.node = g;
         if (!s.turntable) return;
         it.ax = lx + w / 2 < 832 ? lx + w + 14 : lx - 14; it.ay = ly + 60;
-        it.g = document.createElementNS(NS, 'g'); it.g.innerHTML = '<line stroke="#FD2F33" stroke-width="3"/><polygon points="2.93,0 7.07,0 10,2.93 10,7.07 7.07,10 2.93,10 0,7.07 0,2.93" fill="#FD2F33"/>'; it.g.style.opacity = 0; svg.append(it.g); });
+        it.g = document.createElementNS(NS, 'g'); it.g.innerHTML = '<line stroke="#FD2F33" stroke-width="' + (MOB ? 1.5 : 3) + '"/><polygon points="2.93,0 7.07,0 10,2.93 10,7.07 7.07,10 2.93,10 0,7.07 0,2.93" fill="#FD2F33"/>'; it.g.style.opacity = 0; svg.append(it.g); });
       if (s.turntable) { c.fr = items.map(it => it.tr.stop / DUR); c.per = 1;
-        c.track = p => { const t = p * DUR; items.forEach(it => { const tt = it.tr.wrap && t > 15 ? t - DUR : t, [, fx, fy] = at(it.tr.k, tt), x = VX + fx * VW, y = fy * VH0;
-          const v = Math.max(0, Math.min(1, Math.min(tt - it.tr.vis[0], it.tr.vis[1] - tt) / .9));
-          const ln = it.g.firstChild; ln.setAttribute('x1', it.ax); ln.setAttribute('y1', it.ay); ln.setAttribute('x2', x); ln.setAttribute('y2', y);
-          it.g.lastChild.setAttribute('transform', `translate(${x - 9},${y - 9}) scale(1.8)`); it.g.style.opacity = it.node.classList.contains('on') ? v : 0; }); }; }
-      const fit = () => { const k = Math.min(1, (wrap.clientWidth) / 1664, (innerHeight * .56) / 560); st.style.transform = `scale(${k})`; wrap.style.height = 560 * k + 'px'; };
+        c.track = p => { const t = p * DUR;
+          // телефон: реплики стоят списком под машиной, свежая сверху; линия идёт только от неё
+          const W = MOB ? st.clientWidth : 0, on = MOB ? items.filter(it => it.node.classList.contains('on')) : null, top = on && on[on.length - 1];
+          items.forEach(it => { const tt = it.tr.wrap && t > 15 ? t - DUR : t, [, fx, fy] = at(it.tr.k, tt), x = MOB ? fx * W : VX + fx * VW, y = MOB ? fy * W * VH0 / VW : fy * VH0;
+            const v = Math.max(0, Math.min(1, Math.min(tt - it.tr.vis[0], it.tr.vis[1] - tt) / .9));
+            if (MOB && it !== top) { it.g.style.opacity = 0; return; }
+            const ax = MOB ? it.node.offsetLeft + 22 : it.ax, ay = MOB ? it.node.offsetTop - 5 : it.ay;
+            const ln = it.g.firstChild; ln.setAttribute('x1', ax); ln.setAttribute('y1', ay); ln.setAttribute('x2', x); ln.setAttribute('y2', y);
+            it.g.lastChild.setAttribute('transform', MOB ? `translate(${x - 5},${y - 5})` : `translate(${x - 9},${y - 9}) scale(1.8)`); it.g.style.opacity = it.node.classList.contains('on') ? v : 0; }); }; }
+      if (MOB) return;
+      const fit = () => { const k = Math.min(1, (wrap.clientWidth) / 1664, (VH() * .56) / 560); st.style.transform = `scale(${k})`; wrap.style.height = 560 * k + 'px'; };
       addEventListener('resize', fit); requestAnimationFrame(fit); },
     value_table(s) { const c = section('value', s.title, s.id); c.inn.append(h('h2', '', esc(s.title)), h('p', 'vlead', esc(s.lead))); const vt = h('div', 'vt');
       if (s.heads) vt.append(h('div', 'vr vhd', `<p class="who">${esc(s.heads[0])}</p><p class="who">${esc(s.heads[1])}</p><p class="who">${esc(s.heads[2])}</p>`));
       s.table.forEach(([who, av, q, ben]) => { const r = h('div', 'vr', `<img src="${A('av/' + av + '.jpg')}" alt=""><p class="who">${esc(who)}</p><p>${esc(q)}</p>`); r.append(c.step(h('p', 'ben', esc(ben)), who + ' → ' + ben)); vt.append(r); });
-      c.inn.append(vt); },
+      c.inn.append(vt);
+      if (s.note) c.inn.append(h('p', 'vaside', esc(s.note))); },
     culture(s) { const c = section('culture', s.title, s.id); c.inn.append(h('h2', '', esc(s.title))); const row = h('div', 'row'), col = h('div', 'col'), side = h('div', 'side'); row.append(col, side);
       s.body.forEach(p => col.append(c.step(h('p', '', esc(p)), p)));
       const f = h('div', 'faces' + (s.face_imgs ? '' : ' draftonly')); s.faces.forEach((l, i) => { const d = h('div', 'face'); if (s.face_imgs) { const im = h('img'); im.src = A(s.face_imgs[i]); im.alt = l; d.append(im); } else d.append(ph('лицо дедушки')); d.append(h('p', 'lab', esc(l))); f.append(s.face_imgs ? c.step(d, l) : d); });
@@ -185,9 +214,16 @@
     document.querySelectorAll('video.autov').forEach(v => io.observe(v)); }
 
   // ---------- высоты и шаги
-  const VH = () => innerHeight;
-  function layout() { SECTIONS.forEach(s => { const per = s.per || (s.fast ? .5 : .6); s.span = s.steps.length * per * VH(); s.el.style.height = (VH() + s.span) + 'px'; }); }
+  // пересчитываем, только когда реально изменились ширина или высота экрана без панелей; после пересчёта возвращаемся в то же место
+  let LW = 0, LH = 0;
+  function layout() { const w = innerWidth, vh = VH(); if (w === LW && vh === LH) return;
+    let keep = null; if (LW) { const y = scrollY; let i = 0; SECTIONS.forEach((s, k) => { if (s.el.offsetTop <= y + 1) i = k; }); const s = SECTIONS[i]; keep = [s, (y - s.el.offsetTop) / Math.max(1, s.el.offsetHeight)]; }
+    LW = w; LH = vh;
+    SECTIONS.forEach(s => { const flow = FLOW && !s.steps.length, per = s.per || (s.fast ? .5 : .6); s.el.classList.toggle('flow', flow); s.span = s.steps.length * per * vh; s.el.style.height = flow ? '' : (vh + s.span) + 'px'; });
+    if (keep) scrollTo(0, keep[0].el.offsetTop + keep[1] * keep[0].el.offsetHeight); }
   layout(); addEventListener('resize', layout);
+  // место под картинку известно до загрузки: текст под ней не прыгает, пока она грузится
+  document.querySelectorAll('img').forEach(im => { const p = (im.getAttribute('src') || '').split('assets/')[1], d = p && DIM[p.split('?')[0]]; if (d && getComputedStyle(im).aspectRatio === 'auto') im.style.aspectRatio = d[0] + ' / ' + d[1]; });
   const byId = Object.fromEntries(data.slides.map(s => [s.id, s]));
   const ch = 'BroadcastChannel' in window ? new BroadcastChannel('mg-treatment') : null;
   let last = '';
@@ -198,13 +234,15 @@
       if (n) { st = s.fr ? s.fr.filter(f => p >= f - .004).length : Math.max(0, Math.min(n, Math.floor(p * n + .5))); if (scrollY < top - VH() * .35) st = 0; }
       if (s.cur !== st) { s.cur = st; s.apply(st); }
       if (s.scrub && s.scrub.duration && Math.abs(scrollY - top) < s.span + VH()) s.scrub.currentTime = p * (s.scrub.duration - .05);
+      if (s.scrubTo && Math.abs(scrollY - top) < s.span + VH()) s.scrubTo(p);
       if (s.track) s.track(p); });
     let ti = 0; SECTIONS.forEach((x, i) => { if (x.el.offsetTop <= scrollY + 60) ti = i; }); hdr.classList.toggle('dark', DARK.includes(SECTIONS[ti].kind));
+    hdr.classList.toggle('solid', MOB && !['cover', 'chapter', 'thanks', 'statement'].includes(SECTIONS[ti].kind));
     const s = SECTIONS[idx], st = s.cur || 0, nid = st ? s.steps[st - 1].noteId : s.noteId, src = byId[nid] || {};
     const nx = s.steps[st] ? { kind: 'step', text: s.steps[st].text } : (SECTIONS[idx + 1] ? { kind: 'slide', text: SECTIONS[idx + 1].title } : { kind: 'end', text: '' });
     const msg = { t: 'state', lang: LANG, id: nid || s.noteId || '', idx, total: SECTIONS.length, step: st, steps: s.steps.length, title: (byId[nid] && s.kind === 'sb') ? s.title + ' · ' + (src.name || src.title) : s.title,
       now: st ? s.steps[st - 1].text : '', next: nx, say: src.say_b || [], notes: src.notes_b || [], todo: src.todo_b || [], hasVideo: !!s.media, hasAudio: !!s.plays, nextTitle: SECTIONS[idx + 1] ? SECTIONS[idx + 1].title : '' };
-    const key = JSON.stringify([idx, st]); if (key !== last) { last = key; if (ch) ch.postMessage(msg); try { localStorage.setItem('mg-treatment-state', JSON.stringify(msg)); } catch (e) { } history.replaceState(null, '', '#' + idx + '.' + st);
+    const key = JSON.stringify([idx, st]); if (key !== last) { last = key; if (ch) ch.postMessage(msg); try { localStorage.setItem('mg-treatment-state', JSON.stringify(msg)); } catch (e) { } try { history.replaceState(null, '', '#' + idx + '.' + st); } catch (e) { }
       hdr.querySelector('.ht').textContent = s.kind === 'cover' ? '' : s.title.split(' · ')[0];
       if (nav) { let cur = null; navItems.forEach(a => { if (a._i <= idx) cur = a; }); navItems.forEach(a => a.classList.toggle('cur', a === cur)); nav.classList.toggle('dark', DARK.includes(s.kind)); nav.classList.toggle('hide', idx === 0); } }
     return { idx, st, s };
