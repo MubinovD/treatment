@@ -318,3 +318,18 @@ figcaption,.figcap{font-family:var(--mono);text-transform:uppercase;letter-spaci
 /* невысокий экран телефона: текст кадра чуть мельче, чтобы помещался целиком */
 @media(max-width:820px) and (max-height:700px){.win .cap{font-size:14px;line-height:1.22}.ln .ru{font-size:16px}.win .th h3{font-size:21px}.win .t{gap:9px}.win{gap:11px}}
 @media(max-width:820px) and (max-height:590px){.s-sb .pin{padding:70px 22px 40px}.win .cap{font-size:13px}.ln .ru{font-size:15px}.win .th h3{font-size:19px}.win .th .kicker{display:none}.sbhint{bottom:18px}}
+
+/* ====== 27.11: доп-кадры из коротких версий стоят в сториборде, фон у них бордовый ====== */
+.s-sb .pin{transition:background-color .35s ease}
+.s-sb.xf .pin{background:var(--mg-burgundy)}
+.win .th .xk{margin:0;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;font-size:clamp(11px,.85vw,16px);line-height:1.5;color:#fff}
+.win .th .xk b{font-weight:500;background:#fff;color:var(--mg-burgundy);padding:.15em .55em;margin-right:.7em;white-space:nowrap}
+.s-sb.xf .ln{border-top-color:rgba(255,255,255,.3)}
+.s-sb.xf .ln .en,.s-sb.xf .sbbar .kicker,.s-sb.xf .sbbar .cnt,.s-sb.xf .win .th .kicker{color:#F2D9DE}
+.s-sb.xf .rail:before{background:rgba(255,255,255,.28)}
+.s-sb.xf .rail i{background:#fff}
+.rail u{position:absolute;left:3px;width:5px;background:var(--mg-burgundy);text-decoration:none}
+.s-sb.xf .rail u{background:rgba(255,255,255,.45)}
+.hdr.solid.dark.xf{background:var(--mg-burgundy)}
+@media(max-width:820px){.win .th .xk{font-size:10px;line-height:1.6}}
+@media(max-width:820px) and (max-height:590px){.win .th .xk{font-size:9px}}

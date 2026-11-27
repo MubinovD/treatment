@@ -17,8 +17,8 @@
   let AV = {};            // короткий хэш каждого файла: когда файл меняется, меняется и адрес, браузер не держит старую версию
   const A = p => BASE + 'assets/' + p + (AV[p] ? '?v=' + AV[p] : '');
   const T = LANG === 'ru'
-    ? { yt: 'Смотреть на YouTube', play: 'Смотреть', scroll: 'Просто скролльте', hear: 'Нажмите на MG, чтобы услышать', shot: 'Кадр' }
-    : { yt: 'Watch on YouTube', play: 'Play', scroll: 'Just scroll', hear: 'Click MG to hear it', shot: 'Shot' };
+    ? { yt: 'Смотреть на YouTube', play: 'Смотреть', scroll: 'Просто скролльте', hear: 'Нажмите на MG, чтобы услышать', shot: 'Кадр', extra: 'Доп-кадр' }
+    : { yt: 'Watch on YouTube', play: 'Play', scroll: 'Just scroll', hear: 'Click MG to hear it', shot: 'Shot', extra: 'Extra frame' };
   let resp = await fetch(BASE + 'content_' + LANG + '.json', { cache: 'no-store' });
   if (!resp.ok) resp = await fetch(BASE + 'content_ru.json', { cache: 'no-store' });
   const data = await resp.json();
@@ -168,10 +168,10 @@
     const bar = h('div', 'sbbar'), k = h('p', 'kicker', esc(sitTitle)), cnt = h('p', 'cnt'); k.style.margin = 0; bar.append(k, cnt);
     const win = h('div', 'win'), imgs = h('div', 'imgs'), txts = h('div', 'txts'), rail = h('div', 'rail', '<i></i>'), hint = h('p', 'sbhint', esc(T.scroll) + ' <b>↓</b>'); win.append(imgs, txts, rail);
     c.inn.remove(); c.pin.append(bar, win, hint);
-    const real = frames.filter(f => f.kind === 'frame'); const seq = []; const model = sitTitle.split(' · ')[1] || '';
+    const real = frames.filter(f => f.kind === 'frame' && !f.xtra); const seq = []; const model = sitTitle.split(' · ')[1] || '';
     frames.forEach(f => {
       if (f.kind === 'frame') { const im = h('img'); im.loading = 'lazy'; im.src = A('sb/' + f.img + '.jpg'); im.alt = f.name || f.title; imgs.append(im);
-        const t = h('div', 't', `<div class="th"><p class="kicker">${esc(f.model || model)}</p><h3>${esc(f.name || f.title)}</h3></div><p class="cap">${esc(f.cap)}</p>` + f.lines.map(lineHtml).join('')); txts.append(t);
+        const t = h('div', 't', `<div class="th"><p class="kicker">${esc(f.model || model)}</p>${f.xtra ? `<p class="xk"><b>${esc(T.extra)}</b>${esc(f.xtra)}</p>` : ''}<h3>${esc(f.name || f.title)}</h3></div><p class="cap">${esc(f.cap)}</p>` + f.lines.map(lineHtml).join('')); txts.append(t);
         seq.push({ f, im, t, text: (f.name || f.title) + '. ' + f.cap + (f.lines.length ? ' ' + f.lines.map(l => LANG === 'ru' ? '«' + l[1] + '»' : '“' + l[0] + '”').join(' ') : '') }); }
       else if (f.kind === 'hovli' && seq.length) { const p = h('div', 'pop', `<p class="kicker">${esc(f.kicker)}</p><h3>${esc(f.title)}</h3><p>${esc(f.text)}</p><div class="ims">${f.imgs.map(i => `<img src="${A('loc/' + (i === 'hovli_a' ? '15_zs_court_street_A' : '16_hs_court_reverse_A') + '.jpg')}" alt="">`).join('')}</div>`); c.pin.append(p);
         const prev = seq[seq.length - 1]; seq.push({ ...prev, pop: p, f, text: f.title + ': ' + f.text, keep: prev.f }); }
@@ -181,9 +181,10 @@
       imgs.querySelectorAll('img').forEach(i => i.classList.toggle('on', i === q.im));
       txts.querySelectorAll('.t').forEach(t => { t.classList.toggle('cur', t === q.t); t.classList.toggle('txt', t === q.t); });
       c.pin.querySelectorAll('.pop').forEach(p => p.classList.toggle('on', p === q.pop));
-      const fr = q.keep || q.f, i = real.indexOf(fr); cnt.textContent = (i + 1) + ' / ' + real.length;
-      const th = rail.firstChild; th.style.height = (100 / seq.length) + '%'; th.style.top = (n / seq.length * 100) + '%'; hint.classList.toggle('off', n > 0); };
+      const fr = q.keep || q.f, i = real.indexOf(fr); cnt.textContent = fr.xtra ? T.extra : (i + 1) + ' / ' + real.length; c.el.classList.toggle('xf', !!fr.xtra);
+      const th = rail.querySelector('i'); th.style.height = (100 / seq.length) + '%'; th.style.top = (n / seq.length * 100) + '%'; hint.classList.toggle('off', n > 0); };
     rail.onclick = e => { const r = rail.getBoundingClientRect(), i = Math.min(seq.length - 1, Math.max(0, Math.floor((e.clientY - r.top) / r.height * seq.length))); scrollTo({ top: c.el.offsetTop + (c.steps.length ? i / c.steps.length * c.span : 0), behavior: 'smooth' }); };
+    seq.forEach((q, i) => { if (q.f.xtra) { const u = document.createElement('u'); u.style.top = (i / seq.length * 100) + '%'; u.style.height = (100 / seq.length) + '%'; rail.prepend(u); } });
     c.fast = true; c.apply(0);
   }
 
@@ -237,6 +238,7 @@
       if (s.scrubTo && Math.abs(scrollY - top) < s.span + VH()) s.scrubTo(p);
       if (s.track) s.track(p); });
     let ti = 0; SECTIONS.forEach((x, i) => { if (x.el.offsetTop <= scrollY + 60) ti = i; }); hdr.classList.toggle('dark', DARK.includes(SECTIONS[ti].kind));
+    hdr.classList.toggle('xf', SECTIONS[ti].el.classList.contains('xf'));
     hdr.classList.toggle('solid', MOB && !['cover', 'chapter', 'thanks', 'statement'].includes(SECTIONS[ti].kind));
     const s = SECTIONS[idx], st = s.cur || 0, nid = st ? s.steps[st - 1].noteId : s.noteId, src = byId[nid] || {};
     const nx = s.steps[st] ? { kind: 'step', text: s.steps[st].text } : (SECTIONS[idx + 1] ? { kind: 'slide', text: SECTIONS[idx + 1].title } : { kind: 'end', text: '' });
